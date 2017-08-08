@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>ChilliCream.Logging.Abstractions</AssemblyName>
+    <RootNamespace>ChilliCream.Logging.Abstractions</RootNamespace>
+    <Authors>ChilliCream</Authors>
+    <Company>ChilliCream</Company>
+    <Product>ChilliCream.Logging</Product>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>Logging, Tracing, Diagnostics</PackageTags>
+    <RepositoryUrl>https://github.com/ChilliCream/LoggingCore</RepositoryUrl>
+    <PackageProjectUrl />
+    <PackageLicenseUrl>https://github.com/ChilliCream/LoggingCore/blob/master/README.md</PackageLicenseUrl>
+    <Copyright>© Copyright 2017, ChilliCream</Copyright>
+  </PropertyGroup>
+
+</Project>
