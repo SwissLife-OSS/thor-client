@@ -14,6 +14,6 @@
     <PackageProjectUrl />
     <PackageLicenseUrl>https://github.com/ChilliCream/LoggingCore/blob/master/README.md</PackageLicenseUrl>
     <Copyright>© Copyright 2017, ChilliCream</Copyright>
+    <Version>1.0.0-preview1</Version>
   </PropertyGroup>
-
 </Project>
