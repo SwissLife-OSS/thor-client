@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>ChilliCream.Logging.Abstractions</AssemblyName>
-    <RootNamespace>ChilliCream.Logging.Abstractions</RootNamespace>
+    <AssemblyName>ChilliCream.Logging</AssemblyName>
+    <RootNamespace>ChilliCream.Logging</RootNamespace>
     <Authors>ChilliCream</Authors>
     <Company>ChilliCream</Company>
     <Product>ChilliCream.Logging</Product>
@@ -21,4 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+  </ItemGroup>
 </Project>

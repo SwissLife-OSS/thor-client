@@ -9,7 +9,7 @@ namespace ChilliCream.Logging.Abstractions
     /// <typeparam name="TValue"></typeparam>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct UserId<TValue>
+    public struct Id<TValue>
         : IComparable
         , IComparable<TValue>
         , IEquatable<TValue>
@@ -17,25 +17,25 @@ namespace ChilliCream.Logging.Abstractions
     {
         private TValue _value;
 
-        private UserId(TValue value)
+        private Id(TValue value)
         {
             _value = value;
         }
 
         /// <inheritdoc/>
-        public static implicit operator UserId<TValue>(TValue value)
+        public static implicit operator Id<TValue>(TValue value)
         {
-            return new UserId<TValue>(value);
+            return new Id<TValue>(value);
         }
 
         /// <inheritdoc/>
-        public static bool operator ==(UserId<TValue> left, UserId<TValue> right)
+        public static bool operator ==(Id<TValue> left, Id<TValue> right)
         {
             return left == right;
         }
 
         /// <inheritdoc/>
-        public static bool operator !=(UserId<TValue> left, UserId<TValue> right)
+        public static bool operator !=(Id<TValue> left, Id<TValue> right)
         {
             return left != right;
         }

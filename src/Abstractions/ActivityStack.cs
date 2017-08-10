@@ -4,17 +4,14 @@ using System.Threading;
 namespace ChilliCream.Logging.Abstractions
 {
     /// <summary>
-    /// Holds the complete activity state in a stack.
+    /// A stack that holds the complete activity state.
     /// </summary>
     public static class ActivityStack
     {
         private static readonly string _name = Guid.NewGuid().ToString();
         private static readonly AsyncLocal<ActivityState> _callContext = new AsyncLocal<ActivityState>();
 
-        /// <summary>
-        /// Gets or sets the actual state.
-        /// </summary>
-        public static ImmutableStack<Guid> Current
+        private static ImmutableStack<Guid> Current
         {
             get
             {
@@ -29,26 +26,26 @@ namespace ChilliCream.Logging.Abstractions
         }
 
         /// <summary>
-        /// Gets the activity id on the top of the stack; or <see cref="Guid.Empty"/> if the stack is empty.
+        /// Gets the current activity identifier.
         /// </summary>
-        /// <returns>An activity id on the top of the stack; or <see cref="Guid.Empty"/> if the stack is empty.</returns>
-        public static Guid GetTopOrEmpty()
+        public static Guid Id
+        {
+            get
+            {
+                return GetTopOrEmpty();
+            }
+        }
+
+        private static Guid GetTopOrEmpty()
         {
             return (Current.IsEmpty) ? Guid.Empty : Current.Peek();
         }
 
-        /// <summary>
-        /// Gets the activity id on the top of the stack.
-        /// </summary>
-        /// <returns>An activity id on the top of the stack.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when the stack is empty.
-        /// </exception>
-        public static Guid Peek()
+        private static Guid Peek()
         {
             if (Current.IsEmpty)
             {
-                throw new InvalidOperationException("The stack is empty; no activity id was found.");
+                throw new InvalidOperationException(ExceptionMessages.NoActivityIdFound);
             }
 
             return Current.Peek();
@@ -60,9 +57,9 @@ namespace ChilliCream.Logging.Abstractions
         }
 
         /// <summary>
-        /// Pushes an activity id onto the stack and returns a <see cref="IDisposable"/> instance.
+        /// Pushes an activity id to the stack and returns a <see cref="IDisposable"/> instance.
         /// </summary>
-        /// <param name="activityId">An activity id to push onto the stack.</param>
+        /// <param name="activityId">An activity identifier.</param>
         /// <returns>A <see cref="IDisposable"/> instance which cleans up the state on dispose.</returns>
         public static IDisposable Push(Guid activityId)
         {

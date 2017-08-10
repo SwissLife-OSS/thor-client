@@ -4,8 +4,8 @@ using System.Diagnostics.Contracts;
 namespace ChilliCream.Logging.Abstractions
 {
     /// <summary>
-    /// An immutable stack.
-    /// A minimum implementation of corefx <c>ImmutableStack{T}</c>.
+    /// A stack which is immutable.
+    /// A minimum implementation of the dotnet/corefx <c>ImmutableStack{T}</c>.
     /// </summary>
     /// <typeparam name="TElement">The type of element stored by the stack.</typeparam>
     public class ImmutableStack<TElement>
@@ -42,13 +42,13 @@ namespace ChilliCream.Logging.Abstractions
         /// </summary>
         /// <returns>An element on the top of the stack.</returns>
         /// <exception cref="InvalidOperationException">
-        /// Thrown when the stack is empty.
+        /// Throws if the stack is empty.
         /// </exception>
         public TElement Peek()
         {
             if (IsEmpty)
             {
-                throw new InvalidOperationException("This operation does not apply to an empty instance.");
+                throw new InvalidOperationException(ExceptionMessages.ImmutableStackIsEmpty);
             }
 
             return _head;
@@ -59,13 +59,13 @@ namespace ChilliCream.Logging.Abstractions
         /// </summary>
         /// <returns>A stack; never <c>null</c></returns>
         /// <exception cref="InvalidOperationException">
-        /// Thrown when the stack is empty.
+        /// Throws if the stack is empty.
         /// </exception>
         public ImmutableStack<TElement> Pop()
         {
             if (IsEmpty)
             {
-                throw new InvalidOperationException("This operation does not apply to an empty instance.");
+                throw new InvalidOperationException(ExceptionMessages.ImmutableStackIsEmpty);
             }
 
             return _tail;
