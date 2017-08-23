@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChilliCream.Logging.Abstractions
+namespace ChilliCream.Tracing.Abstractions
 {
     // todo: Improve documentation
 

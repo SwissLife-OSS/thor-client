@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChilliCream.Logging.Abstractions
+namespace ChilliCream.Tracing.Abstractions
 {
     /// <summary>
     /// A marker interface for all types of activity.

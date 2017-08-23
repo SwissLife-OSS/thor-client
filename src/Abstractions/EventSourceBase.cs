@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 
-namespace ChilliCream.Logging.Abstractions
+namespace ChilliCream.Tracing.Abstractions
 {
     /// <summary>
     /// A base class for <see cref="EventSource"/>s.

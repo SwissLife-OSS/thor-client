@@ -1,4 +1,4 @@
-﻿namespace ChilliCream.Logging.Abstractions
+﻿namespace ChilliCream.Tracing.Abstractions
 {
     /// <summary>
     /// A bunch of convenient <see cref="string"/> extension methods.
