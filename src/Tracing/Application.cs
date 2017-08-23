@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using static ChilliCream.Logging.ApplicationEventSource;
+using static ChilliCream.Tracing.ApplicationEventSource;
 
-namespace ChilliCream.Logging
+namespace ChilliCream.Tracing
 {
     /// <summary>
     /// 

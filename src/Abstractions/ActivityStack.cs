@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace ChilliCream.Logging.Abstractions
+namespace ChilliCream.Tracing.Abstractions
 {
     /// <summary>
     /// A stack that holds the complete activity state.

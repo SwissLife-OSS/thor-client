@@ -1,7 +1,7 @@
-﻿using ChilliCream.Logging.Abstractions;
+﻿using ChilliCream.Tracing.Abstractions;
 using System.Diagnostics.Tracing;
 
-namespace ChilliCream.Logging
+namespace ChilliCream.Tracing
 {
     [EventSource(Name = EventSourceNames.Application)]
     internal sealed class ApplicationEventSource

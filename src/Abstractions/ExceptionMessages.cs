@@ -1,4 +1,4 @@
-﻿namespace ChilliCream.Logging.Abstractions
+﻿namespace ChilliCream.Tracing.Abstractions
 {
     internal static class ExceptionMessages
     {

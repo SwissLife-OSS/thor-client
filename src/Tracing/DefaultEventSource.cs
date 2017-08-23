@@ -1,10 +1,10 @@
-﻿using ChilliCream.Logging.Abstractions;
+﻿using ChilliCream.Tracing.Abstractions;
 using System;
 using System.Diagnostics.Contracts;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 
-namespace ChilliCream.Logging
+namespace ChilliCream.Tracing
 {
     /// <summary>
     /// A default <see cref="EventSource"/> in case semantic logging is not favoured but the power of ETW.

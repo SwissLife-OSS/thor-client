@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\Package.props" />
+  <Import Project="..\Version.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>ChilliCream.Logging.Abstractions</AssemblyName>
-    <RootNamespace>ChilliCream.Logging.Abstractions</RootNamespace>
-    <Authors>ChilliCream</Authors>
-    <Company>ChilliCream</Company>
-    <Product>ChilliCream.Logging</Product>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageTags>Logging, Tracing, Diagnostics, ETW</PackageTags>
-    <RepositoryUrl>https://github.com/ChilliCream/LoggingCore</RepositoryUrl>
-    <PackageProjectUrl />
-    <PackageLicenseUrl>https://github.com/ChilliCream/LoggingCore/blob/master/README.md</PackageLicenseUrl>
-    <Copyright>© Copyright 2017, ChilliCream</Copyright>
-    <Version>1.0.0-preview1</Version>
+    <PackageId>ChilliCream.Tracing.Abstractions</PackageId>
+    <AssemblyName>ChilliCream.Tracing.Abstractions</AssemblyName>
+    <RootNamespace>ChilliCream.Tracing.Abstractions</RootNamespace>
+    <DebugType>Full</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Provides an ETW EventSource Tracing Abstractions build on .Net Standard 2.0.</Description>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\netstandard2.0\ChilliCream.Logging.Abstractions.xml</DocumentationFile>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\netstandard2.0\ChilliCream.Logging.Abstractions.xml</DocumentationFile>
   </PropertyGroup>
+
 </Project>

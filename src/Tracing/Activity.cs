@@ -1,10 +1,10 @@
-﻿using ChilliCream.Logging.Abstractions;
+﻿using ChilliCream.Tracing.Abstractions;
 using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
-using static ChilliCream.Logging.ActivityEventSource;
+using static ChilliCream.Tracing.ActivityEventSource;
 
-namespace ChilliCream.Logging
+namespace ChilliCream.Tracing
 {
     /// <summary>
     /// A default activity to group log events even across threads.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace ChilliCream.Logging.Abstractions
+namespace ChilliCream.Tracing.Abstractions
 {
     /// <summary>
     /// A stack which is immutable.

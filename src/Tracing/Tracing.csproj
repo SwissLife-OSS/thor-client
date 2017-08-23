@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\Package.props" />
+  <Import Project="..\Version.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>ChilliCream.Tracing</PackageId>
+    <AssemblyName>ChilliCream.Tracing</AssemblyName>
+    <RootNamespace>ChilliCream.Tracing</RootNamespace>
+    <DebugType>Full</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Provides an ETW EventSource Tracing build on .Net Standard 2.0.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\ChilliCream.Logging.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\ChilliCream.Logging.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

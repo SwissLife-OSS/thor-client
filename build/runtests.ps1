@@ -1,0 +1,1 @@
+dotnet test .\src\Tests\Tests.csproj -c $env:CONFIGURATION
