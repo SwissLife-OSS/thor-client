@@ -6,7 +6,7 @@
     public static class StringExtensions
     {
         private const int _messageLength = 20480;
-        private const string _messageTooLong = " ... The message is too long ...";
+        private const string _messageLengthExceeded = " <<< Message length exceeded >>>";
 
         /// <summary>
         /// Ensures a string value is not <c>null</c>.
@@ -40,8 +40,7 @@
         {
             if (value != null && value.Length > length)
             {
-                return value.Substring(0, length) +
-                    _messageTooLong;
+                return value.Substring(0, length) + _messageLengthExceeded;
             }
 
             return value;
