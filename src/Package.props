@@ -11,7 +11,7 @@
     <PackageTags>ETW, EventSource, Logging, Tracing</PackageTags>
     <PackageReleaseNotes>Release notes: https://github.com/ChilliCream/Tracing/releases/$(PackageVersion)</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageIconUrl />
+    <PackageIconUrl>https://github.com/ChilliCream/Tracing/raw/master/icon.png</PackageIconUrl>
     <RepositoryType>GitHub</RepositoryType>
   </PropertyGroup>
 
