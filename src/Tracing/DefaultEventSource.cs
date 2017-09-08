@@ -1,6 +1,5 @@
 ﻿using ChilliCream.Tracing.Abstractions;
 using System;
-using System.Diagnostics.Contracts;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 
@@ -44,7 +43,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -72,7 +70,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -104,7 +101,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -132,7 +128,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -164,7 +159,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -192,7 +186,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -224,7 +217,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -252,7 +244,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -284,7 +275,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -312,7 +302,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {

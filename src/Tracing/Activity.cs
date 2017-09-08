@@ -1,6 +1,5 @@
 ﻿using ChilliCream.Tracing.Abstractions;
 using System;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using static ChilliCream.Tracing.ActivityEventSource;
 
@@ -75,7 +74,6 @@ namespace ChilliCream.Tracing
             {
                 throw new ArgumentNullException(nameof(name));
             }
-            Contract.EndContractBlock();
 
             Activity activity = new Activity(name);
 

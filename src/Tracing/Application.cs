@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using static ChilliCream.Tracing.ApplicationEventSource;
 
 namespace ChilliCream.Tracing
@@ -29,7 +28,6 @@ namespace ChilliCream.Tracing
                 throw new ArgumentOutOfRangeException(nameof(id),
                     ExceptionMessages.ApplicationIdMustBeGreaterZero);
             }
-            Contract.EndContractBlock();
 
             if (Id == default(int))
             {
