@@ -41,7 +41,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (IsEnabled())
@@ -68,7 +68,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
 
             if (IsEnabled())
@@ -99,7 +99,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (IsEnabled())
@@ -126,7 +126,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
 
             if (IsEnabled())
@@ -157,7 +157,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (IsEnabled())
@@ -184,7 +184,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
 
             if (IsEnabled())
@@ -215,7 +215,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (IsEnabled())
@@ -242,7 +242,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
 
             if (IsEnabled())
@@ -273,7 +273,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (IsEnabled())
@@ -300,7 +300,7 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
 
             if (IsEnabled())
