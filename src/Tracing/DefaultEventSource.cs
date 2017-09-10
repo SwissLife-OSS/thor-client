@@ -1,6 +1,5 @@
 ﻿using ChilliCream.Tracing.Abstractions;
 using System;
-using System.Diagnostics.Contracts;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 
@@ -42,9 +41,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -70,9 +68,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -102,9 +99,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -130,9 +126,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -162,9 +157,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -190,9 +184,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -222,9 +215,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -250,9 +242,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -282,9 +273,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(message))
             {
-                throw new ArgumentException(nameof(message));
+                throw new ArgumentNullException(nameof(message));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {
@@ -310,9 +300,8 @@ namespace ChilliCream.Tracing
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                throw new ArgumentException(nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
-            Contract.EndContractBlock();
 
             if (IsEnabled())
             {

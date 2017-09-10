@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace ChilliCream.Tracing.Abstractions
 {
@@ -21,7 +20,6 @@ namespace ChilliCream.Tracing.Abstractions
             {
                 throw new ArgumentNullException(nameof(tail));
             }
-            Contract.EndContractBlock();
 
             _head = head;
             _tail = tail;
