@@ -60,6 +60,56 @@ namespace ChilliCream.Tracing.Tests
             });
         }
 
+        [Fact(DisplayName = "Critical: Should not write anything to the log stream")]
+        public void CriticalFormatDisabled()
+        {
+            using (ProbeEventListener listener = new ProbeEventListener())
+            {
+                // Act
+                DefaultEventSource.Log.Critical("Critical-Format-{0}", "Disabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .Should()
+                    .HaveCount(0);
+            };
+        }
+
+        [Fact(DisplayName = "Critical: Should write one critical message to the log stream")]
+        public void CriticalFormatEnabled()
+        {
+            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            {
+                // Arrange
+                string expectedMessage = "{2}";
+
+                // Act
+                DefaultEventSource.Log.Critical("Critical-Message-{0}", "Enabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .FirstOrDefault(e => e.Message == expectedMessage)
+                    .Should()
+                    .NotBeNull();
+            });
+        }
+
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        [Theory(DisplayName = "Critical: Should throw argument null exception for format")]
+        public void CriticalFormatNull(string format)
+        {
+            // Act
+            Action validate = () => DefaultEventSource.Log.Critical(format, "");
+
+            // Assert
+            validate.ShouldThrowExactly<ArgumentNullException>()
+                .Which.ParamName.Should().Be("format");
+        }
+
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
@@ -112,6 +162,56 @@ namespace ChilliCream.Tracing.Tests
                     .Should()
                     .NotBeNull();
             });
+        }
+
+        [Fact(DisplayName = "Error: Should not write anything to the log stream")]
+        public void ErrorFormatDisabled()
+        {
+            using (ProbeEventListener listener = new ProbeEventListener())
+            {
+                // Act
+                DefaultEventSource.Log.Error("Error-Format-{0}", "Disabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .Should()
+                    .HaveCount(0);
+            };
+        }
+
+        [Fact(DisplayName = "Error: Should write one critical message to the log stream")]
+        public void ErrorFormatEnabled()
+        {
+            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            {
+                // Arrange
+                string expectedMessage = "{2}";
+
+                // Act
+                DefaultEventSource.Log.Error("Error-Message-{0}", "Enabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .FirstOrDefault(e => e.Message == expectedMessage)
+                    .Should()
+                    .NotBeNull();
+            });
+        }
+
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        [Theory(DisplayName = "Error: Should throw argument null exception for format")]
+        public void ErrorFormatNull(string format)
+        {
+            // Act
+            Action validate = () => DefaultEventSource.Log.Error(format, "");
+
+            // Assert
+            validate.ShouldThrowExactly<ArgumentNullException>()
+                .Which.ParamName.Should().Be("format");
         }
 
         [InlineData("")]
@@ -168,6 +268,56 @@ namespace ChilliCream.Tracing.Tests
             });
         }
 
+        [Fact(DisplayName = "Info: Should not write anything to the log stream")]
+        public void InfoFormatDisabled()
+        {
+            using (ProbeEventListener listener = new ProbeEventListener())
+            {
+                // Act
+                DefaultEventSource.Log.Info("Info-Format-{0}", "Disabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .Should()
+                    .HaveCount(0);
+            };
+        }
+
+        [Fact(DisplayName = "Info: Should write one critical message to the log stream")]
+        public void InfoFormatEnabled()
+        {
+            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            {
+                // Arrange
+                string expectedMessage = "{2}";
+
+                // Act
+                DefaultEventSource.Log.Info("Info-Message-{0}", "Enabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .FirstOrDefault(e => e.Message == expectedMessage)
+                    .Should()
+                    .NotBeNull();
+            });
+        }
+
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        [Theory(DisplayName = "Info: Should throw argument null exception for format")]
+        public void InfoFormatNull(string format)
+        {
+            // Act
+            Action validate = () => DefaultEventSource.Log.Info(format, "");
+
+            // Assert
+            validate.ShouldThrowExactly<ArgumentNullException>()
+                .Which.ParamName.Should().Be("format");
+        }
+
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
@@ -222,6 +372,56 @@ namespace ChilliCream.Tracing.Tests
             });
         }
 
+        [Fact(DisplayName = "Verbose: Should not write anything to the log stream")]
+        public void VerboseFormatDisabled()
+        {
+            using (ProbeEventListener listener = new ProbeEventListener())
+            {
+                // Act
+                DefaultEventSource.Log.Verbose("Verbose-Format-{0}", "Disabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .Should()
+                    .HaveCount(0);
+            };
+        }
+
+        [Fact(DisplayName = "Verbose: Should write one critical message to the log stream")]
+        public void VerboseFormatEnabled()
+        {
+            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            {
+                // Arrange
+                string expectedMessage = "{2}";
+
+                // Act
+                DefaultEventSource.Log.Verbose("Verbose-Message-{0}", "Enabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .FirstOrDefault(e => e.Message == expectedMessage)
+                    .Should()
+                    .NotBeNull();
+            });
+        }
+
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        [Theory(DisplayName = "Verbose: Should throw argument null exception for format")]
+        public void VerboseFormatNull(string format)
+        {
+            // Act
+            Action validate = () => DefaultEventSource.Log.Verbose(format, "");
+
+            // Assert
+            validate.ShouldThrowExactly<ArgumentNullException>()
+                .Which.ParamName.Should().Be("format");
+        }
+
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
@@ -274,6 +474,56 @@ namespace ChilliCream.Tracing.Tests
                     .Should()
                     .NotBeNull();
             });
+        }
+
+        [Fact(DisplayName = "Warning: Should not write anything to the log stream")]
+        public void WarningFormatDisabled()
+        {
+            using (ProbeEventListener listener = new ProbeEventListener())
+            {
+                // Act
+                DefaultEventSource.Log.Warning("Warning-Format-{0}", "Disabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .Should()
+                    .HaveCount(0);
+            };
+        }
+
+        [Fact(DisplayName = "Warning: Should write one critical message to the log stream")]
+        public void WarningFormatEnabled()
+        {
+            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            {
+                // Arrange
+                string expectedMessage = "{2}";
+
+                // Act
+                DefaultEventSource.Log.Warning("Warning-Message-{0}", "Enabled");
+
+                // Assert
+                listener
+                    .OrderedEvents
+                    .FirstOrDefault(e => e.Message == expectedMessage)
+                    .Should()
+                    .NotBeNull();
+            });
+        }
+
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        [Theory(DisplayName = "Warning: Should throw argument null exception for format")]
+        public void WarningFormatNull(string format)
+        {
+            // Act
+            Action validate = () => DefaultEventSource.Log.Warning(format, "");
+
+            // Assert
+            validate.ShouldThrowExactly<ArgumentNullException>()
+                .Which.ParamName.Should().Be("format");
         }
 
         [InlineData("")]
