@@ -7,7 +7,7 @@ namespace ChilliCream.Tracing.Tests
 {
     public class ActivityStackTests
     {
-        [Fact(DisplayName = "")]
+        [Fact(DisplayName = "Id: Should return empty")]
         public void Id_Empty()
         {
             // act
@@ -17,7 +17,7 @@ namespace ChilliCream.Tracing.Tests
             result.Should().BeEmpty();
         }
 
-        [Fact(DisplayName = "")]
+        [Fact(DisplayName = "Id: Should return an id")]
         public void Id_NotEmpty()
         {
             IDisposable disposable = null;

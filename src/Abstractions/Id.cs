@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace ChilliCream.Tracing.Abstractions
 {
+    // todo: complete documentation
+
     /// <summary>
     /// 
     /// </summary>
