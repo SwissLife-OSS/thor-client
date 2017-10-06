@@ -9,13 +9,13 @@ namespace ChilliCream.Tracing.Tests
         [Fact(DisplayName = "Analyze: Inspects ApplicationEventSource schema")]
         public void Analyze()
         {
-            // Arrange
+            // arrange
             EventSourceAnalyzer analyzer = new EventSourceAnalyzer();
 
-            // Act
+            // act
             Report report = analyzer.Inspect(ApplicationEventSource.Log);
 
-            // Assert
+            // assert
             report.HasErrors.Should().BeFalse();
         }
     }
