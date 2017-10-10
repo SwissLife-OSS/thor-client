@@ -16,11 +16,6 @@ namespace ChilliCream.Tracing.Abstractions
 
         private ImmutableStack(TElement head, ImmutableStack<TElement> tail)
         {
-            if (tail == null)
-            {
-                throw new ArgumentNullException(nameof(tail));
-            }
-
             _head = head;
             _tail = tail;
         }
@@ -73,7 +68,7 @@ namespace ChilliCream.Tracing.Abstractions
         /// Pushes an element onto a stack and returns the new stack.
         /// </summary>
         /// <param name="element">An element to push onto the stack.</param>
-        /// <returns>An new stack.</returns>
+        /// <returns>A new stack.</returns>
         public ImmutableStack<TElement> Push(TElement element)
         {
             return new ImmutableStack<TElement>(element, this);

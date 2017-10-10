@@ -1,1 +1,1 @@
-dotnet test .\src\Tests\Tests.csproj -c %CONFIGURATION%
+dotnet test .\src\Tests\Tests.csproj -c Debug

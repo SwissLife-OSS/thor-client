@@ -5,7 +5,8 @@ namespace ChilliCream.Tracing.Abstractions
     // todo: Improve documentation
 
     /// <summary>
-    /// Allows the event tracing for Windows (ETW) name to be defined independently of the name of the event source interface.
+    /// Allows the event tracing for Windows (ETW) name to be defined independently of the name of
+    /// the event source interface.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
     public sealed class EventSourceDefinitionAttribute

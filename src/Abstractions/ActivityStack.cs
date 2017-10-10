@@ -41,16 +41,6 @@ namespace ChilliCream.Tracing.Abstractions
             return (Current.IsEmpty) ? Guid.Empty : Current.Peek();
         }
 
-        private static Guid Peek()
-        {
-            if (Current.IsEmpty)
-            {
-                throw new InvalidOperationException(ExceptionMessages.NoActivityIdFound);
-            }
-
-            return Current.Peek();
-        }
-
         private static void Pop()
         {
             Current = Current.Pop();

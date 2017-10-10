@@ -12,13 +12,13 @@ namespace ChilliCream.Tracing.Tests
         [Fact(DisplayName = "Analyze: Inspects DefaultEventSource schema")]
         public void Analyze()
         {
-            // Arrange
+            // arrange
             EventSourceAnalyzer analyzer = new EventSourceAnalyzer();
 
-            // Act
+            // act
             Report report = analyzer.Inspect(DefaultEventSource.Log);
 
-            // Assert
+            // assert
             report.HasErrors.Should().BeFalse();
         }
 
@@ -29,10 +29,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Critical("Critical-Message-Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -45,13 +45,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Critical("Critical-Message-Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -65,10 +65,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Critical("Critical-Format-{0}", "Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -81,13 +81,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Critical("Critical-Message-{0}", "Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -102,10 +102,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Critical: Should throw argument null exception for format")]
         public void CriticalFormatNull(string format)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Critical(format, "");
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
@@ -116,10 +116,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Critical: Should throw argument null exception for message")]
         public void CriticalMessageNull(string message)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Critical(message);
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
@@ -133,10 +133,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Error("Error-Message-Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -149,13 +149,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Error("Critical-Message-Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -169,10 +169,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Error("Error-Format-{0}", "Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -185,13 +185,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Error("Error-Message-{0}", "Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -206,10 +206,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Error: Should throw argument null exception for format")]
         public void ErrorFormatNull(string format)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Error(format, "");
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
@@ -220,10 +220,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Error: Should throw argument null exception for message")]
         public void ErrorMessageNull(string message)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Error(message);
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
@@ -237,10 +237,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Info("Info-Message-Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -253,13 +253,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Info("Info-Message-Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -273,10 +273,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Info("Info-Format-{0}", "Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -289,13 +289,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Info("Info-Message-{0}", "Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -310,10 +310,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Info: Should throw argument null exception for format")]
         public void InfoFormatNull(string format)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Info(format, "");
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
@@ -324,10 +324,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Info: Should throw argument null exception for message")]
         public void InfoMessageNull(string message)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Info(message);
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
@@ -341,10 +341,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Verbose("Verbose-Message-Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -357,13 +357,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Verbose("Verbose-Message-Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -377,10 +377,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Verbose("Verbose-Format-{0}", "Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -393,13 +393,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Verbose("Verbose-Message-{0}", "Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -414,10 +414,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Verbose: Should throw argument null exception for format")]
         public void VerboseFormatNull(string format)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Verbose(format, "");
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
@@ -428,10 +428,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Verbose: Should throw argument null exception for message")]
         public void VerboseMessageNull(string message)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Verbose(message);
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
@@ -445,10 +445,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Warning("Warning-Message-Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -461,13 +461,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Warning("Warning-Message-Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -481,10 +481,10 @@ namespace ChilliCream.Tracing.Tests
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
-                // Act
+                // act
                 DefaultEventSource.Log.Warning("Warning-Format-{0}", "Disabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .Should()
@@ -497,13 +497,13 @@ namespace ChilliCream.Tracing.Tests
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
             {
-                // Arrange
+                // arrange
                 string expectedMessage = "{2}";
 
-                // Act
+                // act
                 DefaultEventSource.Log.Warning("Warning-Message-{0}", "Enabled");
 
-                // Assert
+                // assert
                 listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage)
@@ -518,10 +518,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Warning: Should throw argument null exception for format")]
         public void WarningFormatNull(string format)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Warning(format, "");
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
@@ -532,10 +532,10 @@ namespace ChilliCream.Tracing.Tests
         [Theory(DisplayName = "Warning: Should throw argument null exception for message")]
         public void WarningMessageNull(string message)
         {
-            // Act
+            // act
             Action validate = () => DefaultEventSource.Log.Warning(message);
 
-            // Assert
+            // assert
             validate.ShouldThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
