@@ -8,9 +8,13 @@ clone_folder: c:\cc\tracing
 environment:
   COVERALLS_REPO_TOKEN:
     secure: HqNqbWg/nuZC8ohHGHiBlHfVZxK/Slz+S53dJDdHps/4X3/iXI3aVZD8CQToH7A/
-  SONARQUBE_TOKEN:
-    secure: Oh/eULUJNuQcby4Rp0+gvp9gA5SbxkCeuK8L7qZGUvguXpO6YYpFmEHjXI2PCe/b
+  SONAR_TOKEN:
+    secure: SXuJAntShpypPhbKvPNNUb+g8Je8ACzRPVMFxImkN5YA0SdtfysEhzNwWoo/Imku
   CONFIGURATION: Release
+  SONAR_PROJECT_KEY:
+    secure: cjfDjprgeQBymBKefNahIw==
+  SONAR_ORGANIZATION:
+    secure: cDVvUFZmI9WDLmyAlZSNg/mku7qnHyuwddDBrAYe6Uc/6JAIkRN8xInPv/t8UyO9
 install:
 - ps: .\build\install.ps1
 nuget:
