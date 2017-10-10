@@ -7,8 +7,17 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>ChilliCream.Tracing.Tests</AssemblyName>
     <RootNamespace>ChilliCream.Tracing.Tests</RootNamespace>
-    <DebugType>Full</DebugType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>Full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
