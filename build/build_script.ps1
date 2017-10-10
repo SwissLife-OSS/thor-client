@@ -4,8 +4,7 @@ if (Test-Path env:APPVEYOR)
     dotnet restore .\src\Tracing.sln
 
     # Build & Analyse
-    choco install "msbuild-sonarqube-runner" -y
-    Invoke-Expression ('SonarQube.Scanner.MSBuild.exe begin /n:"' + $env:APPVEYOR_PROJECT_NAME + '" /k:"' + $env:SONARQUBE_PROJECT_KEY + '" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=' + $env:SONARQUBE_TOKEN + '" /v:"' + $env:CC_BUILD_VERSION + '"')
+    Invoke-Expression ('SonarQube.Scanner.MSBuild.exe begin /n:"' + $env:APPVEYOR_PROJECT_NAME + '" /k:"' + $env:SONAR_PROJECT_KEY + '" /v:"' + $env:CC_BUILD_VERSION + '" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=' + $env:SONAR_TOKEN + '" /d:"sonar.organization=' + $env:SONAR_ORGANIZATION_KEY + '"')
     msbuild .\src\Tracing.sln /p:Configuration=$env:CONFIGURATION /p:Version=$env:CC_BUILD_VERSION
-    Invoke-Expression ('SonarQube.Scanner.MSBuild.exe end /d:"sonar.login=' + $env:SONARQUBE_TOKEN + '"')
+    Invoke-Expression ('SonarQube.Scanner.MSBuild.exe end /d:"sonar.login=' + $env:SONAR_TOKEN + '"')
 }
