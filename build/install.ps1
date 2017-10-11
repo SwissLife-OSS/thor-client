@@ -4,9 +4,12 @@ $codeCoverageEnabled = $env:CODE_COVERAGE -eq "true"
 
 if ($runsOnAppVeyor)
 {
-    choco install msbuild-sonarqube-runner -y
+    if ($isRelease)
+    {
+        choco install msbuild-sonarqube-runner -y
 
-    $sonar = "SonarQube.Scanner.MSBuild.exe"
+        $sonar = "SonarQube.Scanner.MSBuild.exe"
+    }
 
     if (!!$env:APPVEYOR_REPO_TAG_NAME) # Has a repo tag name
     {
