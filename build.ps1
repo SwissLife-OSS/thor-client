@@ -1,5 +1,31 @@
+$runsOnAppVeyor = !!$env:APPVEYOR
+$isRelease = $env:IS_RELEASE -eq "true"
+$codeCoverageEnabled = $env:CODE_COVERAGE -eq "true"
+
+Write-Host "Runs on AppVayor:" $runsOnAppVeyor
+Write-Host "Is Release build:" $isRelease
+Write-Host "Is Code Coverage enabled:" $codeCoverageEnabled
+
 if ($runsOnAppVeyor)
 {
+    # Install Analyzer
+    if ($isRelease)
+    {
+        choco install msbuild-sonarqube-runner -y
+
+        $sonar = "SonarQube.Scanner.MSBuild.exe"
+    }
+
+    # Set version
+    if (!!$env:APPVEYOR_REPO_TAG_NAME) # Has a repo tag name
+    {
+        $env:CC_BUILD_VERSION = $env:APPVEYOR_REPO_TAG_NAME
+    }
+    else
+    {
+        $env:CC_BUILD_VERSION = $env:APPVEYOR_BUILD_VERSION
+    }
+
     # Restore packages
     dotnet restore .\src\Tracing.sln
 

@@ -16,12 +16,10 @@ environment:
   SONAR_ORGANIZATION_KEY:
     secure: cDVvUFZmI9WDLmyAlZSNg/mku7qnHyuwddDBrAYe6Uc/6JAIkRN8xInPv/t8UyO9
   CODE_COVERAGE: true
-install:
-- ps: .\build\install.ps1
 nuget:
   disable_publish_on_pr: true
 build_script:
-- ps: .\build\build_script.ps1
+- ps: .\build.ps1
 test: off
 artifacts:
 - path: '**\*.nupkg'
