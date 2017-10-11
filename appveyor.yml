@@ -10,19 +10,19 @@ environment:
     secure: HqNqbWg/nuZC8ohHGHiBlHfVZxK/Slz+S53dJDdHps/4X3/iXI3aVZD8CQToH7A/
   SONAR_TOKEN:
     secure: SXuJAntShpypPhbKvPNNUb+g8Je8ACzRPVMFxImkN5YA0SdtfysEhzNwWoo/Imku
-  CONFIGURATION: Release
+  IS_RELEASE: true
   SONAR_PROJECT_KEY:
     secure: cjfDjprgeQBymBKefNahIw==
   SONAR_ORGANIZATION_KEY:
     secure: cDVvUFZmI9WDLmyAlZSNg/mku7qnHyuwddDBrAYe6Uc/6JAIkRN8xInPv/t8UyO9
+  CODE_COVERAGE: true
 install:
 - ps: .\build\install.ps1
 nuget:
   disable_publish_on_pr: true
 build_script:
 - ps: .\build\build_script.ps1
-test_script:
-- ps: .\build\test_script.ps1
+test: off
 artifacts:
 - path: '**\*.nupkg'
   name: NuGet-Release
