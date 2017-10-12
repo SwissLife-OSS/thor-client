@@ -47,7 +47,7 @@ if ($runsOnAppVeyor)
 
     if (!!$testAssemblies) # Has test assemblies
     {
-        $vstest = "vstest.console.exe"
+        $vstest = Join-Path -Path "C:\*\Microsoft Visual Studio\2017\*\Common7\IDE\Extensions\TestPlatform" -ChildPath "vstest.console.exe" -Resolve
         $vstestArguments = $testAssemblies + "/Framework:FrameworkCore10"
     
         if ($runsOnAppVeyor)
