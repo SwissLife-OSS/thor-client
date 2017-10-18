@@ -48,11 +48,12 @@ if ($runsOnAppVeyor)
     if (!!$testAssemblies) # Has test assemblies
     {
         $vstest = Join-Path -Path "C:\*\Microsoft Visual Studio\2017\*\Common7\IDE\Extensions\TestPlatform" -ChildPath "vstest.console.exe" -Resolve
-        $vstestArguments = $testAssemblies + "/Framework:FrameworkCore10"
+        $vstestFramework = "/Framework:FrameworkCore10"
+        $vstestLogger = $null
     
         if ($runsOnAppVeyor)
         {
-            $vstestArguments += " /logger:Appveyor"
+            $vstestLogger = "/logger:Appveyor"
         }
 
         if ($codeCoverageEnabled)
@@ -61,13 +62,13 @@ if ($runsOnAppVeyor)
             $openCover = Join-Path -Path $env:USERPROFILE -ChildPath ".nuget\packages\OpenCover\*\tools\OpenCover.Console.exe" -Resolve
             $coveralls = Join-Path -Path $env:USERPROFILE -ChildPath ".nuget\packages\coveralls.io\*\tools\coveralls.net.exe" -Resolve
 
-            & $openCover ' -register:user -target:"' + $vstest + '" -targetargs: "' + $vstestArguments + '" -searchdirs:"' + $serachDirs + '" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[*Tracing]*"'
-            & $coveralls ' --opencover coverage.xml'
+            Invoke-Expression ($openCover + ' -register:user -target:"' + $vstest + '" -targetargs:"' + $testAssemblies + ' ' + $vstestFramework + ' ' + $vstestLogger + '" -searchdirs:"' + $serachDirs + '" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[*Tracing]*"')
+            Invoke-Expression ($coveralls + ' --opencover coverage.xml')
         }
         else
         {
             # Test
-            & $vstest $vstestArguments
+            & $vstest $testAssemblies $vstestFramework $vstestLogger
         }
     }
 
