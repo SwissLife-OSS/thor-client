@@ -51,10 +51,10 @@ if ($runsOnAppVeyor)
         $vstestFramework = "/Framework:FrameworkCore10"
         $vstestLogger = $null
     
-        if ($runsOnAppVeyor)
-        {
-            $vstestLogger = "/logger:Appveyor"
-        }
+        #if ($runsOnAppVeyor)
+        #{
+        #    $vstestLogger = "/logger:Appveyor"
+        #}
 
         if ($codeCoverageEnabled)
         {
