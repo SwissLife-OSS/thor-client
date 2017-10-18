@@ -33,7 +33,7 @@ if ($runsOnAppVeyor)
     {
         # Start Analyzation
         # Sonar for .Net Core is not supported right now; for more information go to https://jira.sonarsource.com/browse/SONARMSBRU-310
-        & $sonar ' begin /n:"' + $env:APPVEYOR_PROJECT_NAME + '" /k:"' + $env:SONAR_PROJECT_KEY + '" /v:"' + $env:CC_BUILD_VERSION + '" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=' + $env:SONAR_TOKEN + '" /d:"sonar.organization=' + $env:SONAR_ORGANIZATION_KEY + '"'
+        Invoke-Expression ($sonar + ' begin /n:"' + $env:APPVEYOR_PROJECT_NAME + '" /k:"' + $env:SONAR_PROJECT_KEY + '" /v:"' + $env:CC_BUILD_VERSION + '" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=' + $env:SONAR_TOKEN + '" /d:"sonar.organization=' + $env:SONAR_ORGANIZATION_KEY + '"')
     }
 
     # Build 
@@ -68,14 +68,14 @@ if ($runsOnAppVeyor)
         else
         {
             # Test
-            & $vstest $testAssemblies $vstestFramework $vstestLogger
+            Invoke-Expression ($vstest + ' ' + $testAssemblies + ' ' + $vstestFramework + ' ' + $vstestLogger)
         }
     }
 
     if ($isRelease)
     {
         # End Analyzation
-        & $sonar ' end /d:"sonar.login=' + $env:SONAR_TOKEN + '"'
+        Invoke-Expression ($sonar + ' end /d:"sonar.login=' + $env:SONAR_TOKEN + '"')
 
         # Pack
         dotnet pack .\src\Tracing.sln --include-symbols --include-source -c Release /p:PackageVersion=$env:CC_BUILD_VERSION
