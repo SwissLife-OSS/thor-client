@@ -1,4 +1,4 @@
-﻿namespace ChilliCream.Tracing
+﻿namespace Thor.Core
 {
     internal static class ExceptionMessages
     {

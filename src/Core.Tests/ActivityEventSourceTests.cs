@@ -1,8 +1,8 @@
-﻿using ChilliCream.Tracing.Analyzer;
+﻿using Thor.Analyzer;
 using FluentAssertions;
 using Xunit;
 
-namespace ChilliCream.Tracing.Tests
+namespace Thor.Core.Tests
 {
     public class ActivityEventSourceTests
     {

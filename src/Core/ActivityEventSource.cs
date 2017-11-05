@@ -1,8 +1,8 @@
-﻿using ChilliCream.Tracing.Abstractions;
+﻿using Thor.Core.Abstractions;
 using System;
 using System.Diagnostics.Tracing;
 
-namespace ChilliCream.Tracing
+namespace Thor.Core
 {
     [EventSource(Name = EventSourceNames.Activity)]
     internal sealed class ActivityEventSource

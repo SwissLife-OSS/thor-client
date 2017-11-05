@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace ChilliCream.Tracing.Abstractions
+namespace Thor.Core.Abstractions
 {
     // todo: complete documentation
 

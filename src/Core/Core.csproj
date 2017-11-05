@@ -5,9 +5,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
-    <PackageId>ChilliCream.Tracing</PackageId>
-    <AssemblyName>ChilliCream.Tracing</AssemblyName>
-    <RootNamespace>ChilliCream.Tracing</RootNamespace>
+    <PackageId>Thor.Core</PackageId>
+    <AssemblyName>Thor.Core</AssemblyName>
+    <RootNamespace>Thor.Core</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>Provides an ETW EventSource Tracing build on .Net Standard 2.0.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="..\Core.Abstractions\Core.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

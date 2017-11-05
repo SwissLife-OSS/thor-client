@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChilliCream.Tracing.Abstractions
+namespace Thor.Core.Abstractions
 {
     /// <summary>
     /// A marker interface for all types of activity.
