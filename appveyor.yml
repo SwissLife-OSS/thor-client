@@ -10,16 +10,14 @@ environment:
     secure: HqNqbWg/nuZC8ohHGHiBlHfVZxK/Slz+S53dJDdHps/4X3/iXI3aVZD8CQToH7A/
   SONAR_TOKEN:
     secure: SXuJAntShpypPhbKvPNNUb+g8Je8ACzRPVMFxImkN5YA0SdtfysEhzNwWoo/Imku
-  IS_RELEASE: true
   SONAR_PROJECT_KEY:
     secure: cjfDjprgeQBymBKefNahIw==
   SONAR_ORGANIZATION_KEY:
     secure: cDVvUFZmI9WDLmyAlZSNg/mku7qnHyuwddDBrAYe6Uc/6JAIkRN8xInPv/t8UyO9
-  CODE_COVERAGE: true
 nuget:
   disable_publish_on_pr: true
 build_script:
-- ps: .\build.ps1
+- ps: .\build.ps1 -RunTests -EnableCoverage -EnableSonar -Pack
 test: off
 artifacts:
 - path: '**\*.nupkg'

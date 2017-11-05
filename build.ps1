@@ -1,83 +1,82 @@
-$runsOnAppVeyor = !!$env:APPVEYOR
-$isRelease = $env:IS_RELEASE -eq "true"
-$codeCoverageEnabled = $env:CODE_COVERAGE -eq "true"
+param([switch]$DisableBuild, [switch]$RunTests, [switch]$EnableCoverage, [switch]$EnableSonar, [switch]$Pack)
 
-Write-Host "Runs on AppVayor:" $runsOnAppVeyor
-Write-Host "Is Release build:" $isRelease
-Write-Host "Is Code Coverage enabled:" $codeCoverageEnabled
-
-if ($runsOnAppVeyor)
+if (!!$env:APPVEYOR_REPO_TAG_NAME)
 {
-    # Install Analyzer
-    if ($isRelease)
-    {
-        choco install msbuild-sonarqube-runner -y
+    $version = $env:APPVEYOR_REPO_TAG_NAME
+}
+elseif(!!$env:APPVEYOR_BUILD_VERSION)
+{
+    $version = $env:APPVEYOR_BUILD_VERSION
+}
 
-        $sonar = "SonarQube.Scanner.MSBuild.exe"
-    }
+if($version -ne $null)
+{
+    $env:Version = $version
+}
 
-    # Set version
-    if (!!$env:APPVEYOR_REPO_TAG_NAME) # Has a repo tag name
-    {
-        $env:CC_BUILD_VERSION = $env:APPVEYOR_REPO_TAG_NAME
-    }
-    else
-    {
-        $env:CC_BUILD_VERSION = $env:APPVEYOR_BUILD_VERSION
-    }
+if($EnableSonar)
+{
+    # Sonar for .Net Core is not supported right now; for more information go to https://jira.sonarsource.com/browse/SONARMSBRU-310
+    #choco install msbuild-sonarqube-runner -y
+    #Invoke-Expression ('SonarQube.Scanner.MSBuild.exe begin /k:"' + $env:APPVEYOR_PROJECT_NAME + '" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=' + $env:SONARQUBE_TOKEN + '" /v:"' + $env:CC_BUILD_VERSION + '"')
+}
 
-    # Restore packages
-    dotnet restore .\src\Tracing.sln
+if($DisableBuild -eq $false)
+{
+    dotnet restore src
+    msbuild src
+}
 
-    if ($isRelease)
-    {
-        # Start Analyzation
-        # Sonar for .Net Core is not supported right now; for more information go to https://jira.sonarsource.com/browse/SONARMSBRU-310
-        Invoke-Expression ($sonar + ' begin /n:"' + $env:APPVEYOR_PROJECT_NAME + '" /k:"' + $env:SONAR_PROJECT_KEY + '" /v:"' + $env:CC_BUILD_VERSION + '" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=' + $env:SONAR_TOKEN + '" /d:"sonar.organization=' + $env:SONAR_ORGANIZATION_KEY + '"')
-    }
-
-    # Build 
-    msbuild .\src\Tracing.sln /p:Configuration=Debug /p:Version=$env:CC_BUILD_VERSION
-
+if($RunTests -or $EnableCoverage)
+{
     # Test
-    $serachDirs = ".\src\*\bin\Debug\netcoreapp2.0"
-    $testAssemblies = $null
+    $serachDirs = [System.IO.Path]::Combine($PSScriptRoot, "src", "*", "bin",  "Debug", "netcoreapp2.0")
+    $runTestsCmd = [System.Guid]::NewGuid().ToString("N") + ".cmd"
+    $runTestsCmd = Join-Path -Path $env:TEMP -ChildPath $runTestsCmd
+    $testAssemblies = ""
     
-    Get-ChildItem -Path $serachDirs -Include *.Tests.dll -Recurse | %{ $testAssemblies += $_.FullName + " " }
-
+    Get-ChildItem ./src/*.Tests | %{ $testAssemblies += "dotnet test `"" + $_.FullName + "`" --no-build`n" }
+    
     if (!!$testAssemblies) # Has test assemblies
-    {
-        $vstest = Join-Path -Path "C:\*\Microsoft Visual Studio\2017\*\Common7\IDE\Extensions\TestPlatform" -ChildPath "vstest.console.exe" -Resolve
-        $vstestFramework = "/Framework:FrameworkCore10"
-        $vstestLogger = $null
-    
-        #if ($runsOnAppVeyor)
-        #{
-        #    $vstestLogger = "/logger:Appveyor"
-        #}
+    {    
+        $userDirectory = $env:USERPROFILE
+        if($IsMacOS) 
+        {
+            $userDirectory = $env:HOME
+        }
+        
+        [System.IO.File]::WriteAllText($runTestsCmd, $testAssemblies)
+        Write-Host $runTestsCmd
 
-        if ($codeCoverageEnabled)
+        if ($EnableCoverage)
         {
             # Test & Code Coverage
-            $openCover = Join-Path -Path $env:USERPROFILE -ChildPath ".nuget\packages\OpenCover\*\tools\OpenCover.Console.exe" -Resolve
-            $coveralls = Join-Path -Path $env:USERPROFILE -ChildPath ".nuget\packages\coveralls.io\*\tools\coveralls.net.exe" -Resolve
+            $nugetPackages = [System.IO.Path]::Combine($userDirectory, ".nuget", "packages")
+            
+            $openCover = [System.IO.Path]::Combine($nugetPackages, "OpenCover", "*", "tools",  "OpenCover.Console.exe")
+            $openCover = Resolve-Path $openCover
 
-            Invoke-Expression ($openCover + ' -register:user -target:"' + $vstest + '" -targetargs:"' + $testAssemblies + ' ' + $vstestFramework + ' ' + $vstestLogger + '" -searchdirs:"' + $serachDirs + '" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[*Tracing]*"')
-            Invoke-Expression ($coveralls + ' --opencover coverage.xml')
+            $coveralls = [System.IO.Path]::Combine($nugetPackages, "coveralls.io", "*", "tools",  "coveralls.net.exe")
+            $coveralls = Resolve-Path $coveralls
+
+            & $openCover -register:user -target:"$runTestsCmd" -searchdirs:"$serachDirs" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[ChilliCream*]*"
+            & $coveralls --opencover coverage.xml
         }
         else
         {
             # Test
-            & $vstest $testAssemblies $vstestFramework $vstestLogger
+            & $runTestsCmd
         }
     }
+}
 
-    if ($isRelease)
-    {
-        # End Analyzation
-        Invoke-Expression ($sonar + ' end /d:"sonar.login=' + $env:SONAR_TOKEN + '"')
+if($EnableSonar)
+{
+    # Sonar for .Net Core is not supported right now; for more information go to https://jira.sonarsource.com/browse/SONARMSBRU-310
+    #Invoke-Expression ('SonarQube.Scanner.MSBuild.exe end /d:"sonar.login=' + $env:SONARQUBE_TOKEN + '"')
+}
 
-        # Pack
-        dotnet pack .\src\Tracing.sln --include-symbols --include-source -c Release /p:PackageVersion=$env:CC_BUILD_VERSION
-    }
+if($Pack)
+{
+    dotnet pack src --include-symbols --include-source -c Release /p:PackageVersion=$version
 }
