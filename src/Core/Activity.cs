@@ -1,9 +1,9 @@
-﻿using ChilliCream.Tracing.Abstractions;
+﻿using Thor.Core.Abstractions;
 using System;
 using System.Runtime.CompilerServices;
-using static ChilliCream.Tracing.ActivityEventSource;
+using static Thor.Core.ActivityEventSource;
 
-namespace ChilliCream.Tracing
+namespace Thor.Core
 {
     /// <summary>
     /// A default activity to group log events even across threads.

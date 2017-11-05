@@ -1,17 +1,17 @@
 <Project>
 
   <PropertyGroup>
-    <Product>ChilliCream Tracing</Product>
+    <Product>Thor Core</Product>
     <Authors>ChilliCream authors and contributors</Authors>
     <Company>ChilliCream</Company>
     <Copyright>Copyright © 2017 ChilliCream (Michael &amp; Rafael Staib)</Copyright>
-    <PackageLicenseUrl>https://github.com/ChilliCream/Tracing/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/ChilliCream/Tracing</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ChilliCream/Tracing</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/ChilliCream/thor-core/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/ChilliCream/thor-core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ChilliCream/thor-core</RepositoryUrl>
     <PackageTags>ETW, EventSource, Logging, Tracing</PackageTags>
-    <PackageReleaseNotes>Release notes: https://github.com/ChilliCream/Tracing/releases/$(PackageVersion)</PackageReleaseNotes>
+    <PackageReleaseNotes>Release notes: https://github.com/ChilliCream/thor-core/releases/$(PackageVersion)</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://github.com/ChilliCream/Tracing/raw/master/icon.png</PackageIconUrl>
+    <PackageIconUrl>https://github.com/ChilliCream/thor-core/raw/master/icon.png</PackageIconUrl>
     <RepositoryType>GitHub</RepositoryType>
   </PropertyGroup>
 

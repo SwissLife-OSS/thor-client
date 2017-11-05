@@ -1,9 +1,9 @@
-﻿using ChilliCream.Tracing.Abstractions;
+﻿using Thor.Core.Abstractions;
 using FluentAssertions;
 using System;
 using Xunit;
 
-namespace ChilliCream.Tracing.Tests
+namespace Thor.Core.Tests
 {
     public class ImmutableStackTests
     {

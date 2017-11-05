@@ -1,4 +1,4 @@
-﻿namespace ChilliCream.Tracing.Abstractions
+﻿namespace Thor.Core.Abstractions
 {
     /// <summary>
     /// A bunch of convenient <see cref="string"/> extension methods.

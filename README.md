@@ -1,14 +1,2 @@
-# Tracing
-
-**An *ETW* EventSource Tracing Core build on *.Net Standard 2.0***
-
-## Tools
-
-Some tools we used to create the **Tracing** library.
-
-|                       | Tools |
-| --------------------- | ----- |
-| Artefact Repository | [![NuGet](https://img.shields.io/nuget/v/ChilliCream.Tracing.svg)](https://www.nuget.org/packages/ChilliCream.Tracing) |
-| Build Tools         | [![AppVeyor branch](https://img.shields.io/appveyor/ci/rstaib/Tracing/master.svg)](https://ci.appveyor.com/project/rstaib/tracing) |
-| Quality Tools       | [![Coveralls](https://img.shields.io/coveralls/ChilliCream/Tracing.svg)](https://coveralls.io/github/ChilliCream/Tracing?branch=master) |
-| Source Control      | [![GitHub release](https://img.shields.io/github/release/ChilliCream/Tracing.svg)](https://github.com/ChilliCream/Tracing/releases) [![license](https://img.shields.io/github/license/ChilliCream/Tracing.svg)](https://github.com/ChilliCream/Tracing/blob/raf/dev/LICENSE) |
+# Thor Core
+[![release](https://img.shields.io/github/release/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/releases) [![package](https://img.shields.io/nuget/v/Thor.Core.svg)](https://www.nuget.org/packages/Thor.Core) [![license](https://img.shields.io/github/license/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/blob/master/LICENSE) [![build](https://img.shields.io/appveyor/ci/rstaib/thor-core/master.svg)](https://ci.appveyor.com/project/rstaib/thor-core) [![tests](https://img.shields.io/appveyor/tests/rstaib/thor-core/master.svg)](https://ci.appveyor.com/project/rstaib/thor-core) [![coverage](https://img.shields.io/coveralls/ChilliCream/thor-core.svg)](https://coveralls.io/github/ChilliCream/thor-core?branch=master)

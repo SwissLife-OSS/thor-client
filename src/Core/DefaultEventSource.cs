@@ -1,9 +1,9 @@
-﻿using ChilliCream.Tracing.Abstractions;
+﻿using Thor.Core.Abstractions;
 using System;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 
-namespace ChilliCream.Tracing
+namespace Thor.Core
 {
     /// <summary>
     /// A default <see cref="EventSource"/> in case semantic logging is not favoured but the power of ETW.

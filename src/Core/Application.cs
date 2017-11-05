@@ -1,7 +1,7 @@
 ﻿using System;
-using static ChilliCream.Tracing.ApplicationEventSource;
+using static Thor.Core.ApplicationEventSource;
 
-namespace ChilliCream.Tracing
+namespace Thor.Core
 {
     /// <summary>
     /// 
