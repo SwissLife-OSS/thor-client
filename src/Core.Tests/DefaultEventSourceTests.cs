@@ -1,8 +1,8 @@
-﻿using Thor.Analyzer;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using FluentAssertions;
+using Thor.Analyzer;
 using Xunit;
 
 namespace Thor.Core.Tests

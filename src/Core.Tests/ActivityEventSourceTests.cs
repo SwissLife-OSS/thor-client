@@ -1,5 +1,5 @@
-﻿using Thor.Analyzer;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Thor.Analyzer;
 using Xunit;
 
 namespace Thor.Core.Tests

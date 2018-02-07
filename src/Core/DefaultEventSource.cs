@@ -1,7 +1,7 @@
-﻿using Thor.Core.Abstractions;
-using System;
+﻿using System;
 using System.Diagnostics.Tracing;
 using System.Globalization;
+using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {
