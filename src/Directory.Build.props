@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <CcSourceDirectory>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</CcSourceDirectory>
+    <CcVersionProps>$([System.IO.Path]::Combine($(CcSourceDirectory), 'Version.props'))</CcVersionProps>
+    <CcPackageProps>$([System.IO.Path]::Combine($(CcSourceDirectory), 'Package.props'))</CcPackageProps>
+  </PropertyGroup>
+  
+  <Import Project="$(CcVersionProps)" Condition="Exists('$(CcVersionProps)')"/>
+  <Import Project="$(CcPackageProps)" Condition="Exists('$(CcPackageProps)')"/>
+</Project>

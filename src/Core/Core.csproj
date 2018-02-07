@@ -1,8 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Package.props" />
-  <Import Project="..\Version.props" />
-
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
     <PackageId>Thor.Core</PackageId>
