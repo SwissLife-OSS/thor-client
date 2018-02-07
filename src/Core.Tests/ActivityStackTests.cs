@@ -1,6 +1,6 @@
-﻿using Thor.Core.Abstractions;
+﻿using System;
 using FluentAssertions;
-using System;
+using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests

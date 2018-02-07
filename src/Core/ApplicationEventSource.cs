@@ -1,5 +1,5 @@
-﻿using Thor.Core.Abstractions;
-using System.Diagnostics.Tracing;
+﻿using System.Diagnostics.Tracing;
+using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {
