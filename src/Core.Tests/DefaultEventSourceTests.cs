@@ -106,7 +106,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Critical(format, "");
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
 
@@ -120,7 +120,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Critical(message);
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
 
@@ -210,7 +210,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Error(format, "");
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
 
@@ -224,7 +224,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Error(message);
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
 
@@ -314,7 +314,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Info(format, "");
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
 
@@ -328,7 +328,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Info(message);
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
 
@@ -418,7 +418,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Verbose(format, "");
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
 
@@ -432,7 +432,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Verbose(message);
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
 
@@ -522,7 +522,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Warning(format, "");
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("format");
         }
 
@@ -536,7 +536,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Warning(message);
 
             // assert
-            validate.ShouldThrowExactly<ArgumentNullException>()
+            validate.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("message");
         }
 

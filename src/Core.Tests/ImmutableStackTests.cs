@@ -63,7 +63,7 @@ namespace Thor.Core.Tests
             Action verify = () => stack.Peek();
 
             // assert
-            verify.ShouldThrowExactly<InvalidOperationException>()
+            verify.Should().ThrowExactly<InvalidOperationException>()
                 .Which.Message.Should().Be(Abstractions.ExceptionMessages.ImmutableStackIsEmpty);
         }
 
@@ -94,7 +94,7 @@ namespace Thor.Core.Tests
             Action verify = () => stack.Pop();
 
             // assert
-            verify.ShouldThrowExactly<InvalidOperationException>()
+            verify.Should().ThrowExactly<InvalidOperationException>()
                 .Which.Message.Should().Be(Abstractions.ExceptionMessages.ImmutableStackIsEmpty);
         }
 
