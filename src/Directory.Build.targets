@@ -1,6 +1,6 @@
 <Project>
     <Target Name="CheckCcPropertyFiles" BeforeTargets="Build">
+      <Error Text="Could not load package.props file." Condition="!Exists('$(CcPackageProps)')" />
       <Error Text="Could not load version.props file." Condition="!Exists('$(CcVersionProps)')" />
-      <Error Text="Could not load package.props file." Condition="!Exists('$(SlPackageProps)')" />
     </Target>
 </Project>
