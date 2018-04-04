@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentAssertions;
 using Thor.Core.Abstractions;
 using Xunit;
 
@@ -16,7 +15,7 @@ namespace Thor.Core.Tests
             ImmutableStack<string> stack = ImmutableStack<string>.Empty;
 
             // assert
-            stack.Should().NotBeNull();
+            Assert.NotNull(stack);
         }
 
         #endregion
@@ -33,7 +32,7 @@ namespace Thor.Core.Tests
             bool isEmpty = stack.IsEmpty;
 
             // assert
-            isEmpty.Should().BeTrue();
+            Assert.True(isEmpty);
         }
 
         [Fact(DisplayName = "IsEmpty: Should return false if not empty")]
@@ -46,7 +45,7 @@ namespace Thor.Core.Tests
             bool isEmpty = stack.IsEmpty;
 
             // assert
-            isEmpty.Should().BeFalse();
+            Assert.False(isEmpty);
         }
 
         #endregion
@@ -60,11 +59,11 @@ namespace Thor.Core.Tests
             ImmutableStack<string> stack = ImmutableStack<string>.Empty;
 
             // act
-            Action verify = () => stack.Peek();
+            Action validate = () => stack.Peek();
 
             // assert
-            verify.Should().ThrowExactly<InvalidOperationException>()
-                .Which.Message.Should().Be(Abstractions.ExceptionMessages.ImmutableStackIsEmpty);
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(validate);
+            Assert.Equal(Abstractions.ExceptionMessages.ImmutableStackIsEmpty, exception.Message);
         }
 
         [Fact(DisplayName = "Peek: Should return the top element if stack is not empty")]
@@ -77,7 +76,7 @@ namespace Thor.Core.Tests
             string result = stack.Peek();
 
             // assert
-            result.Should().Be("Top");
+            Assert.Equal("Top", result);
         }
 
         #endregion
@@ -91,11 +90,11 @@ namespace Thor.Core.Tests
             ImmutableStack<string> stack = ImmutableStack<string>.Empty;
 
             // act
-            Action verify = () => stack.Pop();
+            Action validate = () => stack.Pop();
 
             // assert
-            verify.Should().ThrowExactly<InvalidOperationException>()
-                .Which.Message.Should().Be(Abstractions.ExceptionMessages.ImmutableStackIsEmpty);
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(validate);
+            Assert.Equal(Abstractions.ExceptionMessages.ImmutableStackIsEmpty, exception.Message);
         }
 
         [Fact(DisplayName = "Pop: Should return a stack that lacks the top element if stack is not empty")]
@@ -108,7 +107,7 @@ namespace Thor.Core.Tests
             ImmutableStack<string> result = stack.Pop();
 
             // assert
-            result.Peek().Should().Be("Bottom");
+            Assert.Equal("Bottom", result.Peek());
         }
 
         [Fact(DisplayName = "Pop: Should return an empty stack if the stack had only one element before")]
@@ -121,7 +120,7 @@ namespace Thor.Core.Tests
             ImmutableStack<string> result = stack.Pop();
 
             // assert
-            result.IsEmpty.Should().BeTrue();
+            Assert.True(result.IsEmpty);
         }
 
         #endregion

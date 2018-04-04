@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using System.Linq;
-using FluentAssertions;
 using Thor.Analyzer;
 using Xunit;
 
@@ -19,7 +18,7 @@ namespace Thor.Core.Tests
             Report report = analyzer.Inspect(DefaultEventSource.Log);
 
             // assert
-            report.HasErrors.Should().BeFalse();
+            Assert.False(report.HasErrors);
         }
 
         #region Critical
@@ -33,10 +32,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Critical("Critical-Message-Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -52,11 +48,11 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Critical("Critical-Message-Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -69,10 +65,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Critical("Critical-Format-{0}", "Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -88,11 +81,11 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Critical("Critical-Message-{0}", "Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -106,8 +99,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Critical(format, "");
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("format");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("format", exception.ParamName);
         }
 
         [InlineData("")]
@@ -120,8 +113,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Critical(message);
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("message");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("message", exception.ParamName);
         }
 
         #endregion
@@ -137,10 +130,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Error("Error-Message-Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -156,11 +146,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Error("Critical-Message-Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -173,10 +161,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Error("Error-Format-{0}", "Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -192,11 +177,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Error("Error-Message-{0}", "Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -210,8 +193,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Error(format, "");
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("format");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("format", exception.ParamName);
         }
 
         [InlineData("")]
@@ -224,8 +207,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Error(message);
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("message");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("message", exception.ParamName);
         }
 
         #endregion
@@ -241,10 +224,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Info("Info-Message-Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -260,11 +240,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Info("Info-Message-Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -277,10 +255,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Info("Info-Format-{0}", "Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -296,11 +271,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Info("Info-Message-{0}", "Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -314,8 +287,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Info(format, "");
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("format");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("format", exception.ParamName);
         }
 
         [InlineData("")]
@@ -328,8 +301,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Info(message);
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("message");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("message", exception.ParamName);
         }
 
         #endregion
@@ -345,10 +318,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Verbose("Verbose-Message-Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -364,11 +334,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Verbose("Verbose-Message-Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -381,10 +349,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Verbose("Verbose-Format-{0}", "Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -400,11 +365,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Verbose("Verbose-Message-{0}", "Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -418,8 +381,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Verbose(format, "");
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("format");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("format", exception.ParamName);
         }
 
         [InlineData("")]
@@ -432,8 +395,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Verbose(message);
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("message");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("message", exception.ParamName);
         }
 
         #endregion
@@ -449,10 +412,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Warning("Warning-Message-Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -468,11 +428,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Warning("Warning-Message-Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -485,10 +443,7 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Warning("Warning-Format-{0}", "Disabled");
 
                 // assert
-                listener
-                    .OrderedEvents
-                    .Should()
-                    .HaveCount(0);
+                Assert.Empty(listener.OrderedEvents);
             };
         }
 
@@ -504,11 +459,9 @@ namespace Thor.Core.Tests
                 DefaultEventSource.Log.Warning("Warning-Message-{0}", "Enabled");
 
                 // assert
-                listener
+                EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.Message == expectedMessage)
-                    .Should()
-                    .NotBeNull();
+                    .FirstOrDefault(e => e.Message == expectedMessage);
             });
         }
 
@@ -522,8 +475,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Warning(format, "");
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("format");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("format", exception.ParamName);
         }
 
         [InlineData("")]
@@ -536,8 +489,8 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Warning(message);
 
             // assert
-            validate.Should().ThrowExactly<ArgumentNullException>()
-                .Which.ParamName.Should().Be("message");
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
+            Assert.Equal("message", exception.ParamName);
         }
 
         #endregion
