@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentAssertions;
 using Thor.Core.Abstractions;
 using Xunit;
 
@@ -14,7 +13,7 @@ namespace Thor.Core.Tests
             Guid result = ActivityStack.Id;
 
             // assert
-            result.Should().BeEmpty();
+            Assert.Equal(Guid.Empty, result);
         }
 
         [Fact(DisplayName = "Id: Should return an id")]
@@ -32,7 +31,7 @@ namespace Thor.Core.Tests
                 Guid result = ActivityStack.Id;
 
                 // assert
-                result.Should().Be(activityId);
+                Assert.Equal(activityId, result);
             }
             finally
             {

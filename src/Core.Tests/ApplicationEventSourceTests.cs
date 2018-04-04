@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Thor.Analyzer;
+﻿using Thor.Analyzer;
 using Xunit;
 
 namespace Thor.Core.Tests
@@ -16,7 +15,7 @@ namespace Thor.Core.Tests
             Report report = analyzer.Inspect(ApplicationEventSource.Log);
 
             // assert
-            report.HasErrors.Should().BeFalse();
+            Assert.False(report.HasErrors);
         }
     }
 }
