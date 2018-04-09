@@ -16,7 +16,7 @@ namespace Thor.Core.Abstractions
         };
 
         /// <summary>
-        /// Serializes an object for <see cref="IAttachment.Content"/>.
+        /// Serializes an object for <see cref="IAttachment.Value"/>.
         /// </summary>
         /// <param name="content">An object.</param>
         /// <returns>A UTF8 byte array.</returns>

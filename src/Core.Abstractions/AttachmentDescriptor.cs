@@ -11,13 +11,19 @@
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the payload name.
+        /// </summary>
+        /// <returns></returns>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the type name minus "Attachment".
         /// </summary>
         public string TypeName { get; set; }
 
         /// <summary>
-        /// Gets or sets the content stream.
+        /// Gets or sets the payload value.
         /// </summary>
-        public byte[] Content { get; set; }
+        public byte[] Value { get; set; }
     }
 }
