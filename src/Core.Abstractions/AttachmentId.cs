@@ -9,6 +9,7 @@ namespace Thor.Core.Abstractions
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct AttachmentId
+        : IEquatable<AttachmentId>
     {
         private readonly DateTime _timestamp;
         private readonly Guid _uniqueId;
@@ -54,6 +55,12 @@ namespace Thor.Core.Abstractions
         }
 
         /// <inheritdoc/>
+        public bool Equals(AttachmentId id)
+        {
+            return _timestamp == id._timestamp && _uniqueId.Equals(id._uniqueId);
+        }
+
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (!(obj is AttachmentId))
@@ -61,9 +68,7 @@ namespace Thor.Core.Abstractions
                 return false;
             }
 
-            AttachmentId id = (AttachmentId)obj;
-
-            return _timestamp == id._timestamp && _uniqueId.Equals(id._uniqueId);
+            return Equals((AttachmentId)obj);
         }
 
         /// <inheritdoc/>

@@ -7,7 +7,7 @@ namespace Thor.Core.Abstractions
     /// </summary>
     public static class AttachmentExtensions
     {
-        private readonly static string _typeNameSuffix = "Attachment";
+        private const string _typeNameSuffix = "Attachment";
 
         /// <summary>
         /// Gets the type name of an attachment minus "Attachment".

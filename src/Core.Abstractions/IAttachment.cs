@@ -1,7 +1,9 @@
 ﻿namespace Thor.Core.Abstractions
 {
     /// <summary>
-    /// An attachment is an object that is connected to a single ETW event but stored in a different way.
+    /// An attachment is a complex type which is part of a ETW event in form of a payload, but
+    /// stored in a different way because of the limits of ETW itself. ETW is not able to handle
+    /// complex types or even reference types and has a limit in size (64KB with headers).
     /// </summary>
     public interface IAttachment
     {
@@ -12,8 +14,13 @@
         AttachmentId Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the serialized content.
+        /// Gets or sets the payload name.
         /// </summary>
-        byte[] Content { get; set; }
+        string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the serialized payload value.
+        /// </summary>
+        byte[] Value { get; set; }
     }
 }

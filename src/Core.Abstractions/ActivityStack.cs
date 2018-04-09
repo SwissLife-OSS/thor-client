@@ -8,14 +8,13 @@ namespace Thor.Core.Abstractions
     /// </summary>
     public static class ActivityStack
     {
-        private static readonly string _name = Guid.NewGuid().ToString();
         private static readonly AsyncLocal<ActivityState> _callContext = new AsyncLocal<ActivityState>();
 
         private static ImmutableStack<Guid> Current
         {
             get
             {
-                ActivityState state = _callContext.Value as ActivityState;
+                ActivityState state = _callContext.Value;
 
                 return (state == null) ? ImmutableStack<Guid>.Empty : state.ActivityIds;
             }

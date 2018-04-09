@@ -10,6 +10,9 @@
         public AttachmentId Id { get; set; }
 
         /// <inheritdoc/>
-        public byte[] Content { get; set; }
+        public string Name { get; set; }
+
+        /// <inheritdoc/>
+        public byte[] Value { get; set; }
     }
 }

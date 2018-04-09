@@ -66,29 +66,43 @@ namespace Thor.Core.Abstractions
         }
 
         /// <summary>
-        /// Dispatches an attachment.
+        /// Dispatches one or more attachments.
         /// </summary>
-        /// <param name="attachment">An attachment.</param>
+        /// <param name="attachments">A collection of attachments.</param>
         /// <exception cref="ArgumentNullException">
-        /// Throws if <paramref name="attachment"/> is null.
+        /// Throws if <paramref name="attachments"/> is null.
         /// </exception>
-        public void Dispatch(IAttachment attachment)
+        public void Dispatch(params IAttachment[] attachments)
         {
-            if (attachment == null)
+            if (attachments == null)
             {
-                throw new ArgumentNullException(nameof(attachment));
+                throw new ArgumentNullException(nameof(attachments));
             }
 
-            AttachmentDescriptor descriptor = new AttachmentDescriptor
+            if (attachments.Length == 0)
             {
-                Id = attachment.Id.ToString(),
-                TypeName = attachment.GetTypeName(),
-                Content = attachment.Content
-            };
+                throw new ArgumentOutOfRangeException(nameof(attachments));
+            }
+
+            AttachmentDescriptor[] descriptors = new AttachmentDescriptor[attachments.Length];
+
+            for (int i = 0; i < attachments.Length; i++)
+            {
+                descriptors[i] = new AttachmentDescriptor
+                {
+                    Id = attachments[i].Id.ToString(),
+                    Name = attachments[i].Name,
+                    TypeName = attachments[i].GetTypeName(),
+                    Value = attachments[i].Value
+                };
+            }
 
             foreach (Action<AttachmentDescriptor> observer in _observers)
             {
-                observer(descriptor);
+                foreach (AttachmentDescriptor descriptor in descriptors)
+                {
+                    observer(descriptor);
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Moq;
 using Thor.Core.Abstractions;
 using Xunit;
@@ -85,28 +86,44 @@ namespace Thor.Core.Tests
         #region Dispatch
 
         [Fact(DisplayName = "Dispatch: Should throw an argument null excption for attachment")]
-        public void Dispatch_AttachmentNull()
+        public void Dispatch_AttachmentsNull()
         {
             // arrange
-            IAttachment attachment = null;
+            IAttachment[] attachments = null;
             HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
             AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
 
             // act
-            Action validate = () => dispatcher.Dispatch(attachment);
+            Action validate = () => dispatcher.Dispatch(attachments);
 
             // assert
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("attachment", exception.ParamName);
+            Assert.Equal("attachments", exception.ParamName);
         }
 
-        [Fact(DisplayName = "Dispatch: Should dispatch an attachment")]
-        public void Dispatch_Success()
+        [Fact(DisplayName = "Dispatch: Should throw an argument null excption for attachment")]
+        public void Dispatch_AttachmentsEmpty()
         {
             // arrange
-            bool called = false;
+            IAttachment[] attachments = new IAttachment[0];
+            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+
+            // act
+            Action validate = () => dispatcher.Dispatch(attachments);
+
+            // assert
+            ArgumentOutOfRangeException exception = Assert.Throws<ArgumentOutOfRangeException>(validate);
+            Assert.Equal("attachments", exception.ParamName);
+        }
+
+        [Fact(DisplayName = "Dispatch: Should dispatch a single attachment")]
+        public void Dispatch_Single_Success()
+        {
+            // arrange
+            int callCount = 0;
             IAttachment attachment = new Mock<IAttachment>().Object;
-            Action<AttachmentDescriptor> observer = a => { called = true; };
+            Action<AttachmentDescriptor> observer = a => { Interlocked.Increment(ref callCount); };
             HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>()
             {
                 observer
@@ -117,7 +134,32 @@ namespace Thor.Core.Tests
             dispatcher.Dispatch(attachment);
 
             // assert
-            Assert.True(called);
+            Assert.Equal(1, callCount);
+        }
+
+        [Fact(DisplayName = "Dispatch: Should dispatch multiple attachments")]
+        public void Dispatch_Multiple_Success()
+        {
+            // arrange
+            int callCount = 0;
+            IAttachment[] attachments = new[]
+            {
+                new Mock<IAttachment>().Object,
+                new Mock<IAttachment>().Object,
+                new Mock<IAttachment>().Object
+            };
+            Action<AttachmentDescriptor> observer = a => { Interlocked.Increment(ref callCount); };
+            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>()
+            {
+                observer
+            };
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+
+            // act
+            dispatcher.Dispatch(attachments);
+
+            // assert
+            Assert.Equal(3, callCount);
         }
 
         #endregion
