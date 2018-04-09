@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
-    <PackageId>Thor.Core.Abstractions</PackageId>
-    <AssemblyName>Thor.Core.Abstractions</AssemblyName>
-    <RootNamespace>Thor.Core.Abstractions</RootNamespace>
+    <PackageId>Thor.Core.Aspnet</PackageId>
+    <AssemblyName>Thor.Core.Aspnet</AssemblyName>
+    <RootNamespace>Thor.Core.Aspnet</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Description>Provides an ETW EventSource Tracing Abstractions build on .Net Standard 2.0.</Description>
+    <Description>Provides an aspnet middleware build on .Net Standard 2.0.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
@@ -45,7 +45,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.1" />
+    <ProjectReference Include="..\Core.Abstractions\Core.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
