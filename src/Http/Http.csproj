@@ -44,4 +44,8 @@
     <DefineConstants>TRACE;NET461</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Abstractions\Core.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
