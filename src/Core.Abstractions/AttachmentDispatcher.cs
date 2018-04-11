@@ -90,7 +90,7 @@ namespace Thor.Core.Abstractions
             {
                 descriptors[i] = new AttachmentDescriptor
                 {
-                    Id = attachments[i].Id.ToString(),
+                    Id = attachments[i].Id,
                     Name = attachments[i].Name,
                     TypeName = attachments[i].GetTypeName(),
                     Value = attachments[i].Value

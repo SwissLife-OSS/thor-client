@@ -4,7 +4,7 @@ using static Thor.Core.ApplicationEventSource;
 namespace Thor.Core
 {
     /// <summary>
-    /// 
+    /// An application scope.
     /// </summary>
     public static class Application
     {

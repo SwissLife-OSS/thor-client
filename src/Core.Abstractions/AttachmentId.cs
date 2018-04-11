@@ -54,6 +54,15 @@ namespace Thor.Core.Abstractions
                 !left._uniqueId.Equals(right._uniqueId);
         }
 
+        /// <summary>
+        /// An implicit operator for string.
+        /// </summary>
+        /// <param name="id">An attachment id.</param>
+        public static implicit operator string(AttachmentId id)
+        {
+            return id.ToString();
+        }
+
         /// <inheritdoc/>
         public bool Equals(AttachmentId id)
         {
