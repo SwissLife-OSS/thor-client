@@ -26,7 +26,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Send: Should log a client request start")]
         public void Send()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Initiate GET http://127.0.0.1/api/events";
@@ -36,20 +36,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Send(activityId, "GET", "http://127.0.0.1/api/events");
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("9199"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 4, activityId, expectedMessage);
+                AssertItem(firstItem, 2, activityId, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "Send: Should log a client request stop")]
         public void Receive()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Receive 404 NOTFOUND";
@@ -60,13 +61,14 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Receive(activityId, userId, 404, "NOTFOUND");
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("5556"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 5, activityId, userId, expectedMessage);
+                AssertItem(firstItem, 2, activityId, userId, expectedMessage);
             });
         }
 
@@ -77,7 +79,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Start: Should log a server reqeust start")]
         public void Start()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
@@ -87,20 +89,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Start(activityId, "GET", "http://127.0.0.1/api/events");
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("2338"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 5, activityId, expectedMessage);
+                AssertItem(firstItem, 2, activityId, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "Start: Should log a server reqeust start (HttpRequest)")]
         public void Start_HttpRequest()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
@@ -115,20 +118,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Start(activityId, request);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("1111"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 5, activityId, expectedMessage);
+                AssertItem(firstItem, 2, activityId, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop")]
         public void Stop()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -139,20 +143,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Stop(activityId, userId, 200);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("2212"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 6, activityId, userId, expectedMessage);
+                AssertItem(firstItem, 2, activityId, userId, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop (HttpResponse)")]
         public void Stop_HttpResponse()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -168,20 +173,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Stop(activityId, response);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("9991"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 6, activityId, userId, expectedMessage);
+                AssertItem(firstItem, 2, activityId, userId, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop without a status code and user id (HttpResponse)")]
         public void Stop_HttpResponse_NoStatusAndUserId()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -196,20 +202,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Stop(activityId, response);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("6667"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 6, activityId, null, expectedMessage);
+                AssertItem(firstItem, 2, activityId, null, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop with response null (HttpResponse)")]
         public void Stop_HttpResponse_Null()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -220,13 +227,14 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.Stop(activityId, response);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("1345"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 6, activityId, null, expectedMessage);
+                AssertItem(firstItem, 2, activityId, null, expectedMessage);
             });
         }
 
@@ -237,7 +245,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "BeginTransfer: Should log a begin transfer")]
         public void BeginTransfer()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 const string expectedMessage = "Begin activity transfer";
@@ -247,20 +255,21 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.BeginTransfer(activityId);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
-                    .FirstOrDefault(e => e.GetFormattedMessage() == expectedMessage);
+                    .Select(e => e.Map("8768"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
-                AssertItem(firstItem, 2, activityId, expectedMessage);
+                AssertItem(firstItem, 0, activityId, expectedMessage);
             });
         }
 
         [Fact(DisplayName = "EndTransfer: Should log an end transfer")]
         public void EndTransfer()
         {
-            ProbeEvents(RequestEventSource.Log, listener =>
+            RequestEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 const string expectedMessage = "End activity transfer";
@@ -271,33 +280,34 @@ namespace Thor.Core.Http.Tests
                 RequestEventSource.Log.EndTransfer(activityId, relatedActivityId);
 
                 // assert
-                EventWrittenEventArgs firstItem = listener
+                TelemetryEvent firstItem = listener
                     .OrderedEvents
+                    .Select(e => e.Map("2321"))
                     .FirstOrDefault(e => e.Message == expectedMessage);
 
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
                 Assert.Equal(relatedActivityId, firstItem.RelatedActivityId);
-                AssertItem(firstItem, 2, activityId, expectedMessage);
+                AssertItem(firstItem, 0, activityId, expectedMessage);
             });
         }
 
         #endregion
 
-        private static void AssertItem(EventWrittenEventArgs item, int expectedCount,
+        private static void AssertItem(TelemetryEvent item, int expectedCount,
             Guid expectedActivityId, Guid? expectedUserId, string expectedMessage)
         {
             AssertItem(item, expectedCount, expectedActivityId, expectedMessage);
 
-            Assert.Equal(expectedUserId, item.GetUserId());
+            Assert.Equal(expectedUserId, item.UserId);
         }
 
-        private static void AssertItem(EventWrittenEventArgs item, int expectedCount,
+        private static void AssertItem(TelemetryEvent item, int expectedCount,
             Guid expectedActivityId, string expectedMessage)
         {
-            Assert.Equal(0, item.GetApplicationId());
-            Assert.Equal(expectedActivityId, item.GetActivityId());
-            Assert.Equal(EventSourceNames.Request, item.EventSource.Name);
+            Assert.Equal(0, item.ApplicationId);
+            Assert.Equal(expectedActivityId, item.ActivityId);
+            Assert.Equal(EventSourceNames.Request, item.ProviderName);
 
             if (expectedCount == 0)
             {
@@ -306,23 +316,6 @@ namespace Thor.Core.Http.Tests
             else
             {
                 Assert.Equal(expectedCount, item.Payload.Count);
-            }
-        }
-
-        private static void ProbeEvents(EventSource eventSource,
-            Action<ProbeEventListener> execute)
-        {
-            using (ProbeEventListener listener = new ProbeEventListener())
-            {
-                try
-                {
-                    listener.EnableEvents(eventSource, EventLevel.Verbose);
-                    execute(listener);
-                }
-                finally
-                {
-                    listener.DisableEvents(eventSource);
-                }
             }
         }
     }

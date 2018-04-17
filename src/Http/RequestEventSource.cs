@@ -34,7 +34,7 @@ namespace Thor.Core.Http
         }
 
         [Event(_sendEventId, Level = EventLevel.LogAlways, Message = "Initiate {2} {3}",
-            Task = Tasks.Client, Opcode = EventOpcode.Start, Version = 6)]
+            Task = Tasks.Client, Opcode = EventOpcode.Start, Version = 1)]
         private void Send(int applicationId, Guid activityId, string method, string uri)
         {
             StartCore(_sendEventId, applicationId, activityId, method, uri, null);
@@ -53,7 +53,7 @@ namespace Thor.Core.Http
         }
 
         [Event(_receiveEventId, Level = EventLevel.LogAlways, Message = "Receive {3} {4}",
-            Task = Tasks.Client, Opcode = EventOpcode.Stop, Version = 4)]
+            Task = Tasks.Client, Opcode = EventOpcode.Stop, Version = 1)]
         private void Receive(int applicationId, Guid activityId, Guid userId, int statusCode,
             string statusText)
         {
@@ -92,7 +92,7 @@ namespace Thor.Core.Http
         }
 
         [Event(_startEventId, Level = EventLevel.LogAlways, Message = "Request {2} {3}",
-            Task = Tasks.Server, Opcode = EventOpcode.Start, Version = 7)]
+            Task = Tasks.Server, Opcode = EventOpcode.Start, Version = 1)]
         private void Start(int applicationId, Guid activityId, string method, string uri,
             string attachmentId)
         {
@@ -131,7 +131,7 @@ namespace Thor.Core.Http
         }
 
         [Event(_stopEventId, Level = EventLevel.LogAlways, Message = "Response {3} {4}",
-            Task = Tasks.Server, Opcode = EventOpcode.Stop, Version = 5)]
+            Task = Tasks.Server, Opcode = EventOpcode.Stop, Version = 1)]
         private void Stop(int applicationId, Guid activityId, Guid userId, int statusCode,
             string statusText, string attachmentId)
         {
@@ -177,7 +177,7 @@ namespace Thor.Core.Http
         }
 
         [Event(_beginTransferEventId, Level = EventLevel.LogAlways, Message = "Begin activity transfer",
-            Task = Tasks.Transfer, Opcode = EventOpcode.Send, Version = 2)]
+            Task = Tasks.Transfer, Opcode = EventOpcode.Send, Version = 1)]
         private void BeginTransfer(int applicationId, Guid activityId)
         {
             WriteEmptyCore(_beginTransferEventId, applicationId, activityId);
@@ -193,7 +193,7 @@ namespace Thor.Core.Http
         }
 
         [Event(_endTransferEventId, Level = EventLevel.LogAlways, Message = "End activity transfer",
-            Task = Tasks.Transfer, Opcode = EventOpcode.Receive, Version = 2)]
+            Task = Tasks.Transfer, Opcode = EventOpcode.Receive, Version = 1)]
         private void EndTransfer(Guid relatedActivityId, int applicationId, Guid activityId)
         {
             WriteEmptyWithRelatedActivityIdCore(_endTransferEventId, relatedActivityId,

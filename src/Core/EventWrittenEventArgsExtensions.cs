@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Globalization;
 using System.Linq;
 
 namespace Thor.Core
@@ -20,17 +21,56 @@ namespace Thor.Core
         };
 
         /// <summary>
-        /// Gets the activity id stored in the payload.
+        /// Maps a <see cref="EventWrittenEventArgs"/> to a <see cref="TelemetryEvent"/>.
         /// </summary>
-        /// <param name="source">An event to get the activity id from.</param>
-        /// <returns>An activity id; otherwise empty.</returns>
-        public static Guid GetActivityId(this EventWrittenEventArgs source)
+        /// <param name="source">An event to map.</param>
+        /// <param name="sessionName">A session name to add to the destination object.</param>
+        /// <returns>A instance of <see cref="TelemetryEvent"/>.</returns>
+        public static TelemetryEvent Map(this EventWrittenEventArgs source, string sessionName)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
+            if (string.IsNullOrWhiteSpace(sessionName))
+            {
+                throw new ArgumentNullException(nameof(sessionName));
+            }
+
+            TelemetryEvent destination = new TelemetryEvent
+            {
+                ApplicationId = source.GetApplicationId(),
+                AttachmentId = source.GetAttachmentId(),
+                Channel = (int)source.Channel,
+                Id = source.EventId,
+                Level = source.Level,
+                Message = source.GetFormattedMessage(),
+                Name = source.EventName,
+                Payload = source.GetPayloads(),
+                ProcessId = 0,
+                ProcessName = null,
+                ProviderId = source.EventSource.Guid,
+                ProviderName = source.EventSource.Name,
+                OpcodeId = (int)source.Opcode,
+                OpcodeName = source.Opcode.ToString(),
+                ActivityId = source.GetActivityId(),
+                RelatedActivityId = source.RelatedActivityId,
+                Keywords = source.Keywords,
+                SessionName = sessionName,
+                TaskId = (int)source.Task,
+                TaskName = source.Task.ToString(),
+                ThreadId = 0,
+                Timestamp = DateTime.UtcNow.Ticks,
+                UserId = source.GetUserId(),
+                Version = source.Version
+            };
+
+            return destination;
+        }
+
+        private static Guid GetActivityId(this EventWrittenEventArgs source)
+        {
             int index = source.PayloadNames.ToArray().IndexOfName(WellKnownPayloadNames.ActivityId);
             object payload = (index >= 0) ? source.Payload.ToArray()[index] : null;
 
@@ -42,68 +82,37 @@ namespace Thor.Core
             return Guid.Empty;
         }
 
-        /// <summary>
-        /// Gets the application id stored in the payload.
-        /// </summary>
-        /// <param name="source">An event to get the application id from.</param>
-        /// <returns>An application id; otherwise empty.</returns>
-        public static int GetApplicationId(this EventWrittenEventArgs source)
+        private static int GetApplicationId(this EventWrittenEventArgs source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
             int index = source.PayloadNames.ToArray().IndexOfName(WellKnownPayloadNames.ApplicationId);
             object payload = (index >= 0) ? source.Payload.ToArray()[index] : null;
 
             return payload as int? ?? 0;
         }
 
-        /// <summary>
-        /// Gets the attachment id stored in the payload.
-        /// </summary>
-        /// <param name="source">An event to get the attachment id from.</param>
-        /// <returns>An attachment id; otherwise empty.</returns>
-        public static string GetAttachmentId(this EventWrittenEventArgs source)
+        private static string GetAttachmentId(this EventWrittenEventArgs source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
             int index = source.PayloadNames.ToArray().IndexOfName(WellKnownPayloadNames.AttachmentId);
             object payload = (index >= 0) ? source.Payload.ToArray()[index] : null;
 
             return payload as string ?? default(string);
         }
 
-        /// <summary>
-        /// Gets the formatted message stored in the payload.
-        /// </summary>
-        /// <param name="source">An event to get the formatted message from.</param>
-        /// <returns>A formatted message; otherwise empty.</returns>
-        public static string GetFormattedMessage(this EventWrittenEventArgs source)
+        private static string GetFormattedMessage(this EventWrittenEventArgs source)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            object[] payload = source.Payload?.ToArray();
 
-            if (source.Payload == null || source.Payload.Count == 0)
+            if (payload == null || payload.Length == 0)
             {
                 return source.Message;
             }
-
-            return string.Format(source.Message, source.Payload.ToArray());
+            else
+            {
+                return string.Format(CultureInfo.InvariantCulture, source.Message, payload);
+            }
         }
 
-        /// <summary>
-        /// Gets the user id stored in the payload.
-        /// </summary>
-        /// <param name="source">An event to get the user id from.</param>
-        /// <returns>An user id; otherwise empty.</returns>
-        public static Guid? GetUserId(this EventWrittenEventArgs source)
+        private static Guid? GetUserId(this EventWrittenEventArgs source)
         {
             int index = source.PayloadNames.ToArray().IndexOfName(WellKnownPayloadNames.UserId);
             object payload = (index >= 0) ? source.Payload.ToArray()[index] : null;
@@ -114,6 +123,19 @@ namespace Thor.Core
             }
 
             return null;
+        }
+
+        private static Dictionary<string, object> GetPayloads(this EventWrittenEventArgs source)
+        {
+            // Sort some well known payloads out.
+            string[] allNames = source.PayloadNames.ToArray();
+            string[] filteredNames = allNames.Where(p => !_wellKnownPayloadNames.Contains(p)).ToArray();
+            object[] payloads = source.Payload.ToArray();
+
+            return (filteredNames.Length > 0)
+                ? filteredNames.ToDictionary(name => name,
+                    name => payloads[allNames.IndexOfName(name)])
+                : null;
         }
 
         private static int IndexOfName(this string[] names, string name)

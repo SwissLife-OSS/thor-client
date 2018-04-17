@@ -86,6 +86,6 @@ Click [here](https://github.com/ChilliCream/thor-core-docs) to get to the docume
 ## Checkout the Thor Generator
 
 We strongly recommend to use the _Thor Generator_ to generate your own event sources automatically
-and avoid using the `DefaultEventSource`, because ._Semantic Tracing_ is much more powerful for you
+and avoid using the `DefaultEventSource`, because _Semantic Tracing_ is much more powerful for you
 in the end. Click [here](https://github.com/ChilliCream/thor-generator) to get more information
 about the _Thor Generator_.
