@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Abstractions
+﻿namespace Thor.Core
 {
     /// <summary>
     /// An attachment is a complex type which is part of a ETW event in form of a payload, but

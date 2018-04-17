@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     /// <summary>
     /// A bunch of convenient extensions for <see cref="object"/>.

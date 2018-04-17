@@ -134,7 +134,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Error: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Error: Should write one error message to the log stream")]
         public void ErrorEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -149,6 +149,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -165,7 +167,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Error: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Error: Should write one error message to the log stream")]
         public void ErrorFormatEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -180,6 +182,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -228,7 +232,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Info: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Info: Should write one info message to the log stream")]
         public void InfoEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -243,6 +247,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -259,7 +265,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Info: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Info: Should write one info message to the log stream")]
         public void InfoFormatEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -274,6 +280,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -322,7 +330,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Verbose: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Verbose: Should write one verbose message to the log stream")]
         public void VerboseEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -337,6 +345,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -353,7 +363,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Verbose: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Verbose: Should write one verbose message to the log stream")]
         public void VerboseFormatEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -368,6 +378,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -416,7 +428,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Warning: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Warning: Should write one warning message to the log stream")]
         public void WarningEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -431,6 +443,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -447,7 +461,7 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Warning: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Warning: Should write one warning message to the log stream")]
         public void WarningFormatEnabled()
         {
             ProbeEvents(DefaultEventSource.Log, (listener) =>
@@ -462,6 +476,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 

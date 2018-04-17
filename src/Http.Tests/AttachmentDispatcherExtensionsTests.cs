@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Http.Tests
@@ -86,7 +85,7 @@ namespace Thor.Core.Http.Tests
             {
                 d =>
                 {
-                    if (d.Id == id.ToString())
+                    if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
@@ -114,7 +113,7 @@ namespace Thor.Core.Http.Tests
             {
                 d =>
                 {
-                    if (d.Id == id.ToString())
+                    if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
@@ -214,7 +213,7 @@ namespace Thor.Core.Http.Tests
             {
                 d =>
                 {
-                    if (d.Id == id.ToString())
+                    if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
@@ -242,7 +241,7 @@ namespace Thor.Core.Http.Tests
             {
                 d =>
                 {
-                    if (d.Id == id.ToString())
+                    if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Thor.Core.Abstractions;
 using static Thor.Core.ActivityEventSource;
 
 namespace Thor.Core

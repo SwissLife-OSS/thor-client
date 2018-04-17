@@ -1,5 +1,4 @@
 ﻿using System;
-using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests

@@ -1,5 +1,4 @@
 ﻿using System;
-using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests
@@ -63,7 +62,7 @@ namespace Thor.Core.Tests
 
             // assert
             InvalidOperationException exception = Assert.Throws<InvalidOperationException>(validate);
-            Assert.Equal(Abstractions.ExceptionMessages.ImmutableStackIsEmpty, exception.Message);
+            Assert.Equal(ExceptionMessages.ImmutableStackIsEmpty, exception.Message);
         }
 
         [Fact(DisplayName = "Peek: Should return the top element if stack is not empty")]
@@ -94,7 +93,7 @@ namespace Thor.Core.Tests
 
             // assert
             InvalidOperationException exception = Assert.Throws<InvalidOperationException>(validate);
-            Assert.Equal(Abstractions.ExceptionMessages.ImmutableStackIsEmpty, exception.Message);
+            Assert.Equal(ExceptionMessages.ImmutableStackIsEmpty, exception.Message);
         }
 
         [Fact(DisplayName = "Pop: Should return a stack that lacks the top element if stack is not empty")]

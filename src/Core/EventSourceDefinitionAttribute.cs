@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     // todo: Improve documentation
 

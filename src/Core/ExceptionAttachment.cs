@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Abstractions
+﻿namespace Thor.Core
 {
     /// <summary>
     /// An exception attachment.

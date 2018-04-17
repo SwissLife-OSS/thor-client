@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     /// <summary>
     /// A marker interface for all types of activity.

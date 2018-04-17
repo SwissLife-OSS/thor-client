@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     // todo: complete documentation
 

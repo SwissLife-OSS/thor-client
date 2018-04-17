@@ -1,6 +1,4 @@
-﻿using Thor.Core.Abstractions;
-
-namespace Thor.Core.Http
+﻿namespace Thor.Core.Http
 {
     /// <summary>
     /// A bunch of convenient <see cref="AttachmentDispatcher"/> extensions.

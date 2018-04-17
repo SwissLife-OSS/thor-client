@@ -1,6 +1,4 @@
-﻿using Thor.Core.Abstractions;
-
-namespace Thor.Core.Http
+﻿namespace Thor.Core.Http
 {
     /// <summary>
     /// A <c>HTTP</c> request attachment (without body).

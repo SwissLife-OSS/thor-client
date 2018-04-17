@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.Tracing;
-using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {
@@ -10,7 +9,7 @@ namespace Thor.Core
         private const int _startEventId = 1;
         private const int _stopEventId = 2;
 
-        public static readonly ApplicationEventSource Log = new ApplicationEventSource();
+        public static ApplicationEventSource Log { get; } = new ApplicationEventSource();
 
         private ApplicationEventSource() { }
 

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     /// <summary>
     /// An attachment factory.
