@@ -24,10 +24,10 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Map: Should throw an argument null exception for sessionName")]
         public void Map_SessionNameNull()
         {
-            DefaultEventSource.Log.ProbeEvents(listener =>
+            TestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
-                DefaultEventSource.Log.Info("34343");
+                TestEventSource.Log.DoSomething();
                 string sessionName = null;
                 EventWrittenEventArgs @event = listener
                     .OrderedEvents
@@ -44,10 +44,10 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Map: Should return an event")]
         public void Map_Success()
         {
-            DefaultEventSource.Log.ProbeEvents(listener =>
+            TestEventSource.Log.ProbeEvents(listener =>
             {
                 // arrange
-                DefaultEventSource.Log.Info("34343");
+                TestEventSource.Log.DoSomething();
                 string sessionName = "8809";
                 EventWrittenEventArgs @event = listener
                     .OrderedEvents
@@ -62,16 +62,16 @@ namespace Thor.Core.Tests
                 Assert.Null(result.AttachmentId);
                 Assert.Equal(0, result.Channel);
                 Assert.Equal(0, result.EnvironmentId);
-                Assert.Equal(3, result.Id);
+                Assert.Equal(1, result.Id);
                 Assert.Equal(EventLevel.Informational, result.Level);
-                Assert.Equal("34343", result.Message);
-                Assert.Equal("Info", result.Name);
+                Assert.Equal("Test message 555", result.Message);
+                Assert.Equal("DoSomething", result.Name);
                 Assert.Equal(0, result.OpcodeId);
                 Assert.Equal("Info", result.OpcodeName);
                 Assert.Null(result.Payload);
                 Assert.Equal(0, result.ProcessId);
                 Assert.Null(result.ProcessName);
-                Assert.Equal(EventSourceNames.Default, result.ProviderName);
+                Assert.Equal("ChilliCream-Test", result.ProviderName);
                 Assert.Equal(Guid.Empty, result.RelatedActivityId);
                 Assert.Equal("8809", result.SessionName);
                 Assert.Equal(0, result.ThreadId);
