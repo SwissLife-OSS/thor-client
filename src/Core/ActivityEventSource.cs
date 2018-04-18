@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
-using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {
@@ -13,7 +12,7 @@ namespace Thor.Core
         private const int _beginTransferEventId = 3;
         private const int _endTransferEventId = 4;
 
-        public static readonly ActivityEventSource Log = new ActivityEventSource();
+        public static ActivityEventSource Log { get; } = new ActivityEventSource();
 
         private ActivityEventSource() { }
 

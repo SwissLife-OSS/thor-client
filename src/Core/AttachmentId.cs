@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     /// <summary>
     /// An identifier for attachments.
@@ -52,6 +52,15 @@ namespace Thor.Core.Abstractions
         {
             return left._timestamp != right._timestamp ||
                 !left._uniqueId.Equals(right._uniqueId);
+        }
+
+        /// <summary>
+        /// An implicit operator for string.
+        /// </summary>
+        /// <param name="id">An attachment id.</param>
+        public static implicit operator string(AttachmentId id)
+        {
+            return id.ToString();
         }
 
         /// <inheritdoc/>

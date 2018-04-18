@@ -1,9 +1,9 @@
-﻿namespace Thor.Core.Abstractions
+﻿namespace Thor.Core
 {
     /// <summary>
-    /// An object attachment.
+    /// An exception attachment.
     /// </summary>
-    public class ObjectAttachment
+    public class ExceptionAttachment
         : IAttachment
     {
         /// <inheritdoc/>

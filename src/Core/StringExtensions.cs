@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Abstractions
+﻿namespace Thor.Core
 {
     /// <summary>
     /// A bunch of convenient <see cref="string"/> extension methods.

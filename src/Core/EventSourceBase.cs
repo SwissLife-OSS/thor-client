@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     /// <summary>
     /// A base class for <see cref="EventSource"/>s.

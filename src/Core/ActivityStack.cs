@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core
 {
     /// <summary>
     /// A stack that holds the complete activity state.

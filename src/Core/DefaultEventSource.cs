@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using System.Globalization;
-using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {
@@ -22,7 +21,7 @@ namespace Thor.Core
         /// <summary>
         /// A static instance of the <see cref="DefaultEventSource"/> class.
         /// </summary>
-        public static readonly DefaultEventSource Log = new DefaultEventSource();
+        public static DefaultEventSource Log { get; } = new DefaultEventSource();
 
         private DefaultEventSource() { }
 

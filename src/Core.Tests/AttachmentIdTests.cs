@@ -1,5 +1,4 @@
 ﻿using System;
-using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests
@@ -17,7 +16,7 @@ namespace Thor.Core.Tests
 
             // assert
             Assert.Equal(AttachmentId.Empty, id);
-            Assert.Equal(expectedResult, id.ToString());
+            Assert.Equal(expectedResult, id);
         }
         
         [Fact(DisplayName = "NewId: Should create always a new id")]

@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.Core.Tests</AssemblyName>
-    <RootNamespace>Thor.Core.Tests</RootNamespace>
+    <AssemblyName>Thor.Core.Http.Tests</AssemblyName>
+    <RootNamespace>Thor.Core.Http.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -43,18 +42,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
     <PackageReference Include="coveralls.io" Version="1.4.2" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="1.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
+    <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Http\Http.csproj" />
   </ItemGroup>
 
   <ItemGroup>

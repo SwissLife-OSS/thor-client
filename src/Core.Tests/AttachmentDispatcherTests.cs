@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using Moq;
-using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests

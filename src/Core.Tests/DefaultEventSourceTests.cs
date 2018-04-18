@@ -39,7 +39,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Critical: Should write one critical message to the log stream")]
         public void CriticalEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -72,7 +72,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Critical: Should write one critical message to the log stream")]
         public void CriticalFormatEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -99,8 +99,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Critical(format, "");
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("format", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("format", validate);
         }
 
         [InlineData("")]
@@ -113,8 +112,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Critical(message);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("message", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("message", validate);
         }
 
         #endregion
@@ -134,10 +132,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Error: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Error: Should write one error message to the log stream")]
         public void ErrorEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -149,6 +147,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -165,10 +165,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Error: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Error: Should write one error message to the log stream")]
         public void ErrorFormatEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -180,6 +180,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -193,8 +195,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Error(format, "");
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("format", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("format", validate);
         }
 
         [InlineData("")]
@@ -207,8 +208,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Error(message);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("message", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("message", validate);
         }
 
         #endregion
@@ -228,10 +228,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Info: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Info: Should write one info message to the log stream")]
         public void InfoEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -243,6 +243,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -259,10 +261,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Info: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Info: Should write one info message to the log stream")]
         public void InfoFormatEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -274,6 +276,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -287,8 +291,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Info(format, "");
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("format", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("format", validate);
         }
 
         [InlineData("")]
@@ -301,8 +304,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Info(message);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("message", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("message", validate);
         }
 
         #endregion
@@ -322,10 +324,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Verbose: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Verbose: Should write one verbose message to the log stream")]
         public void VerboseEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -337,6 +339,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -353,10 +357,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Verbose: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Verbose: Should write one verbose message to the log stream")]
         public void VerboseFormatEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -368,6 +372,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -381,8 +387,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Verbose(format, "");
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("format", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("format", validate);
         }
 
         [InlineData("")]
@@ -395,8 +400,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Verbose(message);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("message", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("message", validate);
         }
 
         #endregion
@@ -416,10 +420,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Warning: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Warning: Should write one warning message to the log stream")]
         public void WarningEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -431,6 +435,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -447,10 +453,10 @@ namespace Thor.Core.Tests
             };
         }
 
-        [Fact(DisplayName = "Warning: Should write one critical message to the log stream")]
+        [Fact(DisplayName = "Warning: Should write one warning message to the log stream")]
         public void WarningFormatEnabled()
         {
-            ProbeEvents(DefaultEventSource.Log, (listener) =>
+            DefaultEventSource.Log.ProbeEvents((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -462,6 +468,8 @@ namespace Thor.Core.Tests
                 EventWrittenEventArgs firstItem = listener
                     .OrderedEvents
                     .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
             });
         }
 
@@ -475,8 +483,7 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Warning(format, "");
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("format", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("format", validate);
         }
 
         [InlineData("")]
@@ -489,27 +496,9 @@ namespace Thor.Core.Tests
             Action validate = () => DefaultEventSource.Log.Warning(message);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("message", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("message", validate);
         }
 
         #endregion
-
-        private static void ProbeEvents(EventSource eventSource,
-            Action<ProbeEventListener> execute)
-        {
-            using (ProbeEventListener listener = new ProbeEventListener())
-            {
-                try
-                {
-                    listener.EnableEvents(eventSource, EventLevel.Verbose);
-                    execute(listener);
-                }
-                finally
-                {
-                    listener.DisableEvents(eventSource);
-                }
-            }
-        }
     }
 }

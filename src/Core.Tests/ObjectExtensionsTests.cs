@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests
