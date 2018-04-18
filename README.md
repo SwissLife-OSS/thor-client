@@ -8,22 +8,12 @@ The tracing core contains everything to enable _ETW_ tracing in your _.net_ appl
 
 ## Getting Started
 
-Before we get started, we have to install the right package(s). Install the `Thor.Core` if when
-access to the `Activity`, `Application` or `DefaultEventSource` is needed.
-Otherwise install `Thor.Core.Abstractions`.
-
 ### Install Package
 
 Here is how the `Thor.Core` has to be installed via _NuGet_ on a powershell console.
 
 ```powershell
 Install-Package Thor.Core
-```
-
-And the `Thor.Core.Abstractions` will be installed like this.
-
-```powershell
-Install-Package Thor.Core.Abstractions
 ```
 
 ### Code Example
