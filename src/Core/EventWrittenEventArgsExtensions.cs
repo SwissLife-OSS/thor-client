@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Linq;
+using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using Thor.Core.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests
