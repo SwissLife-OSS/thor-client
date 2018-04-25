@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Azure.EventHubs;
+using Thor.Core.Abstractions;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.EventHub
 {
     /// <summary>
     /// A bunch of convenient extensions for <see cref="TelemetryEvent"/>.
@@ -13,6 +14,9 @@ namespace Thor.Core.Abstractions
         /// </summary>
         /// <param name="source">A telemetry event.</param>
         /// <returns>A <see cref="EventData"/> object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source"/> must not be <c>null</c>.
+        /// </exception>
         public static EventData Map(this TelemetryEvent source)
         {
             if (source == null)

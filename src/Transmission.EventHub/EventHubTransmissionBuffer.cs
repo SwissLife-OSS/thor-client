@@ -35,6 +35,9 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
+        public int Count { get { return _output.Count; } }
+
+        /// <inheritdoc />
         public Task EnqueueAsync(EventData data, CancellationToken cancellationToken)
         {
             if (data == null)
@@ -59,7 +62,11 @@ namespace Thor.Core.Transmission.EventHub
             {
                 while (true)
                 {
-                    await Task.Delay(_delay).ConfigureAwait(false);
+                    if (_input.Count < 50)
+                    {
+                        await Task.Delay(_delay).ConfigureAwait(false);
+                    }
+
                     TransformToBatch();
                 }
             });

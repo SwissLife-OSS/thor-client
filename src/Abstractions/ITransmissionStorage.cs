@@ -12,6 +12,11 @@ namespace Thor.Core.Abstractions
         where TData : class
     {
         /// <summary>
+        /// Gets the count of batches.
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
         /// Enqueues a telemetry data batch to a <c>short-term</c> storage.
         /// </summary>
         /// <param name="batch">A telemetry data batch.</param>

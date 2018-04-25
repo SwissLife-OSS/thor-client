@@ -84,7 +84,11 @@ namespace Thor.Core.Transmission.EventHub
                 while (true)
                 {
                     await SendBatchAsync().ConfigureAwait(false);
-                    await Task.Delay(_delay).ConfigureAwait(false);
+
+                    if (_buffer.Count == 0)
+                    {
+                        await Task.Delay(_delay).ConfigureAwait(false);
+                    }
                 }
             });
         }
