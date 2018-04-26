@@ -54,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Testing.Utilities\Testing.Utilities.csproj" />
     <ProjectReference Include="..\Transmission.EventHub\Transmission.EventHub.csproj" />
   </ItemGroup>
 

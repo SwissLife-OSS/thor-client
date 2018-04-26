@@ -55,6 +55,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Testing.Utilities\Testing.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

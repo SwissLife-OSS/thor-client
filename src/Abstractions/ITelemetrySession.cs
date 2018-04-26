@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Tracing;
+﻿using System;
+using System.Diagnostics.Tracing;
 
 namespace Thor.Core.Abstractions
 {
@@ -6,6 +7,7 @@ namespace Thor.Core.Abstractions
     /// An <c>ETW</c> telemetry session to listen to events.
     /// </summary>
     public interface ITelemetrySession
+        : IDisposable
     {
         /// <summary>
         /// Enables a custom event provider by its name and the desired severity.

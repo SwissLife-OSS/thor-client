@@ -6,6 +6,7 @@ namespace Thor.Core.Abstractions
     /// A transmitter for telemetry events.
     /// </summary>
     public interface ITelemetryTransmitter
+        : IDisposable
     {
         /// <summary>
         /// Enqueues a single telemetry event for transmission.

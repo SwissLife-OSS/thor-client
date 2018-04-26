@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.Core.Abstractions.Tests</AssemblyName>
-    <RootNamespace>Thor.Core.Abstractions.Tests</RootNamespace>
+    <AssemblyName>Thor.Core.Testing.Utilities</AssemblyName>
+    <RootNamespace>Thor.Core.Testing.Utilities</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -44,24 +44,6 @@
 
   <ItemGroup>
     <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
-    <PackageReference Include="coveralls.io" Version="1.4.2" />
-    <PackageReference Include="Microsoft.CodeCoverage" Version="1.0.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
-    <PackageReference Include="Moq" Version="4.8.2" />
-    <PackageReference Include="OpenCover" Version="4.6.519" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
-    <ProjectReference Include="..\Testing.Utilities\Testing.Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="xunit.runner.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using System.Diagnostics.Tracing;
 using Thor.Analyzer;
 
-namespace Thor.Core.Http.Tests
+namespace Thor.Core.Testing.Utilities
 {
     public static class EventSourceExtensions
     {

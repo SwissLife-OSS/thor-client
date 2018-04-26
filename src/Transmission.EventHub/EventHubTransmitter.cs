@@ -14,6 +14,8 @@ namespace Thor.Core.Transmission.EventHub
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly ITransmissionBuffer<EventData> _buffer;
         private readonly ITransmissionSender<EventData> _sender;
+        private bool _disposed = false;
+        private Task _transmission;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
@@ -79,7 +81,7 @@ namespace Thor.Core.Transmission.EventHub
 
         private void StartAsyncSending()
         {
-            Task.Run(async () =>
+            _transmission = Task.Run(async () =>
             {
                 while (true)
                 {
@@ -92,5 +94,19 @@ namespace Thor.Core.Transmission.EventHub
                 }
             });
         }
+
+        #region Dispose
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _transmission?.Dispose();
+                _disposed = true;
+            }
+        }
+
+        #endregion
     }
 }

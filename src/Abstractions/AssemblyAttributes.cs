@@ -5,4 +5,5 @@
 [assembly:InternalsVisibleTo("Thor.Core.Tests")]
 [assembly:InternalsVisibleTo("Thor.Core.Http")]
 [assembly:InternalsVisibleTo("Thor.Core.Http.Tests")]
-[assembly:InternalsVisibleTo("Thor.Core.Transmission.EventHub")]
+[assembly:InternalsVisibleTo("Thor.Core.Session")]
+[assembly: InternalsVisibleTo("Thor.Core.Transmission.EventHub")]
