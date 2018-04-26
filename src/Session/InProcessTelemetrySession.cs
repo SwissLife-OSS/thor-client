@@ -19,7 +19,7 @@ namespace Thor.Core.Session
         : EventListener
         , ITelemetrySession
     {
-        private const string _assemblyPrefix = "ChilliCream.";
+        private const string _assemblyPrefix = "Thor.";
         private static readonly Type _attributeType = typeof(EventSourceAttribute);
         private static readonly Type _baseType = typeof(EventSource);
         private readonly object _lock = new object();
@@ -89,26 +89,30 @@ namespace Thor.Core.Session
 
         private static bool IsAssignableFrom(Type type)
         {
-            return type.IsClass && type != _baseType && _baseType.IsAssignableFrom(type);
+            return type.IsClass && type != _baseType && _baseType.IsAssignableFrom(type) &&
+                type.CustomAttributes.Count(a => a.AttributeType == _attributeType) == 1 &&
+                type.CustomAttributes.First(a => a.AttributeType == _attributeType)
+                    .NamedArguments.Count(a => a.MemberName == "Name" &&
+                        !string.IsNullOrWhiteSpace((string)a.TypedValue.Value)) == 1;
         }
 
         private static Dictionary<string, Type> CreateProviderNameMap(Type[] eventSourceTypes)
         {
             Dictionary<string, Type> eventSourceNameMap = eventSourceTypes
                 .ToDictionary(k => (string)k.CustomAttributes
-                    .FirstOrDefault(a => a.AttributeType == _attributeType)?.NamedArguments
-                    .FirstOrDefault(a => a.MemberName == "Name" &&
-                        !string.IsNullOrWhiteSpace((string)a.TypedValue.Value))
-                    .TypedValue.Value, v => v);
+                    .Single(a => a.AttributeType == _attributeType).NamedArguments
+                    .Single(a => a.MemberName == "Name").TypedValue.Value, v => v);
 
             return eventSourceNameMap;
         }
 
         private static Type FindProviderType(Assembly assembly, string name)
         {
-            Func<Type, bool> hasName = type => type.CustomAttributes
-                .FirstOrDefault(h => h.AttributeType == _attributeType)?.NamedArguments
-                .FirstOrDefault(a => a.MemberName == "Name" && (string)a.TypedValue.Value == name) != null;
+            Func<Type, bool> hasName = type =>
+                type.CustomAttributes.Count(a => a.AttributeType == _attributeType) == 1 &&
+                type.CustomAttributes.First(a => a.AttributeType == _attributeType)
+                    .NamedArguments.Count(a => a.MemberName == "Name" &&
+                        (string)a.TypedValue.Value == name) == 1;
             Type providerType = GetLoadableTypes(assembly)
                 .FirstOrDefault(type => IsAssignableFrom(type) && hasName(type));
 
