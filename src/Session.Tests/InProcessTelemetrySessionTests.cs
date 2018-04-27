@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Tracing;
 using Thor.Core.Abstractions;
 using Thor.Core.Testing.Utilities;
 using Xunit;
@@ -54,6 +55,78 @@ namespace Thor.Core.Session.Tests
 
             // assert
             Assert.Equal(1, telemetryCount);
+        }
+
+        #endregion
+
+        #region EnableProvider
+
+        [Fact(DisplayName = "EnableProvider: Should throw an argument null exception for name")]
+        public void EnableProvider_TransmitterNull()
+        {
+            using (ITelemetrySession session = InProcessTelemetrySession.Create(1))
+            {
+                // arrange
+                string name = null;
+
+                // act
+                Action verify = () => session.EnableProvider(name, EventLevel.Critical);
+
+                // assert
+                Assert.Throws<ArgumentNullException>("name", verify);
+            }
+        }
+
+        [Fact(DisplayName = "EnableProvider: Should not throw any exception")]
+        public void EnableProvider_NoException()
+        {
+            using (ITelemetrySession session = InProcessTelemetrySession.Create(1))
+            {
+                // arrange
+                string name = "Valid-Name";
+
+                // act
+                Action verify = () => session.EnableProvider(name, EventLevel.Critical);
+
+                // assert
+                Assert.Null(Record.Exception(verify));
+            }
+        }
+
+        #endregion
+
+        #region SetTransmitter
+
+        [Fact(DisplayName = "SetTransmitter: Should throw an argument null exception for transmitter")]
+        public void SetTransmitter_TransmitterNull()
+        {
+            using (ITelemetrySession session = InProcessTelemetrySession.Create(1))
+            {
+                // arrange
+                ITelemetryTransmitter transmitter = null;
+
+                // act
+                Action verify = () => session.SetTransmitter(transmitter);
+
+                // assert
+                Assert.Throws<ArgumentNullException>("transmitter", verify);
+            }
+        }
+
+        [Fact(DisplayName = "SetTransmitter: Should not throw any exception")]
+        public void SetTransmitter_NoException()
+        {
+            using (ITelemetrySession session = InProcessTelemetrySession.Create(1))
+            {
+                // arrange
+                ITelemetryTransmitter transmitter = new ProbeTransmitter();
+
+                // act
+                Action verify = () => session.SetTransmitter(transmitter);
+
+                // assert
+                Assert.Null(Record.Exception(verify));
+            }
         }
 
         #endregion
