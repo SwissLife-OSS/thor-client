@@ -18,8 +18,9 @@ namespace Thor.Core.Session
     public class InProcessTelemetrySession
         : EventListener
         , ITelemetrySession
+        , IDisposable
     {
-        private const string _assemblyPrefix = "Thor.";
+        private const string _assemblyPrefix = "Thor.Core";
         private static readonly Type _attributeType = typeof(EventSourceAttribute);
         private static readonly Type _baseType = typeof(EventSource);
         private readonly object _lock = new object();
@@ -294,11 +295,13 @@ namespace Thor.Core.Session
         /// <inheritdoc/>
         public override void Dispose()
         {
-            // todo: here we need a way to wait for transmission sending has flushed all its data
+            IEnumerable<IDisposable> disposableTransmitters = _transmitters
+                .Where(t => typeof(IDisposable).IsAssignableFrom(t.GetType()))
+                .Select(t => t as IDisposable);
 
-            foreach (ITelemetryTransmitter publisher in _transmitters)
+            foreach (IDisposable transmitter in disposableTransmitters)
             {
-                publisher.Dispose();
+                transmitter.Dispose();
             }
 
             base.Dispose();

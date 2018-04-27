@@ -49,7 +49,7 @@ namespace Thor.Core.Session.Tests
             using (ITelemetrySession session = InProcessTelemetrySession.Create(applicationId))
             {
                 session.SetTransmitter(transmitter);
-                DefaultEventSource.Log.Info("VerifyDefaultProviders");
+                Application.Start(applicationId);
                 telemetryCount = transmitter.Count;
             }
 

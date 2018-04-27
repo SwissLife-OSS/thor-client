@@ -78,8 +78,8 @@ namespace Thor.Core.Transmission.EventHub
             // todo: find a better way of checking batch size
             // explaination: EventDataBatch.ToEnumerable() is internal so we cannot use it for
             // passing just the pure list to the TransmissionSender thats why we have the second
-            // list. thats bad because we have to list instead of one, but this is just an interims
-            // solution which we will retire as soon as possible
+            // list. thats bad because we have two list instead of one, but this is just an interim
+            // solution which we will retire as soon as possible.
             EventDataBatch batchToCheckSize = _client.CreateBatch();
             bool stopCollectingEvents = false;
             EventData data;

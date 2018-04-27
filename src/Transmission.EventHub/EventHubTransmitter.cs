@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Abstractions;
@@ -12,10 +13,13 @@ namespace Thor.Core.Transmission.EventHub
         : ITelemetryTransmitter
     {
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
+        private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
+        private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
         private readonly ITransmissionBuffer<EventData> _buffer;
         private readonly ITransmissionSender<EventData> _sender;
         private bool _disposed = false;
         private Task _transmission;
+        private bool _transmissionStopped = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
@@ -66,7 +70,10 @@ namespace Thor.Core.Transmission.EventHub
                 throw new ArgumentNullException(nameof(telemetryEvent));
             }
 
-            Task.Run(() => _buffer.EnqueueAsync(telemetryEvent.Map()));
+            if (!_disposeToken.IsCancellationRequested)
+            {
+                Task.Run(() => _buffer.EnqueueAsync(telemetryEvent.Map()));
+            }
         }
 
         private async Task SendBatchAsync()
@@ -83,15 +90,18 @@ namespace Thor.Core.Transmission.EventHub
         {
             _transmission = Task.Run(async () =>
             {
-                while (true)
+                while (!_disposeToken.IsCancellationRequested || _buffer.Count > 0)
                 {
                     await SendBatchAsync().ConfigureAwait(false);
 
-                    if (_buffer.Count == 0)
+                    if (!_disposeToken.IsCancellationRequested && _buffer.Count == 0)
                     {
                         await Task.Delay(_delay).ConfigureAwait(false);
                     }
                 }
+
+                _transmissionStopped = true;
+                _resetEvent.Set();
             });
         }
 
@@ -102,6 +112,15 @@ namespace Thor.Core.Transmission.EventHub
         {
             if (!_disposed)
             {
+                _disposeToken.Cancel();
+
+                if (!_transmissionStopped)
+                {
+                    _resetEvent.Wait(TimeSpan.FromSeconds(5));
+                }
+
+                _disposeToken?.Dispose();
+                _resetEvent?.Dispose();
                 _transmission?.Dispose();
                 _disposed = true;
             }

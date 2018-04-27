@@ -10,8 +10,6 @@ namespace Thor.Core.Testing.Utilities
 
         public int Count { get { return _queue.Count; } }
 
-        public void Dispose() { }
-
         public void Enqueue(TelemetryEvent telemetryEvent)
         {
             _queue.Enqueue(telemetryEvent);
