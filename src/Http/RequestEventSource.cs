@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
+using Thor.Core.Abstractions;
 
 namespace Thor.Core.Http
 {
@@ -107,8 +108,7 @@ namespace Thor.Core.Http
         {
             if (IsEnabled())
             {
-                Stop(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText(),
-                    null);
+                Stop(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText(), null);
             }
         }
 
@@ -124,8 +124,7 @@ namespace Thor.Core.Http
                 int statusCode = response?.StatusCode ?? 0;
                 Guid userId = response?.UserId ?? Guid.Empty;
 
-                Stop(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText(),
-                    id.ToString());
+                Stop(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText(), id);
                 AttachmentDispatcher.Instance.Dispatch(id, nameof(response), response);
             }
         }

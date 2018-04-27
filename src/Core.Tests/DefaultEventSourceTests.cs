@@ -2,6 +2,7 @@
 using System.Diagnostics.Tracing;
 using System.Linq;
 using Thor.Analyzer;
+using Thor.Core.Testing.Utilities;
 using Xunit;
 
 namespace Thor.Core.Tests
