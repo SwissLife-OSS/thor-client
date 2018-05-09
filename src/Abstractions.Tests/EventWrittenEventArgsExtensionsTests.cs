@@ -26,7 +26,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Map: Should throw an argument null exception for sessionName")]
         public void Map_SessionNameNull()
         {
-            TestEventSource.Log.ProbeEvents(listener =>
+            TestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 TestEventSource.Log.DoSomething();
@@ -46,7 +46,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Map: Should return an event")]
         public void Map_Success()
         {
-            TestEventSource.Log.ProbeEvents(listener =>
+            TestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 TestEventSource.Log.DoSomething();

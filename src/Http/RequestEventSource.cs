@@ -45,11 +45,11 @@ namespace Thor.Core.Http
         /// Receives a response on the client-side.
         /// </summary>
         [NonEvent]
-        public void Receive(Guid activityId, Guid userId, int statusCode, string statusText)
+        public void Receive(Guid activityId, Guid userId, int statusCode)
         {
             if (IsEnabled())
             {
-                Receive(Application.Id, activityId, userId, statusCode, statusText);
+                Receive(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText());
             }
         }
 

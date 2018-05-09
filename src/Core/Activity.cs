@@ -6,7 +6,7 @@ using static Thor.Core.ActivityEventSource;
 namespace Thor.Core
 {
     /// <summary>
-    /// A default activity to group log events even across threads.
+    /// A default activity to group telemetry events across threads and processes.
     /// </summary>
     /// <example>
     /// Here is an Example of creating an activity.

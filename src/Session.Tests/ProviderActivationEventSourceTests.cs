@@ -39,7 +39,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Activated: Should write one message to the log stream")]
         public void ActivatedEnabled()
         {
-            ProviderActivationEventSource.Log.ProbeEvents((listener) =>
+            ProviderActivationEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "Activated provider \"{0}\"";
@@ -80,7 +80,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Activating: Should write one message to the log stream")]
         public void ActivatingEnabled()
         {
-            ProviderActivationEventSource.Log.ProbeEvents((listener) =>
+            ProviderActivationEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "Activating provider \"{0}\" ...";
@@ -121,7 +121,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "AlreadyActivated: Should write one message to the log stream")]
         public void AlreadyActivatedEnabled()
         {
-            ProviderActivationEventSource.Log.ProbeEvents((listener) =>
+            ProviderActivationEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "Provider \"{0}\" already activated";
@@ -162,7 +162,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "NoInstance: Should write one message to the log stream")]
         public void NoInstanceEnabled()
         {
-            ProviderActivationEventSource.Log.ProbeEvents((listener) =>
+            ProviderActivationEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "Provider \"{0}\" could not be instantiated";
@@ -203,7 +203,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "NotFound: Should write one message to the log stream")]
         public void NotFoundEnabled()
         {
-            ProviderActivationEventSource.Log.ProbeEvents((listener) =>
+            ProviderActivationEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "Provider \"{0}\" not found";

@@ -28,7 +28,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Send: Should log a client request start")]
         public void Send()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Initiate GET http://127.0.0.1/api/events";
@@ -52,7 +52,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Send: Should log a client request stop")]
         public void Receive()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Receive 404 NOTFOUND";
@@ -60,7 +60,7 @@ namespace Thor.Core.Http.Tests
                 Guid activityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.Receive(activityId, userId, 404, "NOTFOUND");
+                RequestEventSource.Log.Receive(activityId, userId, 404);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -81,7 +81,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Start: Should log a server reqeust start")]
         public void Start()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
@@ -105,7 +105,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Start: Should log a server reqeust start (HttpRequest)")]
         public void Start_HttpRequest()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
@@ -134,7 +134,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop")]
         public void Stop()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -159,7 +159,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop (HttpResponse)")]
         public void Stop_HttpResponse()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -189,7 +189,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop without a status code and user id (HttpResponse)")]
         public void Stop_HttpResponse_NoStatusAndUserId()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -218,7 +218,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop with response null (HttpResponse)")]
         public void Stop_HttpResponse_Null()
         {
-            RequestEventSource.Log.ProbeEvents(listener =>
+            RequestEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -247,7 +247,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "BeginTransfer: Should log a begin transfer")]
         public void BeginTransfer()
         {
-            RequestEventSource.Log.ProbeEvents((listener) =>
+            RequestEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 const string expectedMessage = "Begin activity transfer";
@@ -271,7 +271,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "EndTransfer: Should log an end transfer")]
         public void EndTransfer()
         {
-            RequestEventSource.Log.ProbeEvents((listener) =>
+            RequestEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 const string expectedMessage = "End activity transfer";

@@ -40,7 +40,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Critical: Should write one critical message to the log stream")]
         public void CriticalEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -73,7 +73,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Critical: Should write one critical message to the log stream")]
         public void CriticalFormatEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -136,7 +136,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Error: Should write one error message to the log stream")]
         public void ErrorEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -169,7 +169,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Error: Should write one error message to the log stream")]
         public void ErrorFormatEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -232,7 +232,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Info: Should write one info message to the log stream")]
         public void InfoEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -265,7 +265,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Info: Should write one info message to the log stream")]
         public void InfoFormatEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -328,7 +328,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Verbose: Should write one verbose message to the log stream")]
         public void VerboseEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -361,7 +361,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Verbose: Should write one verbose message to the log stream")]
         public void VerboseFormatEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -424,7 +424,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Warning: Should write one warning message to the log stream")]
         public void WarningEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
@@ -457,7 +457,7 @@ namespace Thor.Core.Tests
         [Fact(DisplayName = "Warning: Should write one warning message to the log stream")]
         public void WarningFormatEnabled()
         {
-            DefaultEventSource.Log.ProbeEvents((listener) =>
+            DefaultEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 string expectedMessage = "{2}";
