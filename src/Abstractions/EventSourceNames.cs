@@ -6,6 +6,6 @@
         public const string Application = "ChilliCream-Application";
         public const string Default = "ChilliCream-Common";
         public const string ProviderActivation = "ChilliCream-Diagnostics-ProviderActivation";
-        public const string Request = "ChilliCream-Request";
+        public const string RequestActivity = "ChilliCream-RequestActivity";
     }
 }

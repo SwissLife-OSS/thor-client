@@ -8,16 +8,16 @@ using Xunit;
 
 namespace Thor.Core.Http.Tests
 {
-    public class RequestEventSourceTests
+    public class RequestActivityEventSourceTests
     {
-        [Fact(DisplayName = "RequestEventSource: Inspect schema")]
+        [Fact(DisplayName = "RequestActivityEventSource: Inspect schema")]
         public void Inspect()
         {
             // arrange
             EventSourceAnalyzer analyzer = new EventSourceAnalyzer();
 
             // act
-            Report report = analyzer.Inspect(RequestEventSource.Log);
+            Report report = analyzer.Inspect(RequestActivityEventSource.Log);
 
             // assert
             Assert.False(report.HasErrors);
@@ -28,14 +28,14 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Send: Should log a client request start")]
         public void Send()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Initiate GET http://127.0.0.1/api/events";
                 Guid activityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.Send(activityId, "GET", "http://127.0.0.1/api/events");
+                RequestActivityEventSource.Log.Send(activityId, "GET", "http://127.0.0.1/api/events");
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -52,7 +52,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Send: Should log a client request stop")]
         public void Receive()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Receive 404 NOTFOUND";
@@ -60,7 +60,7 @@ namespace Thor.Core.Http.Tests
                 Guid activityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.Receive(activityId, userId, 404);
+                RequestActivityEventSource.Log.Receive(activityId, userId, 404);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -81,14 +81,14 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Start: Should log a server reqeust start")]
         public void Start()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
                 Guid activityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.Start(activityId, "GET", "http://127.0.0.1/api/events");
+                RequestActivityEventSource.Log.Start(activityId, "GET", "http://127.0.0.1/api/events");
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -105,7 +105,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Start: Should log a server reqeust start (HttpRequest)")]
         public void Start_HttpRequest()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
@@ -117,7 +117,7 @@ namespace Thor.Core.Http.Tests
                 };
 
                 // act
-                RequestEventSource.Log.Start(activityId, request);
+                RequestActivityEventSource.Log.Start(activityId, request);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -134,7 +134,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop")]
         public void Stop()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -142,7 +142,7 @@ namespace Thor.Core.Http.Tests
                 Guid activityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.Stop(activityId, userId, 200);
+                RequestActivityEventSource.Log.Stop(activityId, userId, 200);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -159,7 +159,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop (HttpResponse)")]
         public void Stop_HttpResponse()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -172,7 +172,7 @@ namespace Thor.Core.Http.Tests
                 };
 
                 // act
-                RequestEventSource.Log.Stop(activityId, response);
+                RequestActivityEventSource.Log.Stop(activityId, response);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -189,7 +189,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop without a status code and user id (HttpResponse)")]
         public void Stop_HttpResponse_NoStatusAndUserId()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -201,7 +201,7 @@ namespace Thor.Core.Http.Tests
                 };
 
                 // act
-                RequestEventSource.Log.Stop(activityId, response);
+                RequestActivityEventSource.Log.Stop(activityId, response);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -218,7 +218,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "Stop: Should log a server reqeust stop with response null (HttpResponse)")]
         public void Stop_HttpResponse_Null()
         {
-            RequestEventSource.Log.Listen(listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -226,7 +226,7 @@ namespace Thor.Core.Http.Tests
                 HttpResponse response = null;
 
                 // act
-                RequestEventSource.Log.Stop(activityId, response);
+                RequestActivityEventSource.Log.Stop(activityId, response);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -247,14 +247,14 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "BeginTransfer: Should log a begin transfer")]
         public void BeginTransfer()
         {
-            RequestEventSource.Log.Listen((listener) =>
+            RequestActivityEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 const string expectedMessage = "Begin activity transfer";
                 Guid activityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.BeginTransfer(activityId);
+                RequestActivityEventSource.Log.BeginTransfer(activityId);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -271,7 +271,7 @@ namespace Thor.Core.Http.Tests
         [Fact(DisplayName = "EndTransfer: Should log an end transfer")]
         public void EndTransfer()
         {
-            RequestEventSource.Log.Listen((listener) =>
+            RequestActivityEventSource.Log.Listen((listener) =>
             {
                 // arrange
                 const string expectedMessage = "End activity transfer";
@@ -279,7 +279,7 @@ namespace Thor.Core.Http.Tests
                 Guid relatedActivityId = Guid.NewGuid();
 
                 // act
-                RequestEventSource.Log.EndTransfer(activityId, relatedActivityId);
+                RequestActivityEventSource.Log.EndTransfer(activityId, relatedActivityId);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -309,7 +309,7 @@ namespace Thor.Core.Http.Tests
         {
             Assert.Equal(0, item.ApplicationId);
             Assert.Equal(expectedActivityId, item.ActivityId);
-            Assert.Equal(EventSourceNames.Request, item.ProviderName);
+            Assert.Equal(EventSourceNames.RequestActivity, item.ProviderName);
 
             if (expectedCount == 0)
             {

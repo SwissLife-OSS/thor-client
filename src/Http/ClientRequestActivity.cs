@@ -1,14 +1,14 @@
 ﻿using System;
 using Thor.Core.Abstractions;
-using static Thor.Core.Http.RequestEventSource;
+using static Thor.Core.Http.RequestActivityEventSource;
 
 namespace Thor.Core.Http
 {
     /// <summary>
-    /// A client-side HTTP request scope to ensures event grouped across threads and processes.
+    /// A client-side HTTP request activity to group telemetry events across threads and processes.
     /// </summary>
     [Serializable]
-    public class ClientRequestScope
+    public class ClientRequestActivity
         : IActivity
     {
         private readonly Guid _activityId = Guid.NewGuid();
@@ -18,7 +18,7 @@ namespace Thor.Core.Http
         private int? _statusCode;
         private Guid? _userId;
 
-        private ClientRequestScope()
+        private ClientRequestActivity()
         {
             _relatedActivityId = ActivityStack.Id;
             _popWhenDispose = ActivityStack.Push(_activityId);
@@ -28,12 +28,12 @@ namespace Thor.Core.Http
         public Guid Id => _activityId;
 
         /// <summary>
-        /// Creates a client-side HTTP request scope.
+        /// Creates a client-side HTTP request activity.
         /// </summary>
         /// <param name="method">A HTTP method of a request.</param>
         /// <param name="uri">A HTTP uri of a request.</param>
-        /// <returns>A new instance of <see cref="ClientRequestScope"/>.</returns>
-        public static ClientRequestScope Create(string method, Uri uri)
+        /// <returns>A new instance of <see cref="ClientRequestActivity"/>.</returns>
+        public static ClientRequestActivity Create(string method, Uri uri)
         {
             if (string.IsNullOrWhiteSpace(method))
             {
@@ -44,7 +44,7 @@ namespace Thor.Core.Http
                 throw new ArgumentNullException(nameof(uri));
             }
 
-            ClientRequestScope context = new ClientRequestScope();
+            ClientRequestActivity context = new ClientRequestActivity();
 
             if (context._relatedActivityId == Guid.Empty)
             {

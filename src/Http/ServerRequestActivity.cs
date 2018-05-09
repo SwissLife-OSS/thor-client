@@ -1,14 +1,14 @@
 ﻿using System;
 using Thor.Core.Abstractions;
-using static Thor.Core.Http.RequestEventSource;
+using static Thor.Core.Http.RequestActivityEventSource;
 
 namespace Thor.Core.Http
 {
     /// <summary>
-    /// A server-side HTTP request scope to ensures event grouped across threads and processes.
+    /// A server-side HTTP request activity to group telemetry events across threads and processes.
     /// </summary>
     [Serializable]
-    public class ServerRequestScope
+    public class ServerRequestActivity
         : IActivity
     {
         private readonly Guid _activityId = Guid.NewGuid();
@@ -19,7 +19,7 @@ namespace Thor.Core.Http
         private int? _statusCode;
         private Guid? _userId;
 
-        private ServerRequestScope()
+        private ServerRequestActivity()
         {
             _relatedActivityId = ActivityStack.Id;
             _popWhenDispose = ActivityStack.Push(_activityId);
@@ -29,19 +29,19 @@ namespace Thor.Core.Http
         public Guid Id => _activityId;
 
         /// <summary>
-        /// Creates a server-side HTTP request scope.
+        /// Creates a server-side HTTP request activity.
         /// </summary>
         /// <param name="method">A HTTP method of a request.</param>
         /// <param name="uri">A HTTP uri of a request.</param>
         /// <param name="relatedActivityId">
-        /// A related activity identifier to link a activity scope across component or service 
-        /// boundaries with a related scope. Do not use it for initialize a new activity scope!
+        /// A related activity identifier to link activities across component or service 
+        /// boundaries with a parent activity.
         /// </param>
-        /// <returns>A new instance of <see cref="ServerRequestScope"/>.</returns>
+        /// <returns>A new instance of <see cref="ServerRequestActivity"/>.</returns>
         /// <remarks>
         /// This method is more or less for internal use. Use instead the <c>Thor.AspNetCore</c> package.
         /// </remarks>
-        public static ServerRequestScope Create(string method, Uri uri, Guid? relatedActivityId)
+        public static ServerRequestActivity Create(string method, Uri uri, Guid? relatedActivityId)
         {
             if (string.IsNullOrWhiteSpace(method))
             {
@@ -52,11 +52,11 @@ namespace Thor.Core.Http
                 throw new ArgumentNullException(nameof(uri));
             }
 
-            ServerRequestScope context = new ServerRequestScope();
+            ServerRequestActivity context = new ServerRequestActivity();
 
             if (context._relatedActivityId != Guid.Empty)
             {
-                Log.OuterScopeNotAllowed(context.Id);
+                Log.OuterActivityNotAllowed(context.Id);
             }
 
             if (relatedActivityId != null && relatedActivityId != Guid.Empty)
@@ -74,29 +74,29 @@ namespace Thor.Core.Http
         }
 
         /// <summary>
-        /// Creates a server-side HTTP request scope.
+        /// Creates a server-side HTTP request activity.
         /// </summary>
         /// <param name="request">A HTTP request.</param>
         /// <param name="relatedActivityId">
-        /// A related activity identifier to link a activity scope across component or service 
-        /// boundaries with a related scope. Do not use it for initialize a new activity scope!
+        /// A related activity identifier to link activities across component or service 
+        /// boundaries with a parent activity.
         /// </param>
-        /// <returns>A new instance of <see cref="ServerRequestScope"/>.</returns>
+        /// <returns>A new instance of <see cref="ServerRequestActivity"/>.</returns>
         /// <remarks>
         /// This method is more or less for internal use. Use instead the <c>Thor.AspNetCore</c> package.
         /// </remarks>
-        public static ServerRequestScope Create(HttpRequest request, Guid? relatedActivityId)
+        public static ServerRequestActivity Create(HttpRequest request, Guid? relatedActivityId)
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            ServerRequestScope context = new ServerRequestScope();
+            ServerRequestActivity context = new ServerRequestActivity();
 
             if (context._relatedActivityId != Guid.Empty)
             {
-                Log.OuterScopeNotAllowed(context.Id);
+                Log.OuterActivityNotAllowed(context.Id);
             }
 
             if (relatedActivityId != null && relatedActivityId != Guid.Empty)
@@ -130,7 +130,7 @@ namespace Thor.Core.Http
         /// <param name="response">An object that contains details about the HTTP response.</param>
         public void SetResponse(HttpResponse response)
         {
-            _httpResponse = response;
+            _httpResponse = response ?? throw new ArgumentNullException(nameof(response));
         }
 
         #region Dispose
