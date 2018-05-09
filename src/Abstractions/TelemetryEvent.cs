@@ -36,7 +36,7 @@ namespace Thor.Core.Abstractions
 
         /// <summary>
         /// Gets or sets the provider-specific integer value that uniquely identifies an event
-        /// within the scope of the provider.
+        /// within the activity of the provider.
         /// </summary>
         public int Id { get; set; }
 

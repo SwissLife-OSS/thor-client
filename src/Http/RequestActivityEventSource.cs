@@ -4,8 +4,8 @@ using Thor.Core.Abstractions;
 
 namespace Thor.Core.Http
 {
-    [EventSource(Name = EventSourceNames.Request)]
-    internal sealed class RequestEventSource
+    [EventSource(Name = EventSourceNames.RequestActivity)]
+    internal sealed class RequestActivityEventSource
         : EventSourceBase
     {
         private const int _startEventId = 1;
@@ -14,11 +14,11 @@ namespace Thor.Core.Http
         private const int _receiveEventId = 4;
         private const int _beginTransferEventId = 5;
         private const int _endTransferEventId = 6;
-        private const int _outerScopeWarningEventId = 7;
+        private const int _outerActivityWarningEventId = 7;
 
-        public static RequestEventSource Log { get; } = new RequestEventSource();
+        public static RequestActivityEventSource Log { get; } = new RequestActivityEventSource();
 
-        private RequestEventSource() { }
+        private RequestActivityEventSource() { }
 
         #region Send/Receive Events
 
@@ -45,11 +45,11 @@ namespace Thor.Core.Http
         /// Receives a response on the client-side.
         /// </summary>
         [NonEvent]
-        public void Receive(Guid activityId, Guid userId, int statusCode, string statusText)
+        public void Receive(Guid activityId, Guid userId, int statusCode)
         {
             if (IsEnabled())
             {
-                Receive(Application.Id, activityId, userId, statusCode, statusText);
+                Receive(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText());
             }
         }
 
@@ -140,26 +140,26 @@ namespace Thor.Core.Http
 
         #endregion
 
-        #region Outer Scope Warning
+        #region Outer Activity Warning
 
         /// <summary>
-        /// A warning regarding outer scopes which were not allowed when opening a new server-side message scope.
+        /// A warning regarding outer activities which were not allowed when opening a new server-side message activity.
         /// </summary>
         [NonEvent]
-        public void OuterScopeNotAllowed(Guid activityId)
+        public void OuterActivityNotAllowed(Guid activityId)
         {
             if (IsEnabled())
             {
-                OuterScopeNotAllowed(Application.Id, activityId);
+                OuterActivityNotAllowed(Application.Id, activityId);
             }
         }
 
-        [Event(_outerScopeWarningEventId, Level = EventLevel.Warning,
-            Message = "Outer scopes are not allowed when creating a server-side message scope.",
+        [Event(_outerActivityWarningEventId, Level = EventLevel.Warning,
+            Message = "Outer activities are not allowed when creating a server-side message activity.",
             Version = 1)]
-        private void OuterScopeNotAllowed(int applicationId, Guid activityId)
+        private void OuterActivityNotAllowed(int applicationId, Guid activityId)
         {
-            WriteEmptyCore(_outerScopeWarningEventId, applicationId, activityId);
+            WriteEmptyCore(_outerActivityWarningEventId, applicationId, activityId);
         }
 
         #endregion

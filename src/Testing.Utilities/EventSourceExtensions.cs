@@ -6,8 +6,7 @@ namespace Thor.Core.Testing.Utilities
 {
     public static class EventSourceExtensions
     {
-        public static void ProbeEvents(this EventSource eventSource,
-            Action<ProbeEventListener> execute)
+        public static void Listen(this EventSource eventSource, Action<ProbeEventListener> execute)
         {
             using (ProbeEventListener listener = new ProbeEventListener())
             {
