@@ -15,6 +15,7 @@ namespace Thor.Core.Http
         private const int _beginTransferEventId = 5;
         private const int _endTransferEventId = 6;
         private const int _outerActivityWarningEventId = 7;
+        private const int _internalServerErrorEventId = 8;
 
         public static RequestActivityEventSource Log { get; } = new RequestActivityEventSource();
 
@@ -143,7 +144,8 @@ namespace Thor.Core.Http
         #region Outer Activity Warning
 
         /// <summary>
-        /// A warning regarding outer activities which were not allowed when opening a new server-side message activity.
+        /// A warning regarding outer activities which are not allowed when opening a new
+        /// server-side message activity.
         /// </summary>
         [NonEvent]
         public void OuterActivityNotAllowed(Guid activityId)
@@ -197,6 +199,58 @@ namespace Thor.Core.Http
         {
             WriteEmptyWithRelatedActivityIdCore(_endTransferEventId, relatedActivityId,
                 applicationId, activityId);
+        }
+
+        #endregion
+
+        #region Internal Server Error
+
+        /// <summary>
+        /// A internal server error occurred during request/response processing.
+        /// </summary>
+        [NonEvent]
+        public void InternalServerErrorOccurred(Exception exception)
+        {
+            if (IsEnabled())
+            {
+                AttachmentId attachmentId = AttachmentId.NewId();
+                ExceptionAttachment attachment = AttachmentFactory.Create(attachmentId,
+                    nameof(exception), exception);
+
+                AttachmentDispatcher.Instance.Dispatch(attachment);
+                InternalServerErrorOccurred(Application.Id, ActivityStack.Id, attachmentId);
+            }
+        }
+
+        [Event(_internalServerErrorEventId, Level = EventLevel.Error,
+            Message = "Internal server error occurred.", Version = 1)]
+        private void InternalServerErrorOccurred(int applicationId, Guid activityId,
+            string attachmentId)
+        {
+            InternalServerErrorOccurredCore(_internalServerErrorEventId, applicationId, activityId,
+                attachmentId);
+        }
+
+        [NonEvent]
+        private unsafe void InternalServerErrorOccurredCore(int eventId, int applicationId,
+            Guid activityId, string attachmentId)
+        {
+            StringExtensions.SetToEmptyIfNull(ref attachmentId);
+
+            fixed (char* attachmentIdBytes = attachmentId)
+            {
+                const short dataCount = 3;
+                EventData* data = stackalloc EventData[dataCount];
+
+                data[0].DataPointer = (IntPtr)(&applicationId);
+                data[0].Size = 4;
+                data[1].DataPointer = (IntPtr)(&activityId);
+                data[1].Size = 16;
+                data[2].DataPointer = (IntPtr)attachmentIdBytes;
+                data[2].Size = ((attachmentId.Length + 1) * 2);
+
+                WriteEventCore(eventId, dataCount, data);
+            }
         }
 
         #endregion
