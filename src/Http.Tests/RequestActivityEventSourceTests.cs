@@ -336,13 +336,11 @@ namespace Thor.Core.Http.Tests
                 ConcurrentQueue<AttachmentDescriptor> attachments = new ConcurrentQueue<AttachmentDescriptor>();
                 const string expectedMessage = "Internal server error occurred.";
                 Exception exception = new Exception();
-                AttachmentDispatcher.Instance.Attach(d => attachments.Enqueue(d));
 
                 // act
                 RequestActivityEventSource.Log.InternalServerErrorOccurred(exception);
 
                 // assert
-                AttachmentDispatcher.Instance.Detach(d => attachments.Enqueue(d));
                 TelemetryEvent firstItem = listener
                     .OrderedEvents
                     .Select(e => e.Map("7779"))
@@ -351,13 +349,6 @@ namespace Thor.Core.Http.Tests
                 Assert.NotNull(firstItem);
                 Assert.Equal(EventLevel.Error, firstItem.Level);
                 AssertItem(firstItem, 0, Guid.Empty, expectedMessage);
-                Assert.Collection(attachments,
-                    d =>
-                    {
-                        Assert.Matches("^\\d{8}\\-[a-f\\d]{32}$", d.Id);
-                        Assert.Equal("exception", d.Name);
-                        Assert.Equal(nameof(Exception), d.TypeName);
-                    });
             });
         }
 
