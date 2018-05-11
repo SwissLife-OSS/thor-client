@@ -270,6 +270,60 @@ namespace Thor.Core.Http.Tests
 
         #endregion
 
+        #region HandleException
+
+        [Fact(DisplayName = "HandleException: Should throw an argument null exception for exception")]
+        public void HandleException_ExceptionNull()
+        {
+            // arrange
+            const string method = "GET";
+            Uri uri = new Uri("http://127.0.0.1/api/events");
+            Exception exception = null;
+            ServerRequestActivity activity = ServerRequestActivity.Create(method, uri, null);
+
+            // act
+            Action verify = () => activity.HandleException(exception);
+
+            // assert
+            Assert.Throws<ArgumentNullException>("exception", verify);
+        }
+
+        [Fact(DisplayName = "HandleException: Should handle an exception")]
+        public void HandleException()
+        {
+            RequestActivityEventSource.Log.Listen(listener =>
+            {
+                // arrange
+                const string method = "PUT";
+                Uri uri = new Uri("http://127.0.0.1/api/events");
+                Exception exception = new Exception();
+
+                // act
+                using (ServerRequestActivity activity = ServerRequestActivity.Create(method, uri, null))
+                {
+                    activity.HandleException(exception);
+                }
+
+                // assert
+                Assert.Collection(listener.OrderedEvents,
+                    e =>
+                    {
+                        Assert.Equal("Request {2} {3}", e.Message);
+                        Assert.Equal(method, e.Payload[2]);
+                        Assert.Equal(uri.ToString(), e.Payload[3]);
+                    },
+                    e => Assert.Equal("Internal server error occurred.", e.Message),
+                    e =>
+                    {
+                        Assert.Equal("Response {3} {4}", e.Message);
+                        Assert.Equal(0, e.Payload[3]);
+                        Assert.Equal("UNKNOWN", e.Payload[4]);
+                    });
+            });
+        }
+
+        #endregion
+
         #region SetResponse
 
         [Fact(DisplayName = "SetResponse: Should set the response")]

@@ -4,7 +4,7 @@ using Thor.Analyzer;
 using Thor.Core.Testing.Utilities;
 using Xunit;
 
-namespace Thor.Core.Tests
+namespace Thor.Core.Session.Tests
 {
     public class ProviderActivationEventSourceTests
     {
