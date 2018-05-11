@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using Thor.Analyzer;
@@ -242,6 +243,34 @@ namespace Thor.Core.Http.Tests
 
         #endregion
 
+        #region Outer Activity Warning
+
+        [Fact(DisplayName = "OuterActivityNotAllowed: Should log a outer activity is not allowed")]
+        public void OuterActivityNotAllowed()
+        {
+            RequestActivityEventSource.Log.Listen((listener) =>
+            {
+                // arrange
+                const string expectedMessage = "Outer activities are not allowed when creating a server-side message activity.";
+                Guid activityId = Guid.NewGuid();
+
+                // act
+                RequestActivityEventSource.Log.OuterActivityNotAllowed(activityId);
+
+                // assert
+                TelemetryEvent firstItem = listener
+                    .OrderedEvents
+                    .Select(e => e.Map("7778"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
+                Assert.Equal(EventLevel.Warning, firstItem.Level);
+                AssertItem(firstItem, 0, activityId, expectedMessage);
+            });
+        }
+
+        #endregion
+
         #region Begin/End Transfer Events
 
         [Fact(DisplayName = "BeginTransfer: Should log a begin transfer")]
@@ -291,6 +320,44 @@ namespace Thor.Core.Http.Tests
                 Assert.Equal(EventLevel.LogAlways, firstItem.Level);
                 Assert.Equal(relatedActivityId, firstItem.RelatedActivityId);
                 AssertItem(firstItem, 0, activityId, expectedMessage);
+            });
+        }
+
+        #endregion
+
+        #region Internal Server Error
+
+        [Fact(DisplayName = "InternalServerErrorOccurred: Should log a internal server error exception")]
+        public void InternalServerErrorOccurred()
+        {
+            RequestActivityEventSource.Log.Listen((listener) =>
+            {
+                // arrange
+                ConcurrentQueue<AttachmentDescriptor> attachments = new ConcurrentQueue<AttachmentDescriptor>();
+                const string expectedMessage = "Internal server error occurred.";
+                Exception exception = new Exception();
+                AttachmentDispatcher.Instance.Attach(d => attachments.Enqueue(d));
+
+                // act
+                RequestActivityEventSource.Log.InternalServerErrorOccurred(exception);
+
+                // assert
+                AttachmentDispatcher.Instance.Detach(d => attachments.Enqueue(d));
+                TelemetryEvent firstItem = listener
+                    .OrderedEvents
+                    .Select(e => e.Map("7779"))
+                    .FirstOrDefault(e => e.Message == expectedMessage);
+
+                Assert.NotNull(firstItem);
+                Assert.Equal(EventLevel.Error, firstItem.Level);
+                AssertItem(firstItem, 0, Guid.Empty, expectedMessage);
+                Assert.Collection(attachments,
+                    d =>
+                    {
+                        Assert.Matches("^\\d{8}\\-[a-f\\d]{32}$", d.Id);
+                        Assert.Equal("exception", d.Name);
+                        Assert.Equal(nameof(Exception), d.TypeName);
+                    });
             });
         }
 
