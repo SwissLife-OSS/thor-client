@@ -327,7 +327,7 @@ namespace Thor.Core.Http.Tests
 
         #region Internal Server Error
 
-        [Fact(DisplayName = "InternalServerErrorOccurred: Should log a internal server error exception")]
+        [Fact(DisplayName = "InternalServerErrorOccurred: Should log an internal server error exception")]
         public void InternalServerErrorOccurred()
         {
             RequestActivityEventSource.Log.Listen((listener) =>

@@ -114,6 +114,20 @@ namespace Thor.Core.Http
         }
 
         /// <summary>
+        /// Handles unhandled exception.
+        /// </summary>
+        /// <param name="exception">An exception.</param>
+        public void HandleException(Exception exception)
+        {
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(exception));
+            }
+
+            Log.InternalServerErrorOccurred(exception);
+        }
+
+        /// <summary>
         /// Sets the response information which will be persited in the logging stream.
         /// </summary>
         /// <param name="statusCode">A HTTP response status code.</param>
