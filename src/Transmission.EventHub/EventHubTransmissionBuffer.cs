@@ -38,6 +38,17 @@ namespace Thor.Core.Transmission.EventHub
         public int Count { get { return _output.Count; } }
 
         /// <inheritdoc />
+        public Task<EventData[]> DequeueAsync(CancellationToken cancellationToken)
+        {
+            if (_output.TryDequeue(out EventData[] batch))
+            {
+                return Task.FromResult(batch);
+            }
+
+            return Task.FromResult(new EventData[0]);
+        }
+
+        /// <inheritdoc />
         public Task EnqueueAsync(EventData data, CancellationToken cancellationToken)
         {
             if (data == null)
@@ -48,12 +59,6 @@ namespace Thor.Core.Transmission.EventHub
             _input.Enqueue(data);
 
             return Task.FromResult(0);
-        }
-
-        /// <inheritdoc />
-        public Task<bool> TryDequeueAsync(out EventData[] batch, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(_output.TryDequeue(out batch));
         }
 
         private void StartAsyncProcessing()

@@ -8,7 +8,7 @@ namespace Thor.Core.Abstractions
     /// A transmission sender for telemetry data batches. The sender is responsible for sending
     /// the batches to the backend service/solution for further processing.
     /// </summary>
-    public interface ITransmissionSender<TData>
+    public interface ITransmissionSender<in TData>
         where TData : class
     {
         /// <summary>

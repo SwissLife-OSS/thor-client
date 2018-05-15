@@ -10,6 +10,22 @@ namespace Thor.Core.Abstractions
     public static class TransmissionBufferExtensions
     {
         /// <summary>
+        /// Dequeues a telemetry data batch from the buffer.
+        /// </summary>
+        /// <param name="buffer">A transmission buffer instance.</param>
+        /// <returns>A telemetry data batch.</returns>
+        public static Task<TData[]> DequeueAsync<TData>(this ITransmissionBuffer<TData> buffer)
+            where TData : class
+        {
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
+
+            return buffer.DequeueAsync(CancellationToken.None);
+        }
+
+        /// <summary>
         /// Enqueues a single telemetry data object.
         /// </summary>
         /// <param name="buffer">A transmission buffer instance.</param>
@@ -23,24 +39,6 @@ namespace Thor.Core.Abstractions
             }
 
             return buffer.EnqueueAsync(data, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Tries to dequeue an telemetry data batch from the buffer.
-        /// </summary>
-        /// <param name="buffer">A transmission buffer instance.</param>
-        /// <param name="batch">A telemetry data batch.</param>
-        /// <returns>A value indicating whether a telemetry data batch could be returned.</returns>
-        public static Task<bool> TryDequeueAsync<TData>(this ITransmissionBuffer<TData> buffer,
-            out TData[] batch)
-                where TData : class
-        {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException(nameof(buffer));
-            }
-
-            return buffer.TryDequeueAsync(out batch, CancellationToken.None);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Thor.Core.Abstractions
             TAttachment attachment = null;
 
             if (id != AttachmentId.Empty && !string.IsNullOrWhiteSpace(payloadName) &&
-                payloadValue != null)
+                !payloadValue.Equals(default(TPayload)))
             {
                 attachment = Activator.CreateInstance<TAttachment>();
                 attachment.Id = id;
