@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Thor.Core.Abstractions;
 
 namespace Thor.Core.Session
@@ -32,9 +33,9 @@ namespace Thor.Core.Session
                 .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
                 .AddSingleton<ITelemetrySession>(p =>
                 {
-                    SessionConfiguration sessionConfig = p.GetService<SessionConfiguration>();
+                    IOptions<SessionConfiguration> configAccessor = p.GetService<IOptions<SessionConfiguration>>();
 
-                    return InProcessTelemetrySession.Create(sessionConfig);
+                    return InProcessTelemetrySession.Create(configAccessor.Value);
                 });
         }
     }
