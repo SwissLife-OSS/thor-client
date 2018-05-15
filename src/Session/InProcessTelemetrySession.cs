@@ -18,7 +18,6 @@ namespace Thor.Core.Session
     public class InProcessTelemetrySession
         : EventListener
         , ITelemetrySession
-        , IDisposable
     {
         private const string _assemblyPrefix = "Thor.Core";
         private static readonly Type _attributeType = typeof(EventSourceAttribute);
@@ -77,7 +76,8 @@ namespace Thor.Core.Session
         protected override void OnEventWritten(EventWrittenEventArgs eventData)
         {
             // note: here we filter out the EventSource manifest events
-            if (eventData.EventId != 0 && eventData.EventId != EventIdentifiers.Manifest)
+            if (eventData != null && eventData.EventId != 0 &&
+                eventData.EventId != EventIdentifiers.Manifest)
             {
                 TelemetryEvent telemetryEvent = eventData.Map(_sessionName);
 
@@ -207,7 +207,7 @@ namespace Thor.Core.Session
                     {
                         ProviderActivationEventSource.Log.Activating(name);
 
-                        EnableEvents(instance, _level);
+                        EnableEvents(instance, level);
                         _providers = new HashSet<string>(_providers) { name };
 
                         ProviderActivationEventSource.Log.Activated(name);
@@ -288,6 +288,16 @@ namespace Thor.Core.Session
             return session;
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="InProcessTelemetrySession"/>.
+        /// </summary>
+        /// <param name="configuration">A session configuration instance.</param>
+        /// <returns>A new instance of <see cref="InProcessTelemetrySession"/>.</returns>
+        public static InProcessTelemetrySession Create(SessionConfiguration configuration)
+        {
+            return Create(configuration.ApplicationId, configuration.Level);
+        }
+
         #endregion
 
         #region Dispose
@@ -295,11 +305,7 @@ namespace Thor.Core.Session
         /// <inheritdoc/>
         public override void Dispose()
         {
-            IEnumerable<IDisposable> disposableTransmitters = _transmitters
-                .Where(t => typeof(IDisposable).IsAssignableFrom(t.GetType()))
-                .Select(t => t as IDisposable);
-
-            foreach (IDisposable transmitter in disposableTransmitters)
+            foreach (IDisposable transmitter in _transmitters.OfType<IDisposable>())
             {
                 transmitter.Dispose();
             }

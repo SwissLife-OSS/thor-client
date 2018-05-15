@@ -11,15 +11,16 @@ namespace Thor.Core.Transmission.EventHub
     /// </summary>
     public class EventHubTransmitter
         : ITelemetryTransmitter
+        , IDisposable
     {
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
         private readonly ITransmissionBuffer<EventData> _buffer;
         private readonly ITransmissionSender<EventData> _sender;
-        private bool _disposed = false;
+        private bool _disposed;
         private Task _transmission;
-        private bool _transmissionStopped = false;
+        private bool _transmissionStopped;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
@@ -78,9 +79,9 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task SendBatchAsync()
         {
-            EventData[] batch;
+            EventData[] batch = await _buffer.DequeueAsync().ConfigureAwait(false);
 
-            if (await _buffer.TryDequeueAsync(out batch).ConfigureAwait(false))
+            if (batch.Length > 0)
             {
                 await _sender.SendAsync(batch).ConfigureAwait(false);
             }

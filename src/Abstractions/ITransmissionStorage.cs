@@ -17,6 +17,13 @@ namespace Thor.Core.Abstractions
         int Count { get; }
 
         /// <summary>
+        /// Dequeues a telemetry data batch from the storage.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        /// <returns>A telemetry data batch.</returns>
+        Task<TData[]> DequeueAsync(CancellationToken cancellationToken);
+
+        /// <summary>
         /// Enqueues a telemetry data batch to a <c>short-term</c> storage.
         /// </summary>
         /// <param name="batch">A telemetry data batch.</param>
@@ -28,13 +35,5 @@ namespace Thor.Core.Abstractions
         /// <paramref name="batch"/> must contain at least one item.
         /// </exception>
         Task EnqueueAsync(TData[] batch, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Tries to dequeue a telemetry data batch from the storage.
-        /// </summary>
-        /// <param name="batch">A telemetry data batch.</param>
-        /// <param name="cancellationToken">A cancellation token.</param>
-        /// <returns>A value indicating whether a telemetry data batch could be returned.</returns>
-        Task<bool> TryDequeueAsync(out TData[] batch, CancellationToken cancellationToken);
     }
 }

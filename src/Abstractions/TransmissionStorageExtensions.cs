@@ -10,6 +10,22 @@ namespace Thor.Core.Abstractions
     public static class TransmissionStorageExtensions
     {
         /// <summary>
+        /// Dequeues a telemetry data batch from the storage.
+        /// </summary>
+        /// <param name="storage">A transmission storage instance.</param>
+        /// <returns>A telemetry data batch.</returns>
+        public static Task<TData[]> DequeueAsync<TData>(this ITransmissionStorage<TData> storage)
+            where TData : class
+        {
+            if (storage == null)
+            {
+                throw new ArgumentNullException(nameof(storage));
+            }
+
+            return storage.DequeueAsync(CancellationToken.None);
+        }
+
+        /// <summary>
         /// Enqueues a telemetry data batch to a <c>short-term</c> storage.
         /// </summary>
         /// <param name="storage">A transmission storage instance.</param>
@@ -23,24 +39,6 @@ namespace Thor.Core.Abstractions
             }
 
             return storage.EnqueueAsync(batch, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Tries to dequeue a telemetry data batch from the storage.
-        /// </summary>
-        /// <param name="storage">A transmission storage instance.</param>
-        /// <param name="batch">A telemetry data batch.</param>
-        /// <returns>A value indicating whether a telemetry data batch could be returned.</returns>
-        public static Task<bool> TryDequeueAsync<TData>(this ITransmissionStorage<TData> storage,
-            out TData[] batch)
-                where TData : class
-        {
-            if (storage == null)
-            {
-                throw new ArgumentNullException(nameof(storage));
-            }
-
-            return storage.TryDequeueAsync(out batch, CancellationToken.None);
         }
     }
 }

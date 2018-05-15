@@ -64,9 +64,9 @@ namespace Thor.Core.Abstractions
         }
 
         /// <inheritdoc/>
-        public bool Equals(AttachmentId id)
+        public bool Equals(AttachmentId other)
         {
-            return _timestamp == id._timestamp && _uniqueId.Equals(id._uniqueId);
+            return _timestamp == other._timestamp && _uniqueId.Equals(other._uniqueId);
         }
 
         /// <inheritdoc/>
