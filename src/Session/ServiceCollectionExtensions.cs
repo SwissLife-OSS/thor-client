@@ -31,10 +31,11 @@ namespace Thor.Core.Session
             }
 
             return services
+                .AddOptions()
                 .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
                 .AddSingleton(p =>
                 {
-                    IOptions<SessionConfiguration> configAccessor = p.GetService<IOptions<SessionConfiguration>>();
+                    IOptions<SessionConfiguration> configAccessor = p.GetRequiredService<IOptions<SessionConfiguration>>();
                     IEnumerable<ITelemetryTransmitter> transmitters = p.GetServices<ITelemetryTransmitter>();
                     ITelemetrySession session = InProcessTelemetrySession.Create(configAccessor.Value);
 
