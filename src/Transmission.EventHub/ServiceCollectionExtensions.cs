@@ -31,10 +31,11 @@ namespace Thor.Core.Transmission.EventHub
             }
 
             return services
+                .AddOptions()
                 .Configure<EventHubConfiguration>(configuration.GetSection("Tracing").GetSection("EventHub"))
                 .AddSingleton(p =>
                 {
-                    IOptions<EventHubConfiguration> configAccessor = p.GetService<IOptions<EventHubConfiguration>>();
+                    IOptions<EventHubConfiguration> configAccessor = p.GetRequiredService<IOptions<EventHubConfiguration>>();
 
                     return EventHubClient.CreateFromConnectionString(configAccessor.Value.ConnectionString);
                 })
