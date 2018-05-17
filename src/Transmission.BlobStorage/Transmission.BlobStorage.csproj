@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
-    <PackageId>Thor.Core.Transmission.EventHub</PackageId>
-    <AssemblyName>Thor.Core.Transmission.EventHub</AssemblyName>
-    <RootNamespace>Thor.Core.Transmission.EventHub</RootNamespace>
+    <PackageId>Thor.Core.Transmission.BlobStorage</PackageId>
+    <AssemblyName>Thor.Core.Transmission.BlobStorage</AssemblyName>
+    <RootNamespace>Thor.Core.Transmission.BlobStorage</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Description>Provides a transmitter for Azure EventHub.</Description>
+    <Description>Provides a transmitter for Azure BLOB Storage.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
@@ -45,7 +45,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.2" />
