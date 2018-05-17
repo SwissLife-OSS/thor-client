@@ -1,6 +1,7 @@
 ﻿using System;
+using Thor.Core.Abstractions;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A bunch of convenient <see cref="IAttachment"/> extensions.

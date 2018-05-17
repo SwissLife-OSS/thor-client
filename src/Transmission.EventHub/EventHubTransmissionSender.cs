@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
 {

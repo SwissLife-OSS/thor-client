@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Thor.Core.Abstractions;
+using Thor.Core.Session.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Session
 {

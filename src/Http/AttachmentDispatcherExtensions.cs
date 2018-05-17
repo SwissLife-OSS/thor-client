@@ -1,4 +1,5 @@
 ﻿using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Http
 {

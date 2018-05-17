@@ -21,19 +21,18 @@ namespace Thor.Core.Transmission.EventHub.Tests
             Assert.Throws<ArgumentNullException>("client", verify);
         }
 
-        [Fact(DisplayName = "Constructor: Should not throw any exception",
-            Skip = "We need a valid EventHub connection string")]
+        [Fact(DisplayName = "Constructor: Should not throw any exception")]
         public void Constructor_Success()
         {
             // assert
-            EventHubClient client = EventHubClient.CreateFromConnectionString("connstring");
+            EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
 
             // act
             Action verify = () => new EventHubTransmissionSender(client);
 
             // arrange
             Exception exception = Record.Exception(verify);
-            Assert.NotNull(exception);
+            Assert.Null(exception);
         }
 
         #endregion

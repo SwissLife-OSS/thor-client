@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A bunch of convenient <see cref="ITransmissionBuffer{TData}"/> extension methods.

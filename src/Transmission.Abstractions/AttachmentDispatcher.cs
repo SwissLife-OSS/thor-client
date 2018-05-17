@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Thor.Core.Abstractions;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A dispatcher for attachments.

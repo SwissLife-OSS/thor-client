@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Transmission.EventHub.Tests
@@ -18,7 +18,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             IConfigurationBuilder builder = new ConfigurationBuilder();
             Dictionary<string, string> data = new Dictionary<string, string>
             {
-                {"Tracing:EventHub:ConnectionString", "Endpoint=sb://xxx.servicebus.windows.net/;SharedAccessKeyName=Send;SharedAccessKey=67bHkkKw92k/pH6zU7ikSEXxo2oJJ67Kabf5CS4tg367=;EntityPath=rumba"}
+                {"Tracing:EventHub:ConnectionString", "Endpoint=sb://fake.servicebus.windows.net/;SharedAccessKeyName=Send;SharedAccessKey=67bfakew92k/pH6FAKEkSEXxo2oJJ67Kabf5CS4tg367=;EntityPath=fake"}
             };
 
             builder.AddInMemoryCollection(data);

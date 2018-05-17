@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Http.Tests

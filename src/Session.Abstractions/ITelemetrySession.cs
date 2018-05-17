@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
+using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Session.Abstractions
 {
     /// <summary>
     /// An <c>ETW</c> telemetry session to listen to events.

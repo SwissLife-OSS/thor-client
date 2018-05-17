@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A transmission storage to cache telemetry data batches in <c>memory</c> or on the

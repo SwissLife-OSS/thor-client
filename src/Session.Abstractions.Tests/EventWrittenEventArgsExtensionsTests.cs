@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using Thor.Core.Abstractions;
 using Thor.Core.Testing.Utilities;
 using Xunit;
 
-namespace Thor.Core.Abstractions.Tests
+namespace Thor.Core.Session.Abstractions.Tests
 {
     public class EventWrittenEventArgsExtensionsTests
     {

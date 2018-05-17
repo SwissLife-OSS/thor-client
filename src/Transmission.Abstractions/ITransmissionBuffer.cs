@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A buffer for telemetry data transmission which enqueues single data objects for batch processing.

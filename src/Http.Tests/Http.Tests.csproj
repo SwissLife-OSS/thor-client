@@ -54,7 +54,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Http\Http.csproj" />
-    <ProjectReference Include="..\Testing.Utilities\Testing.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

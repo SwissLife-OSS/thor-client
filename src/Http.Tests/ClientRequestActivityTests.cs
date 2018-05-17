@@ -1,5 +1,5 @@
 ﻿using System;
-using Thor.Core.Testing.Utilities;
+using Thor.Core.Session.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Http.Tests

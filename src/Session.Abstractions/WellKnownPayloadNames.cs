@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Abstractions
+﻿namespace Thor.Core.Session.Abstractions
 {
     /// <summary>
     /// A bunch of well known payload names.

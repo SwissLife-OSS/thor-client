@@ -13,7 +13,7 @@ namespace Thor.Core
 
         #region Activated
 
-        [Event(1, Level = EventLevel.Informational, Message = "Activated provider \"{0}\"", Version = 1)]
+        [Event(1, Level = EventLevel.Verbose, Message = "Activated provider \"{0}\"", Version = 1)]
         public void Activated(string name)
         {
             if (IsEnabled())
@@ -26,7 +26,7 @@ namespace Thor.Core
 
         #region Activating
 
-        [Event(2, Level = EventLevel.Informational, Message = "Activating provider \"{0}\" ...", Version = 1)]
+        [Event(2, Level = EventLevel.Verbose, Message = "Activating provider \"{0}\" ...", Version = 1)]
         public void Activating(string name)
         {
             if (IsEnabled())
@@ -39,7 +39,7 @@ namespace Thor.Core
 
         #region AlreadyActivated
 
-        [Event(3, Level = EventLevel.Informational, Message = "Provider \"{0}\" already activated", Version = 1)]
+        [Event(3, Level = EventLevel.Verbose, Message = "Provider \"{0}\" already activated", Version = 1)]
         public void AlreadyActivated(string name)
         {
             if (IsEnabled())
@@ -52,7 +52,7 @@ namespace Thor.Core
 
         #region NoInstance
 
-        [Event(4, Level = EventLevel.Informational, Message = "Provider \"{0}\" could not be instantiated", Version = 1)]
+        [Event(4, Level = EventLevel.Verbose, Message = "Provider \"{0}\" could not be instantiated", Version = 1)]
         public void NoInstance(string name)
         {
             if (IsEnabled())
@@ -65,7 +65,7 @@ namespace Thor.Core
 
         #region NotFound
 
-        [Event(5, Level = EventLevel.Informational, Message = "Provider \"{0}\" not found", Version = 1)]
+        [Event(5, Level = EventLevel.Verbose, Message = "Provider \"{0}\" not found", Version = 1)]
         public void NotFound(string name)
         {
             if (IsEnabled())

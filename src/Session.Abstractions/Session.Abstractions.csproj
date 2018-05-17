@@ -1,11 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
-    <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.Core.Testing.Utilities</AssemblyName>
-    <RootNamespace>Thor.Core.Testing.Utilities</RootNamespace>
+    <PackageId>Thor.Core.Session.Abstractions</PackageId>
+    <AssemblyName>Thor.Core.Session.Abstractions</AssemblyName>
+    <RootNamespace>Thor.Core.Session.Abstractions</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Provides abstractions for the session.</Description>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -14,8 +16,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -43,11 +45,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

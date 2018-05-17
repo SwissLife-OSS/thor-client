@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Http
 {

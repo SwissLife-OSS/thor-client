@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.Core.Abstractions.Tests</AssemblyName>
-    <RootNamespace>Thor.Core.Abstractions.Tests</RootNamespace>
+    <AssemblyName>Thor.Core.Session.Abstractions.Tests</AssemblyName>
+    <RootNamespace>Thor.Core.Session.Abstractions.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -54,8 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
-    <ProjectReference Include="..\Testing.Utilities\Testing.Utilities.csproj" />
+    <ProjectReference Include="..\Session.Abstractions\Session.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

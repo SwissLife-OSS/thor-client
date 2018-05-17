@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.Tracing;
 using System.Linq;
-using Thor.Analyzer;
-using Thor.Core.Testing.Utilities;
+using Thor.Core.Session.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Session.Tests
@@ -12,10 +11,10 @@ namespace Thor.Core.Session.Tests
         public void Analyze()
         {
             // arrange
-            EventSourceAnalyzer analyzer = new EventSourceAnalyzer();
+            Analyzer.EventSourceAnalyzer analyzer = new Analyzer.EventSourceAnalyzer();
 
             // act
-            Report report = analyzer.Inspect(ProviderActivationEventSource.Log);
+            Analyzer.Report report = analyzer.Inspect(ProviderActivationEventSource.Log);
 
             // assert
             Assert.False(report.HasErrors);
@@ -55,7 +54,7 @@ namespace Thor.Core.Session.Tests
                 Assert.NotNull(firstItem);
                 Assert.Single(firstItem.Payload);
                 Assert.Equal(1, firstItem.EventId);
-                Assert.Equal(EventLevel.Informational, firstItem.Level);
+                Assert.Equal(EventLevel.Verbose, firstItem.Level);
                 Assert.Equal("Activated-Enabled", firstItem.Payload[0]);
             });
         }
@@ -96,7 +95,7 @@ namespace Thor.Core.Session.Tests
                 Assert.NotNull(firstItem);
                 Assert.Single(firstItem.Payload);
                 Assert.Equal(2, firstItem.EventId);
-                Assert.Equal(EventLevel.Informational, firstItem.Level);
+                Assert.Equal(EventLevel.Verbose, firstItem.Level);
                 Assert.Equal("Activating-Enabled", firstItem.Payload[0]);
             });
         }
@@ -137,7 +136,7 @@ namespace Thor.Core.Session.Tests
                 Assert.NotNull(firstItem);
                 Assert.Single(firstItem.Payload);
                 Assert.Equal(3, firstItem.EventId);
-                Assert.Equal(EventLevel.Informational, firstItem.Level);
+                Assert.Equal(EventLevel.Verbose, firstItem.Level);
                 Assert.Equal("AlreadyActivated-Enabled", firstItem.Payload[0]);
             });
         }
@@ -178,7 +177,7 @@ namespace Thor.Core.Session.Tests
                 Assert.NotNull(firstItem);
                 Assert.Single(firstItem.Payload);
                 Assert.Equal(4, firstItem.EventId);
-                Assert.Equal(EventLevel.Informational, firstItem.Level);
+                Assert.Equal(EventLevel.Verbose, firstItem.Level);
                 Assert.Equal("NoInstance-Enabled", firstItem.Payload[0]);
             });
         }
@@ -219,7 +218,7 @@ namespace Thor.Core.Session.Tests
                 Assert.NotNull(firstItem);
                 Assert.Single(firstItem.Payload);
                 Assert.Equal(5, firstItem.EventId);
-                Assert.Equal(EventLevel.Informational, firstItem.Level);
+                Assert.Equal(EventLevel.Verbose, firstItem.Level);
                 Assert.Equal("NotFound-Enabled", firstItem.Payload[0]);
             });
         }

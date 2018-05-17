@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Linq;
+using Thor.Core.Abstractions;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Session.Abstractions
 {
     /// <summary>
     /// A bunch of convenient <see cref="EventWrittenEventArgs"/> extension methods.

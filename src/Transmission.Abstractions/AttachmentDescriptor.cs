@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Abstractions
+﻿namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// An descriptor for attachments.

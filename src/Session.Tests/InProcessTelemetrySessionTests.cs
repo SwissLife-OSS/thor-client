@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
-using Thor.Core.Abstractions;
+using Thor.Core.Session.Abstractions;
 using Thor.Core.Testing.Utilities;
+using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Session.Tests
