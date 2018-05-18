@@ -31,7 +31,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // assert
             ServiceProvider provider = services.BuildServiceProvider();
 
-            Assert.IsType<EventHubTransmitter>(provider.GetService<ITelemetryTransmitter>());
+            Assert.IsType<EventHubTransmitter>(provider.GetService<ITelemetryEventTransmitter>());
         }
 
         #endregion

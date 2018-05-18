@@ -10,15 +10,15 @@ namespace Thor.Core.Transmission.Abstractions
     public class AttachmentDispatcher
     {
         private static readonly object _sync = new object();
-        private readonly HashSet<Action<AttachmentDescriptor>> _observers;
+        private HashSet<ITelemetryAttachmentTransmitter> _transmitters;
 
         private AttachmentDispatcher()
-            : this(new HashSet<Action<AttachmentDescriptor>>())
+            : this(new HashSet<ITelemetryAttachmentTransmitter>())
         { }
 
-        internal AttachmentDispatcher(HashSet<Action<AttachmentDescriptor>> observers)
+        internal AttachmentDispatcher(HashSet<ITelemetryAttachmentTransmitter> transmitters)
         {
-            _observers = observers ?? throw new ArgumentNullException(nameof(observers));
+            _transmitters = transmitters ?? throw new ArgumentNullException(nameof(transmitters));
         }
 
         /// <summary>
@@ -27,42 +27,53 @@ namespace Thor.Core.Transmission.Abstractions
         public static AttachmentDispatcher Instance { get; } = new AttachmentDispatcher();
 
         /// <summary>
-        /// Attaches an observer for <see cref="AttachmentDescriptor"/> changes.
+        /// Attaches a transmitter for telemetry attachment transmission.
         /// </summary>
-        /// <param name="observer">An observer.</param>
+        /// <param name="transmitter">A attachment transmitter.</param>
         /// <exception cref="ArgumentNullException">
-        /// Throws if <paramref name="observer"/> is null.
+        /// Throws if <paramref name="transmitter"/> is null.
         /// </exception>
-        public void Attach(Action<AttachmentDescriptor> observer)
+        public void Attach(ITelemetryAttachmentTransmitter transmitter)
         {
-            if (observer == null)
+            if (transmitter == null)
             {
-                throw new ArgumentNullException(nameof(observer));
+                throw new ArgumentNullException(nameof(transmitter));
             }
 
             lock (_sync)
             {
-                _observers.Add(observer);
+                HashSet<ITelemetryAttachmentTransmitter> newTransmitters = new HashSet<ITelemetryAttachmentTransmitter>(_transmitters);
+
+                if (!newTransmitters.Contains(transmitter))
+                {
+                    newTransmitters.Add(transmitter);
+                }
+
+                _transmitters = newTransmitters;
             }
         }
 
         /// <summary>
-        /// Detaches an observer for <see cref="AttachmentDescriptor"/> changes.
+        /// Detaches a transmitter for telemetry attachment transmission.
         /// </summary>
-        /// <param name="observer">An observer.</param>
+        /// <param name="transmitter">A attachment transmitter.</param>
         /// <exception cref="ArgumentNullException">
-        /// Throws if <paramref name="observer"/> is null.
+        /// Throws if <paramref name="transmitter"/> is null.
         /// </exception>
-        public void Detach(Action<AttachmentDescriptor> observer)
+        public void Detach(ITelemetryAttachmentTransmitter transmitter)
         {
-            if (observer == null)
+            if (transmitter == null)
             {
-                throw new ArgumentNullException(nameof(observer));
+                throw new ArgumentNullException(nameof(transmitter));
             }
 
             lock (_sync)
             {
-                _observers.Remove(observer);
+                HashSet<ITelemetryAttachmentTransmitter> newTransmitters = new HashSet<ITelemetryAttachmentTransmitter>(_transmitters);
+
+                newTransmitters.Remove(transmitter);
+
+                _transmitters = newTransmitters;
             }
         }
 
@@ -98,11 +109,11 @@ namespace Thor.Core.Transmission.Abstractions
                 };
             }
 
-            foreach (Action<AttachmentDescriptor> observer in _observers)
+            foreach (ITelemetryAttachmentTransmitter transmitter in _transmitters)
             {
                 foreach (AttachmentDescriptor descriptor in descriptors)
                 {
-                    observer(descriptor);
+                    transmitter.Enqueue(descriptor);
                 }
             }
         }

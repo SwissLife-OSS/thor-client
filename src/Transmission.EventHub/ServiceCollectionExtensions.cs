@@ -41,7 +41,7 @@ namespace Thor.Core.Transmission.EventHub
                 })
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
                 .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
-                .AddSingleton<ITelemetryTransmitter, EventHubTransmitter>();
+                .AddSingleton<ITelemetryEventTransmitter, EventHubTransmitter>();
         }
     }
 }

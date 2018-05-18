@@ -8,10 +8,10 @@ using Thor.Core.Transmission.Abstractions;
 namespace Thor.Core.Transmission.EventHub
 {
     /// <summary>
-    /// A telemetry transmitter for <c>Azure</c> <c>EventHub</c>.
+    /// A telemetry event transmitter for <c>Azure</c> <c>EventHub</c>.
     /// </summary>
     public class EventHubTransmitter
-        : ITelemetryTransmitter
+        : ITelemetryEventTransmitter
         , IDisposable
     {
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Moq;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
@@ -83,17 +84,23 @@ namespace Thor.Core.Http.Tests
             // arrange
             int callCount = 0;
             AttachmentId id = AttachmentId.NewId();
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>
-            {
-                d =>
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback((AttachmentDescriptor d) =>
                 {
                     if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
-                }
+                });
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
+            {
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
             string payloadName = "Name-4141";
             HttpRequest payloadValue = new HttpRequest();
 
@@ -111,17 +118,23 @@ namespace Thor.Core.Http.Tests
             // arrange
             int callCount = 0;
             AttachmentId id = AttachmentId.NewId();
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>
-            {
-                d =>
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback((AttachmentDescriptor d) =>
                 {
                     if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
-                }
+                });
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
+            {
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
             string payloadName = "Name-3131";
             HttpRequest payloadValue = new HttpRequest
             {
@@ -211,17 +224,23 @@ namespace Thor.Core.Http.Tests
             // arrange
             int callCount = 0;
             AttachmentId id = AttachmentId.NewId();
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>
-            {
-                d =>
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback((AttachmentDescriptor d) =>
                 {
                     if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
-                }
+                });
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
+            {
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
             string payloadName = "Name-4242";
             HttpResponse payloadValue = new HttpResponse();
 
@@ -239,17 +258,23 @@ namespace Thor.Core.Http.Tests
             // arrange
             int callCount = 0;
             AttachmentId id = AttachmentId.NewId();
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>
-            {
-                d =>
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback((AttachmentDescriptor d) =>
                 {
                     if (d.Id == id)
                     {
                         Interlocked.Increment(ref callCount);
                     }
-                }
+                });
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
+            {
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
             string payloadName = "Name-3232";
             HttpResponse payloadValue = new HttpResponse
             {

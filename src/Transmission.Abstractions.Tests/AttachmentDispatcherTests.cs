@@ -11,74 +11,91 @@ namespace Thor.Core.Transmission.Abstractions.Tests
     {
         #region Attach
         
-        [Fact(DisplayName = "Attach: Should throw an argument null excption for observer")]
-        public void Attach_ObserverNull()
+        [Fact(DisplayName = "Attach: Should throw an argument null excption for transmitter")]
+        public void Attach_TransmitterNull()
         {
             // arrange
-            Action<AttachmentDescriptor> observer = null;
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            ITelemetryAttachmentTransmitter transmitter = null;
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>();
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
-            Action validate = () => dispatcher.Attach(observer);
+            Action validate = () => dispatcher.Attach(transmitter);
 
             // assert
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("observer", exception.ParamName);
+            Assert.Equal("transmitter", exception.ParamName);
         }
 
-        [Fact(DisplayName = "Attach: Should attach an observer")]
+        [Fact(DisplayName = "Attach: Should attach an transmitter")]
         public void Attach_Success()
         {
             // arrange
-            Action<AttachmentDescriptor> observer = d => { };
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            int callCount = 0;
+            Mock<IAttachment> attachment = new Mock<IAttachment>();
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback(() => Interlocked.Increment(ref callCount));
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>();
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
-            dispatcher.Attach(observer);
+            dispatcher.Attach(transmitter.Object);
 
             // assert
-            Assert.Collection(observers,
-                item => Assert.NotNull(item));
+            dispatcher.Dispatch(attachment.Object);
+
+            Assert.Equal(1, callCount);
         }
 
         #endregion
 
         #region Detach
 
-        [Fact(DisplayName = "Detach: Should throw an argument null excption for observer")]
-        public void Detach_ObserverNull()
+        [Fact(DisplayName = "Detach: Should throw an argument null excption for transmitter")]
+        public void Detach_TransmitterNull()
         {
             // arrange
-            Action<AttachmentDescriptor> observer = null;
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            ITelemetryAttachmentTransmitter transmitter = null;
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>();
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
-            Action validate = () => dispatcher.Detach(observer);
+            Action validate = () => dispatcher.Detach(transmitter);
 
             // assert
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("observer", exception.ParamName);
+            Assert.Equal("transmitter", exception.ParamName);
         }
 
-        [Fact(DisplayName = "Detach: Should detach an observer")]
+        [Fact(DisplayName = "Detach: Should detach an transmitter")]
         public void Detach_Success()
         {
             // arrange
-            Action<AttachmentDescriptor> observer = d => { };
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>()
+            int callCount = 0;
+            Mock<IAttachment> attachment = new Mock<IAttachment>();
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback(() => Interlocked.Increment(ref callCount));
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
             {
-                observer
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
-            dispatcher.Detach(observer);
+            dispatcher.Detach(transmitter.Object);
 
             // assert
-            Assert.Empty(observers);
+            dispatcher.Dispatch(attachment.Object);
+
+            Assert.Equal(0, callCount);
         }
 
         #endregion
@@ -90,8 +107,8 @@ namespace Thor.Core.Transmission.Abstractions.Tests
         {
             // arrange
             IAttachment[] attachments = null;
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>();
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
             Action validate = () => dispatcher.Dispatch(attachments);
@@ -106,8 +123,8 @@ namespace Thor.Core.Transmission.Abstractions.Tests
         {
             // arrange
             IAttachment[] attachments = new IAttachment[0];
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>();
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>();
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
             Action validate = () => dispatcher.Dispatch(attachments);
@@ -123,12 +140,17 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             // arrange
             int callCount = 0;
             IAttachment attachment = new Mock<IAttachment>().Object;
-            Action<AttachmentDescriptor> observer = a => { Interlocked.Increment(ref callCount); };
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>()
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback(() => Interlocked.Increment(ref callCount));
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
             {
-                observer
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
             dispatcher.Dispatch(attachment);
@@ -148,12 +170,17 @@ namespace Thor.Core.Transmission.Abstractions.Tests
                 new Mock<IAttachment>().Object,
                 new Mock<IAttachment>().Object
             };
-            Action<AttachmentDescriptor> observer = a => { Interlocked.Increment(ref callCount); };
-            HashSet<Action<AttachmentDescriptor>> observers = new HashSet<Action<AttachmentDescriptor>>()
+            Mock<ITelemetryAttachmentTransmitter> transmitter = new Mock<ITelemetryAttachmentTransmitter>();
+
+            transmitter
+                .Setup(t => t.Enqueue(It.IsAny<AttachmentDescriptor>()))
+                .Callback(() => Interlocked.Increment(ref callCount));
+
+            HashSet<ITelemetryAttachmentTransmitter> transmitters = new HashSet<ITelemetryAttachmentTransmitter>
             {
-                observer
+                transmitter.Object
             };
-            AttachmentDispatcher dispatcher = new AttachmentDispatcher(observers);
+            AttachmentDispatcher dispatcher = new AttachmentDispatcher(transmitters);
 
             // act
             dispatcher.Dispatch(attachments);

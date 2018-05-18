@@ -1,20 +1,20 @@
 ﻿using System;
-using Thor.Core.Abstractions;
 
 namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
-    /// A transmitter for telemetry events.
+    /// A transmitter for telemetry data.
     /// </summary>
-    public interface ITelemetryTransmitter
+    public interface ITelemetryTransmitter<TData>
+        where TData : class
     {
         /// <summary>
-        /// Enqueues a single telemetry event for transmission.
+        /// Enqueues a single telemetry data object for transmission.
         /// </summary>
-        /// <param name="telemetryEvent">A telemetry event.</param>
+        /// <param name="data">A telemetry data object.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="telemetryEvent"/> must not be <c>null</c>.
+        /// <paramref name="data"/> must not be <c>null</c>.
         /// </exception>
-        void Enqueue(TelemetryEvent telemetryEvent);
+        void Enqueue(TData data);
     }
 }

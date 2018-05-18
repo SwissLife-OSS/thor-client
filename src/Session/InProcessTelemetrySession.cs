@@ -26,7 +26,7 @@ namespace Thor.Core.Session
         private static readonly Type _baseType = typeof(EventSource);
         private readonly object _lock = new object();
         private HashSet<string> _providers = new HashSet<string>();
-        private ITelemetryTransmitter[] _transmitters = new ITelemetryTransmitter[0];
+        private HashSet<ITelemetryEventTransmitter> _transmitters = new HashSet<ITelemetryEventTransmitter>();
         private readonly EventLevel _level;
         private readonly AppDomain _currentDomain;
         private readonly string _sessionName;
@@ -56,7 +56,7 @@ namespace Thor.Core.Session
         }
 
         /// <inheritdoc />
-        public void SetTransmitter(ITelemetryTransmitter transmitter)
+        public void Attach(ITelemetryEventTransmitter transmitter)
         {
             if (transmitter == null)
             {
@@ -65,12 +65,14 @@ namespace Thor.Core.Session
 
             lock (_lock)
             {
-                List<ITelemetryTransmitter> newTransmitters = new List<ITelemetryTransmitter>(_transmitters)
-                {
-                    transmitter
-                };
+                HashSet<ITelemetryEventTransmitter> newTransmitters = new HashSet<ITelemetryEventTransmitter>(_transmitters);
 
-                _transmitters = newTransmitters.ToArray();
+                if (!newTransmitters.Contains(transmitter))
+                {
+                    newTransmitters.Add(transmitter);
+                }
+
+                _transmitters = newTransmitters;
             }
         }
 
@@ -83,7 +85,7 @@ namespace Thor.Core.Session
             {
                 TelemetryEvent telemetryEvent = eventData.Map(_sessionName);
 
-                foreach (ITelemetryTransmitter transmitter in _transmitters)
+                foreach (ITelemetryEventTransmitter transmitter in _transmitters)
                 {
                     transmitter.Enqueue(telemetryEvent);
                 }

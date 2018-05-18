@@ -49,7 +49,7 @@ namespace Thor.Core.Session.Tests
 
             using (ITelemetrySession session = InProcessTelemetrySession.Create(applicationId))
             {
-                session.SetTransmitter(transmitter);
+                session.Attach(transmitter);
                 Application.Start(applicationId);
                 telemetryCount = transmitter.Count;
             }
@@ -104,10 +104,10 @@ namespace Thor.Core.Session.Tests
             using (ITelemetrySession session = InProcessTelemetrySession.Create(1))
             {
                 // arrange
-                ITelemetryTransmitter transmitter = null;
+                ITelemetryEventTransmitter transmitter = null;
 
                 // act
-                Action verify = () => session.SetTransmitter(transmitter);
+                Action verify = () => session.Attach(transmitter);
 
                 // assert
                 Assert.Throws<ArgumentNullException>("transmitter", verify);
@@ -120,10 +120,10 @@ namespace Thor.Core.Session.Tests
             using (ITelemetrySession session = InProcessTelemetrySession.Create(1))
             {
                 // arrange
-                ITelemetryTransmitter transmitter = new ProbeTransmitter();
+                ITelemetryEventTransmitter transmitter = new ProbeTransmitter();
 
                 // act
-                Action verify = () => session.SetTransmitter(transmitter);
+                Action verify = () => session.Attach(transmitter);
 
                 // assert
                 Assert.Null(Record.Exception(verify));

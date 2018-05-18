@@ -11,7 +11,7 @@ namespace Thor.Core.Testing.Utilities
     /// Especially good for unit tests. Should not be used in production code.
     /// </remarks>
     public class ProbeTransmitter
-        : ITelemetryTransmitter
+        : ITelemetryEventTransmitter
     {
         private readonly ConcurrentQueue<TelemetryEvent> _queue = new ConcurrentQueue<TelemetryEvent>();
 

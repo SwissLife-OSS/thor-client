@@ -18,9 +18,9 @@ namespace Thor.Core.Session.Abstractions
         void EnableProvider(string name, EventLevel level);
 
         /// <summary>
-        /// Sets a transmitter for telemetry event transmission.
+        /// Attaches a transmitter for telemetry event transmission.
         /// </summary>
         /// <param name="transmitter">A transmitter instance.</param>
-        void SetTransmitter(ITelemetryTransmitter transmitter);
+        void Attach(ITelemetryEventTransmitter transmitter);
     }
 }

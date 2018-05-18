@@ -37,12 +37,12 @@ namespace Thor.Core.Session
                 .AddSingleton(p =>
                 {
                     IOptions<SessionConfiguration> configAccessor = p.GetRequiredService<IOptions<SessionConfiguration>>();
-                    IEnumerable<ITelemetryTransmitter> transmitters = p.GetServices<ITelemetryTransmitter>();
+                    IEnumerable<ITelemetryEventTransmitter> transmitters = p.GetServices<ITelemetryEventTransmitter>();
                     ITelemetrySession session = InProcessTelemetrySession.Create(configAccessor.Value);
 
-                    foreach(ITelemetryTransmitter transmitter in transmitters)
+                    foreach(ITelemetryEventTransmitter transmitter in transmitters)
                     {
-                        session.SetTransmitter(transmitter);
+                        session.Attach(transmitter);
                     }
 
                     return session;
