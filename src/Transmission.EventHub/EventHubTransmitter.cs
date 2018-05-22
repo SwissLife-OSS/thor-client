@@ -10,7 +10,7 @@ namespace Thor.Core.Transmission.EventHub
     /// <summary>
     /// A telemetry event transmitter for <c>Azure</c> <c>EventHub</c>.
     /// </summary>
-    public class EventHubTransmitter
+    public sealed class EventHubTransmitter
         : ITelemetryEventTransmitter
         , IDisposable
     {
@@ -65,16 +65,16 @@ namespace Thor.Core.Transmission.EventHub
 
 
         /// <inheritdoc />
-        public void Enqueue(TelemetryEvent telemetryEvent)
+        public void Enqueue(TelemetryEvent data)
         {
-            if (telemetryEvent == null)
+            if (data == null)
             {
-                throw new ArgumentNullException(nameof(telemetryEvent));
+                throw new ArgumentNullException(nameof(data));
             }
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _buffer.EnqueueAsync(telemetryEvent.Map()));
+                Task.Run(() => _buffer.EnqueueAsync(data.Map()));
             }
         }
 
