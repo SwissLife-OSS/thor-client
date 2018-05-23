@@ -13,41 +13,18 @@ namespace Thor.Core.Transmission.BlobStorage
     public class BlobStorageTransmissionSender
         : ITransmissionSender<AttachmentDescriptor>
     {
-        private readonly CloudBlobClient _client;
-        private readonly BlobStorageConfiguration _configuration;
-        private CloudBlobContainer _container;
+        private readonly CloudBlobContainer _container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmissionSender"/> class.
         /// </summary>
-        /// <param name="client">A <c>Azure</c> <c>BLOB</c> <c>Storage</c> client instance.</param>
-        /// <param name="configuration">A </param>
+        /// <param name="container">A <c>Azure</c> <c>BLOB</c> <c>Storage</c> container instance.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="client"/> must not be <c>null</c>.
+        /// <paramref name="container"/> must not be <c>null</c>.
         /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="configuration"/> must not be <c>null</c>.
-        /// </exception>
-        public BlobStorageTransmissionSender(CloudBlobClient client,
-            BlobStorageConfiguration configuration)
+        public BlobStorageTransmissionSender(CloudBlobContainer container)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            try
-            {
-                _container = _client.GetContainerReference(_configuration.AttachmentContainerName);
-                _container.CreateIfNotExistsAsync().GetAwaiter().GetResult();
-            }
-            catch (Exception)
-            {
-                // todo: log
-            }
+            _container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         /// <inheritdoc/>
@@ -58,23 +35,23 @@ namespace Thor.Core.Transmission.BlobStorage
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (batch.Length != 1)
+            if (batch.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(batch),
-                    ExceptionMessages.CollectionOneItem);
+                throw new ArgumentOutOfRangeException(nameof(batch), ExceptionMessages.CollectionIsEmpty);
             }
 
             try
             {
-                AttachmentDescriptor descriptor = batch[0];
-
-                await _container.GetBlockBlobReference($"{descriptor.Id}\\{descriptor.TypeName}")
-                    .UploadFromByteArrayAsync(descriptor.Value, 0, descriptor.Value.Length)
-                    .ConfigureAwait(false);
+                foreach (AttachmentDescriptor descriptor in batch)
+                {
+                    await _container.GetBlockBlobReference($"{descriptor.Id}\\{descriptor.TypeName}")
+                        .UploadFromByteArrayAsync(descriptor.Value, 0, descriptor.Value.Length)
+                        .ConfigureAwait(false);
+                }
             }
             catch (Exception)
             {
-                // todo: log
+                // todo: log via event provider
             }
         }
     }

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Thor.Core.Transmission.BlobStorage.Tests
 {
-    public class BrobStorageTransmitterTests
+    public class BlobStorageTransmitterTests
     {
         #region Constructor
 
