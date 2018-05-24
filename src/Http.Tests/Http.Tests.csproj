@@ -44,7 +44,7 @@
   <ItemGroup>
     <PackageReference Include="coveralls.io" Version="1.4.2" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="1.0.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
@@ -54,7 +54,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Http\Http.csproj" />
-    <ProjectReference Include="..\Testing.Utilities\Testing.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

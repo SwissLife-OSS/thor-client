@@ -4,7 +4,8 @@ using System.Diagnostics.Tracing;
 using System.Linq;
 using Thor.Analyzer;
 using Thor.Core.Abstractions;
-using Thor.Core.Testing.Utilities;
+using Thor.Core.Session.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Http.Tests

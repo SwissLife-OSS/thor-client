@@ -3,14 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
 {
     /// <summary>
-    /// A telemetry transmitter for <c>Azure</c> <c>EventHub</c>.
+    /// A telemetry event transmitter for <c>Azure</c> <c>EventHub</c>.
     /// </summary>
-    public class EventHubTransmitter
-        : ITelemetryTransmitter
+    public sealed class EventHubTransmitter
+        : ITelemetryEventTransmitter
         , IDisposable
     {
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
@@ -64,16 +65,16 @@ namespace Thor.Core.Transmission.EventHub
 
 
         /// <inheritdoc />
-        public void Enqueue(TelemetryEvent telemetryEvent)
+        public void Enqueue(TelemetryEvent data)
         {
-            if (telemetryEvent == null)
+            if (data == null)
             {
-                throw new ArgumentNullException(nameof(telemetryEvent));
+                throw new ArgumentNullException(nameof(data));
             }
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _buffer.EnqueueAsync(telemetryEvent.Map()));
+                Task.Run(() => _buffer.EnqueueAsync(data.Map()));
             }
         }
 

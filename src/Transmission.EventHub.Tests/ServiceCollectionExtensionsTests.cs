@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Thor.Core.Abstractions;
+using Moq;
+using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Transmission.EventHub.Tests
@@ -9,6 +11,34 @@ namespace Thor.Core.Transmission.EventHub.Tests
     public class ServiceCollectionExtensionsTests
     {
         #region AddEventHubTelemetryEventTransmission
+
+        [Fact(DisplayName = "AddEventHubTelemetryEventTransmission: Should throw an argument null exception for services")]
+        public void AddEventHubTelemetryEventTransmission_ServicesNull()
+        {
+            // arrange
+            IServiceCollection services = null;
+            IConfiguration configuration = new Mock<IConfiguration>().Object;
+
+            // act
+            Action verify = () => services.AddEventHubTelemetryEventTransmission(configuration);
+
+            // arrange
+            Assert.Throws<ArgumentNullException>("services", verify);
+        }
+
+        [Fact(DisplayName = "AddEventHubTelemetryEventTransmission: Should throw an argument null exception for configuration")]
+        public void AddEventHubTelemetryEventTransmission_ConfigurationNull()
+        {
+            // arrange
+            IServiceCollection services = new Mock<IServiceCollection>().Object;
+            IConfiguration configuration = null;
+
+            // act
+            Action verify = () => services.AddEventHubTelemetryEventTransmission(configuration);
+
+            // arrange
+            Assert.Throws<ArgumentNullException>("configuration", verify);
+        }
 
         [Fact(DisplayName = "AddEventHubTelemetryEventTransmission: Resolve telemetry transmitter")]
         public void AddEventHubTelemetryEventTransmission()
@@ -18,7 +48,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             IConfigurationBuilder builder = new ConfigurationBuilder();
             Dictionary<string, string> data = new Dictionary<string, string>
             {
-                {"Tracing:EventHub:ConnectionString", "Endpoint=sb://xxx.servicebus.windows.net/;SharedAccessKeyName=Send;SharedAccessKey=67bHkkKw92k/pH6zU7ikSEXxo2oJJ67Kabf5CS4tg367=;EntityPath=rumba"}
+                {"Tracing:EventHub:ConnectionString", Constants.FakeConnectionString}
             };
 
             builder.AddInMemoryCollection(data);
@@ -31,7 +61,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // assert
             ServiceProvider provider = services.BuildServiceProvider();
 
-            Assert.IsType<EventHubTransmitter>(provider.GetService<ITelemetryTransmitter>());
+            Assert.IsType<EventHubTransmitter>(provider.GetService<ITelemetryEventTransmitter>());
         }
 
         #endregion

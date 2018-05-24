@@ -3,7 +3,7 @@ using Microsoft.Azure.EventHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Thor.Core.Abstractions;
+using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
 {
@@ -31,7 +31,7 @@ namespace Thor.Core.Transmission.EventHub
             }
 
             return services
-                .AddOptions()
+                .AddTracingCore(configuration)
                 .Configure<EventHubConfiguration>(configuration.GetSection("Tracing").GetSection("EventHub"))
                 .AddSingleton(p =>
                 {
@@ -41,7 +41,7 @@ namespace Thor.Core.Transmission.EventHub
                 })
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
                 .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
-                .AddSingleton<ITelemetryTransmitter, EventHubTransmitter>();
+                .AddSingleton<ITelemetryEventTransmitter, EventHubTransmitter>();
         }
     }
 }

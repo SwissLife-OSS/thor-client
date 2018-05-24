@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Thor.Core.Abstractions;
+using Thor.Core.Session.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Session.Tests

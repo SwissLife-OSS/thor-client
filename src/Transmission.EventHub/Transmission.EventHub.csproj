@@ -6,7 +6,7 @@
     <AssemblyName>Thor.Core.Transmission.EventHub</AssemblyName>
     <RootNamespace>Thor.Core.Transmission.EventHub</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Description>Provides a transmitter for EventHub.</Description>
+    <Description>Provides a transmitter for Azure EventHub.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
@@ -53,7 +53,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

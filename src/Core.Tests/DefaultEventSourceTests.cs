@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using System.Linq;
-using Thor.Analyzer;
-using Thor.Core.Testing.Utilities;
+using Thor.Core.Session.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Tests
@@ -13,10 +12,10 @@ namespace Thor.Core.Tests
         public void Analyze()
         {
             // arrange
-            EventSourceAnalyzer analyzer = new EventSourceAnalyzer();
+            Analyzer.EventSourceAnalyzer analyzer = new Analyzer.EventSourceAnalyzer();
 
             // act
-            Report report = analyzer.Inspect(DefaultEventSource.Log);
+            Analyzer.Report report = analyzer.Inspect(DefaultEventSource.Log);
 
             // assert
             Assert.False(report.HasErrors);
