@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 using Thor.Core.Session.Abstractions;
-using Thor.Core.Testing.Utilities;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
 

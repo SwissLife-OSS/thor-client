@@ -6,49 +6,50 @@ using Moq;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
-namespace Thor.Core.Transmission.EventHub.Tests
+namespace Thor.Core.Transmission.BlobStorage.Tests
 {
     public class ServiceCollectionExtensionsTests
     {
-        #region AddEventHubTelemetryEventTransmission
+        #region AddBlobStorageTelemetryAttachmentTransmission
 
-        [Fact(DisplayName = "AddEventHubTelemetryEventTransmission: Should throw an argument null exception for services")]
-        public void AddEventHubTelemetryEventTransmission_ServicesNull()
+        [Fact(DisplayName = "AddBlobStorageTelemetryAttachmentTransmission: Should throw an argument null exception for services")]
+        public void AddBlobStorageTelemetryAttachmentTransmission_ServicesNull()
         {
             // arrange
             IServiceCollection services = null;
             IConfiguration configuration = new Mock<IConfiguration>().Object;
 
             // act
-            Action verify = () => services.AddEventHubTelemetryEventTransmission(configuration);
+            Action verify = () => services.AddBlobStorageTelemetryAttachmentTransmission(configuration);
 
             // arrange
             Assert.Throws<ArgumentNullException>("services", verify);
         }
 
-        [Fact(DisplayName = "AddEventHubTelemetryEventTransmission: Should throw an argument null exception for configuration")]
-        public void AddEventHubTelemetryEventTransmission_ConfigurationNull()
+        [Fact(DisplayName = "AddBlobStorageTelemetryAttachmentTransmission: Should throw an argument null exception for configuration")]
+        public void AddBlobStorageTelemetryAttachmentTransmission_ConfigurationNull()
         {
             // arrange
             IServiceCollection services = new Mock<IServiceCollection>().Object;
             IConfiguration configuration = null;
 
             // act
-            Action verify = () => services.AddEventHubTelemetryEventTransmission(configuration);
+            Action verify = () => services.AddBlobStorageTelemetryAttachmentTransmission(configuration);
 
             // arrange
             Assert.Throws<ArgumentNullException>("configuration", verify);
         }
 
-        [Fact(DisplayName = "AddEventHubTelemetryEventTransmission: Resolve telemetry transmitter")]
-        public void AddEventHubTelemetryEventTransmission()
+        [Fact(DisplayName = "AddBlobStorageTelemetryAttachmentTransmission: Resolve telemetry transmitter",
+            Skip = "Because a valid storage connection string is required")]
+        public void AddBlobStorageTelemetryAttachmentTransmission()
         {
             // arrange
             IServiceCollection services = new ServiceCollection();
             IConfigurationBuilder builder = new ConfigurationBuilder();
             Dictionary<string, string> data = new Dictionary<string, string>
             {
-                {"Tracing:EventHub:ConnectionString", Constants.FakeConnectionString}
+                {"Tracing:BlobStorage:ConnectionString", Constants.FakeConnectionString}
             };
 
             builder.AddInMemoryCollection(data);
@@ -56,12 +57,12 @@ namespace Thor.Core.Transmission.EventHub.Tests
             IConfiguration configuration = builder.Build();
 
             // act
-            services.AddEventHubTelemetryEventTransmission(configuration);
+            services.AddBlobStorageTelemetryAttachmentTransmission(configuration);
 
             // assert
             ServiceProvider provider = services.BuildServiceProvider();
 
-            Assert.IsType<EventHubTransmitter>(provider.GetService<ITelemetryEventTransmitter>());
+            Assert.IsType<BlobStorageTransmitter>(provider.GetService<ITelemetryAttachmentTransmitter>());
         }
 
         #endregion

@@ -2,7 +2,7 @@
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.Core.Testing.Utilities
+namespace Thor.Core.Session.Abstractions
 {
     /// <summary>
     /// A transmitter for probing telemetry events.

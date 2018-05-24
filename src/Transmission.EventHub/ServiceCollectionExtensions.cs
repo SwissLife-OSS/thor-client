@@ -31,7 +31,7 @@ namespace Thor.Core.Transmission.EventHub
             }
 
             return services
-                .AddOptions()
+                .AddTracingCore(configuration)
                 .Configure<EventHubConfiguration>(configuration.GetSection("Tracing").GetSection("EventHub"))
                 .AddSingleton(p =>
                 {

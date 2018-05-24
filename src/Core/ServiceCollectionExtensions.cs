@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Thor.Core.Session.Abstractions;
-using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.Core.Session
+namespace Thor.Core
 {
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.
@@ -19,7 +15,7 @@ namespace Thor.Core.Session
         /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddInProcessTelemetrySession(this IServiceCollection services,
+        public static IServiceCollection AddTracingCore(this IServiceCollection services,
             IConfiguration configuration)
         {
             if (services == null)
@@ -32,21 +28,8 @@ namespace Thor.Core.Session
             }
 
             return services
-                .AddTracingCore(configuration)
-                .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
-                .AddSingleton(p =>
-                {
-                    IOptions<SessionConfiguration> configAccessor = p.GetRequiredService<IOptions<SessionConfiguration>>();
-                    IEnumerable<ITelemetryEventTransmitter> transmitters = p.GetServices<ITelemetryEventTransmitter>();
-                    ITelemetrySession session = InProcessTelemetrySession.Create(configAccessor.Value);
-
-                    foreach(ITelemetryEventTransmitter transmitter in transmitters)
-                    {
-                        session.Attach(transmitter);
-                    }
-
-                    return session;
-                });
+                .AddOptions()
+                .Configure<TracingConfiguration>(configuration.GetSection("Tracing"));
         }
     }
 }
