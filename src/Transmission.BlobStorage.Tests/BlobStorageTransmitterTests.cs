@@ -17,25 +17,25 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_BufferNull()
         {
             // assert
-            ITransmissionBuffer<AttachmentDescriptor> buffer = null;
+            ITransmissionStorage<AttachmentDescriptor> storage = null;
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, sender);
+            Action verify = () => new BlobStorageTransmitter(storage, sender);
 
             // arrange
-            Assert.Throws<ArgumentNullException>("buffer", verify);
+            Assert.Throws<ArgumentNullException>("storage", verify);
         }
 
         [Fact(DisplayName = "Constructor: Should throw an argument null exception for sender")]
         public void Constructor_SenderNull()
         {
             // assert
-            ITransmissionBuffer<AttachmentDescriptor> buffer = new Mock<ITransmissionBuffer<AttachmentDescriptor>>().Object;
+            ITransmissionStorage<AttachmentDescriptor> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>().Object;
             ITransmissionSender<AttachmentDescriptor> sender = null;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, sender);
+            Action verify = () => new BlobStorageTransmitter(storage, sender);
 
             // arrange
             Assert.Throws<ArgumentNullException>("sender", verify);
@@ -45,11 +45,11 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_NoException()
         {
             // assert
-            ITransmissionBuffer<AttachmentDescriptor> buffer = new Mock<ITransmissionBuffer<AttachmentDescriptor>>().Object;
+            ITransmissionStorage<AttachmentDescriptor> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>().Object;
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, sender);
+            Action verify = () => new BlobStorageTransmitter(storage, sender);
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -63,9 +63,9 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Enqueue_DataNull()
         {
             // arrange
-            ITransmissionBuffer<AttachmentDescriptor> buffer = new Mock<ITransmissionBuffer<AttachmentDescriptor>>().Object;
+            ITransmissionStorage<AttachmentDescriptor> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>().Object;
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
-            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(buffer, sender);
+            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(storage, sender);
             AttachmentDescriptor data = null;
 
             // act
@@ -79,13 +79,13 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Enqueue_NoException()
         {
             // assert
-            ITransmissionBuffer<AttachmentDescriptor> buffer = new Mock<ITransmissionBuffer<AttachmentDescriptor>>().Object;
+            ITransmissionStorage<AttachmentDescriptor> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>().Object;
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
-            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(buffer, sender);
+            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(storage, sender);
             AttachmentDescriptor data = new Mock<AttachmentDescriptor>().Object;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, sender);
+            Action verify = () => new BlobStorageTransmitter(storage, sender);
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -96,23 +96,23 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         {
             // assert
             ManualResetEventSlim resetEvent = new ManualResetEventSlim();
-            Mock<ITransmissionBuffer<AttachmentDescriptor>> buffer = new Mock<ITransmissionBuffer<AttachmentDescriptor>>();
+            Mock<ITransmissionStorage<AttachmentDescriptor>> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>();
             Mock<ITransmissionSender<AttachmentDescriptor>> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>();
-            ConcurrentQueue<AttachmentDescriptor> bufferQueue = new ConcurrentQueue<AttachmentDescriptor>();
+            ConcurrentQueue<AttachmentDescriptor[]> bufferQueue = new ConcurrentQueue<AttachmentDescriptor[]>();
 
-            buffer
-                .Setup(t => t.EnqueueAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
-                .Callback((AttachmentDescriptor d, CancellationToken t) => bufferQueue.Enqueue(d));
-            buffer
+            storage
+                .Setup(t => t.EnqueueAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))
+                .Callback((AttachmentDescriptor[] d, CancellationToken t) => bufferQueue.Enqueue(d));
+            storage
                 .Setup(t => t.DequeueAsync(It.IsAny<CancellationToken>()))
                 .Returns(() =>
                 {
                     int count = 0;
                     List<AttachmentDescriptor> results = new List<AttachmentDescriptor>();
 
-                    while (bufferQueue.TryDequeue(out AttachmentDescriptor d) && count < 10)
+                    while (bufferQueue.TryDequeue(out AttachmentDescriptor[] d) && count < 10)
                     {
-                        results.Add(d);
+                        results.AddRange(d);
                         count++;
                     }
 
@@ -122,7 +122,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Setup(t => t.SendAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
-            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(buffer.Object, sender.Object);
+            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(storage.Object, sender.Object);
             AttachmentDescriptor data = new Mock<AttachmentDescriptor>().Object;
 
             // act
@@ -144,9 +144,9 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Dispose()
         {
             // arrange
-            ITransmissionBuffer<AttachmentDescriptor> buffer = new Mock<ITransmissionBuffer<AttachmentDescriptor>>().Object;
+            ITransmissionStorage<AttachmentDescriptor> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>().Object;
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
-            BlobStorageTransmitter transmitter = new BlobStorageTransmitter(buffer, sender);
+            BlobStorageTransmitter transmitter = new BlobStorageTransmitter(storage, sender);
 
             // act
             Action verify = () => transmitter.Dispose();

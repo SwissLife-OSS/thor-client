@@ -15,7 +15,7 @@ namespace Thor.Core.Transmission.BlobStorage
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
-        private readonly ITransmissionBuffer<AttachmentDescriptor> _buffer;
+        private readonly ITransmissionStorage<AttachmentDescriptor> _storage;
         private readonly ITransmissionSender<AttachmentDescriptor> _sender;
         private bool _disposed;
         private bool _transmissionStopped;
@@ -23,18 +23,18 @@ namespace Thor.Core.Transmission.BlobStorage
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmitter"/> class.
         /// </summary>
-        /// <param name="buffer">A transmission buffer instance.</param>
+        /// <param name="storage">A transmission storage instance.</param>
         /// <param name="sender">A transmission sender instance.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="buffer"/> must not be <c>null</c>.
+        /// <paramref name="storage"/> must not be <c>null</c>.
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="sender"/> must not be <c>null</c>.
         /// </exception>
-        public BlobStorageTransmitter(ITransmissionBuffer<AttachmentDescriptor> buffer,
+        public BlobStorageTransmitter(ITransmissionStorage<AttachmentDescriptor> storage,
             ITransmissionSender<AttachmentDescriptor> sender)
         {
-            _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
 
             StartAsyncSending();
@@ -50,13 +50,13 @@ namespace Thor.Core.Transmission.BlobStorage
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _buffer.EnqueueAsync(data));
+                Task.Run(() => _storage.EnqueueAsync(new[] { data }));
             }
         }
 
         private async Task SendBatchAsync()
         {
-            AttachmentDescriptor[] batch = await _buffer.DequeueAsync().ConfigureAwait(false);
+            AttachmentDescriptor[] batch = await _storage.DequeueAsync().ConfigureAwait(false);
 
             if (batch.Length > 0)
             {
@@ -70,11 +70,11 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 _disposeToken.Token.ThrowIfCancellationRequested();
 
-                while (!_disposeToken.IsCancellationRequested || _buffer.Count > 0)
+                while (!_disposeToken.IsCancellationRequested || _storage.Count > 0)
                 {
                     await SendBatchAsync().ConfigureAwait(false);
 
-                    if (!_disposeToken.IsCancellationRequested && _buffer.Count == 0)
+                    if (!_disposeToken.IsCancellationRequested && _storage.Count == 0)
                     {
                         await Task.Delay(_delay).ConfigureAwait(false);
                     }
