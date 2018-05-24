@@ -36,11 +36,17 @@ namespace Thor.Core.Session
                 .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
                 .AddSingleton(p =>
                 {
-                    IOptions<SessionConfiguration> configAccessor = p.GetRequiredService<IOptions<SessionConfiguration>>();
-                    IEnumerable<ITelemetryEventTransmitter> transmitters = p.GetServices<ITelemetryEventTransmitter>();
-                    ITelemetrySession session = InProcessTelemetrySession.Create(configAccessor.Value);
+                    SessionConfiguration config = p.GetRequiredService<IOptions<SessionConfiguration>>()?.Value;
+                    IEnumerable<ITelemetryAttachmentTransmitter> attachmentTransmitter = p.GetServices<ITelemetryAttachmentTransmitter>();
+                    IEnumerable<ITelemetryEventTransmitter> eventTransmitters = p.GetServices<ITelemetryEventTransmitter>();
+                    ITelemetrySession session = InProcessTelemetrySession.Create(config);
 
-                    foreach(ITelemetryEventTransmitter transmitter in transmitters)
+                    foreach (ITelemetryAttachmentTransmitter transmitter in attachmentTransmitter)
+                    {
+                        AttachmentDispatcher.Instance.Attach(transmitter);
+                    }
+
+                    foreach (ITelemetryEventTransmitter transmitter in eventTransmitters)
                     {
                         session.Attach(transmitter);
                     }
