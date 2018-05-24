@@ -19,8 +19,13 @@ namespace Thor.Core
         }
 
         /// <summary>
-        /// Gets or sets the application root folder path. The default value is reading its value
-        /// from <see cref="Directory.GetCurrentDirectory()"/>.
+        /// Gets or sets the application's identifier.
+        /// </summary>
+        public int ApplicationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application's root folder path. The default value is reading its
+        /// value from <see cref="Directory.GetCurrentDirectory()"/>.
         /// </summary>
         public string ApplicationRootPath { get; set; }
 
