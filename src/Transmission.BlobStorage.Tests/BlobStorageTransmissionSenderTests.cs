@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Moq;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
@@ -15,7 +15,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_ContainerNull()
         {
             // assert
-            CloudBlobContainer container = null;
+            IBlobContainer container = null;
 
             // act
             Action verify = () => new BlobStorageTransmissionSender(container);
@@ -28,10 +28,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_NoException()
         {
             // assert
-            CloudBlobContainer container = CloudStorageAccount
-                .Parse(Constants.FakeConnectionString)
-                .CreateCloudBlobClient()
-                .GetContainerReference(Guid.NewGuid().ToString());
+            IBlobContainer container = new Mock<IBlobContainer>().Object;
 
             // act
             Action verify = () => new BlobStorageTransmissionSender(container);
@@ -48,11 +45,13 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public async Task SendAsync_BatchNull()
         {
             // arrange
-            CloudBlobContainer container = CloudStorageAccount
-                .Parse(Constants.FakeConnectionString)
-                .CreateCloudBlobClient()
-                .GetContainerReference(Guid.NewGuid().ToString());
-            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container);
+            Mock<IBlobContainer> container = new Mock<IBlobContainer>();
+
+            container
+                .Setup(t => t.UploadAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(0));
+
+            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
             AttachmentDescriptor[] batch = null;
 
             // act
@@ -66,11 +65,13 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public async Task SendAsync_BatchOutOfRange()
         {
             // arrange
-            CloudBlobContainer container = CloudStorageAccount
-                .Parse(Constants.FakeConnectionString)
-                .CreateCloudBlobClient()
-                .GetContainerReference(Guid.NewGuid().ToString());
-            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container);
+            Mock<IBlobContainer> container = new Mock<IBlobContainer>();
+
+            container
+                .Setup(t => t.UploadAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(0));
+
+            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
             AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
 
             // act
@@ -84,11 +85,13 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public async Task SendAsync_NoException()
         {
             // assert
-            CloudBlobContainer container = CloudStorageAccount
-                .Parse(Constants.FakeConnectionString)
-                .CreateCloudBlobClient()
-                .GetContainerReference(Guid.NewGuid().ToString());
-            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container);
+            Mock<IBlobContainer> container = new Mock<IBlobContainer>();
+
+            container
+                .Setup(t => t.UploadAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(0));
+
+            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
             AttachmentDescriptor[] batch = new[] { new AttachmentDescriptor() };
 
             // act

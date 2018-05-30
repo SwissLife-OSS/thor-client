@@ -45,6 +45,7 @@ namespace Thor.Core.Transmission.BlobStorage
 
                     return container;
                 })
+                .AddSingleton<IBlobContainer, BlobContainer>()
                 .AddSingleton<ITransmissionSender<AttachmentDescriptor>, BlobStorageTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<AttachmentDescriptor>>(p =>
                 {

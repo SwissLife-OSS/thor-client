@@ -18,8 +18,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => attachment.GetTypeName();
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("attachment", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("attachment", validate);
         }
         
         [Fact(DisplayName = "GetTypeName: Should return a correct type name")]
@@ -49,8 +48,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => type.GetTypeName();
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("type", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("type", validate);
         }
         
         [Fact(DisplayName = "GetTypeName: Should return a correct type name")]
