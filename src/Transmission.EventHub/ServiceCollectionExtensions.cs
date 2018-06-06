@@ -25,6 +25,7 @@ namespace Thor.Core.Transmission.EventHub
             {
                 throw new ArgumentNullException(nameof(services));
             }
+
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(configuration));

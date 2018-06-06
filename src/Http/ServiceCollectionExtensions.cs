@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http;
 
-namespace Thor.Core
+namespace Thor.Core.Http
 {
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.
@@ -10,12 +12,12 @@ namespace Thor.Core
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds tracing core services to the service collection.
+        /// Adds <see cref="TracingHttpMessageHandler"/> services to the service collection.
         /// </summary>
         /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddTracingCore(this IServiceCollection services,
+        public static IServiceCollection AddTracingHttpMessageHandler(this IServiceCollection services,
             IConfiguration configuration)
         {
             if (services == null)
@@ -28,9 +30,13 @@ namespace Thor.Core
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            return services
-                .AddOptions()
-                .Configure<TracingConfiguration>(configuration.GetSection("Tracing"));
+            services
+                .AddTracingCore(configuration)
+                .AddHttpClient()
+                .TryAddEnumerable(ServiceDescriptor.Singleton<IHttpMessageHandlerBuilderFilter,
+                    TracingHttpMessageHandlerBuilderFilter>());
+
+            return services;
         }
     }
 }
