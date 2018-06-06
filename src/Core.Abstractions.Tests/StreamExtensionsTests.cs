@@ -16,8 +16,7 @@ namespace Thor.Core.Abstractions.Tests
             Action validate = () => stream.SetToStart();
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("stream", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("stream", validate);
         }
         
         [Fact(DisplayName = "SetToStart: Should not throw any exception")]

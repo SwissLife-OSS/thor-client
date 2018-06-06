@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
@@ -13,16 +12,16 @@ namespace Thor.Core.Transmission.BlobStorage
     public class BlobStorageTransmissionSender
         : ITransmissionSender<AttachmentDescriptor>
     {
-        private readonly CloudBlobContainer _container;
+        private readonly IBlobContainer _container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmissionSender"/> class.
         /// </summary>
-        /// <param name="container">A <c>Azure</c> <c>BLOB</c> <c>Storage</c> container instance.</param>
+        /// <param name="container">A <c>BLOB</c> <c>Storage</c> container instance.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="container"/> must not be <c>null</c>.
         /// </exception>
-        public BlobStorageTransmissionSender(CloudBlobContainer container)
+        public BlobStorageTransmissionSender(IBlobContainer container)
         {
             _container = container ?? throw new ArgumentNullException(nameof(container));
         }
@@ -44,9 +43,7 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 foreach (AttachmentDescriptor descriptor in batch)
                 {
-                    await _container.GetBlockBlobReference($"{descriptor.Id}\\{descriptor.TypeName}")
-                        .UploadFromByteArrayAsync(descriptor.Value, 0, descriptor.Value.Length)
-                        .ConfigureAwait(false);
+                    await _container.UploadAsync(descriptor, cancellationToken).ConfigureAwait(false);
                 }
             }
             catch (Exception)

@@ -23,8 +23,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => dispatcher.Attach(transmitter);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("transmitter", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("transmitter", validate);
         }
 
         [Fact(DisplayName = "Attach: Should attach an transmitter")]
@@ -67,8 +66,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => dispatcher.Detach(transmitter);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("transmitter", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("transmitter", validate);
         }
 
         [Fact(DisplayName = "Detach: Should detach an transmitter")]
@@ -114,8 +112,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => dispatcher.Dispatch(attachments);
 
             // assert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(validate);
-            Assert.Equal("attachments", exception.ParamName);
+            Assert.Throws<ArgumentNullException>("attachments", validate);
         }
 
         [Fact(DisplayName = "Dispatch: Should throw an argument null excption for attachment")]
@@ -130,8 +127,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => dispatcher.Dispatch(attachments);
 
             // assert
-            ArgumentOutOfRangeException exception = Assert.Throws<ArgumentOutOfRangeException>(validate);
-            Assert.Equal("attachments", exception.ParamName);
+            Assert.Throws<ArgumentOutOfRangeException>("attachments", validate);
         }
 
         [Fact(DisplayName = "Dispatch: Should dispatch a single attachment")]
