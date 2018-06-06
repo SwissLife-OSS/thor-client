@@ -31,12 +31,12 @@ namespace Thor.Core.Http
             }
 
             services
-                .AddTracingCore(configuration)
-                .AddHttpClient()
                 .TryAddEnumerable(ServiceDescriptor.Singleton<IHttpMessageHandlerBuilderFilter,
                     TracingHttpMessageHandlerBuilderFilter>());
 
-            return services;
+            return services
+                .AddTracingCore(configuration)
+                .AddHttpClient();
         }
     }
 }
