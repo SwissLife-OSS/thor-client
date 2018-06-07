@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Abstractions;
-using static Thor.Core.Http.RequestActivityEventSource;
 
 namespace Thor.Core.Http
 {
@@ -30,21 +28,9 @@ namespace Thor.Core.Http
 
             using (ClientRequestActivity activity = ClientRequestActivity.Create(method, request.RequestUri))
             {
-                try
-                {
-                    request.Headers.Add(MessageHeaderKeys.ActivityId, activity.Id.ToString("N"));
-                    response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-                    activity.SetResponse((int)response.StatusCode, Guid.Empty);
-                }
-                catch (Exception ex)
-                {
-                    Log.InternalServerErrorOccurred(ex);
-
-                    if (Debugger.IsAttached)
-                    {
-                        throw;
-                    }
-                }
+                request.Headers.Add(MessageHeaderKeys.ActivityId, activity.Id.ToString("N"));
+                response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                activity.SetResponse((int)response.StatusCode, Guid.Empty);
             }
 
 
