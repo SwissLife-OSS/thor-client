@@ -30,6 +30,7 @@ namespace Thor.Core.Http
             {
                 request.Headers.Add(MessageHeaderKeys.ActivityId, activity.Id.ToString("N"));
                 response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                // todo: user id resolver
                 activity.SetResponse((int)response.StatusCode, Guid.Empty);
             }
 
