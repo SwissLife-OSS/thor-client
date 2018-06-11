@@ -26,6 +26,7 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 throw new ArgumentNullException(nameof(services));
             }
+
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(configuration));
