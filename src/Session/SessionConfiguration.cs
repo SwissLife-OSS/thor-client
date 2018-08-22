@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Tracing;
+﻿using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 
 namespace Thor.Core.Session
 {
@@ -16,5 +17,10 @@ namespace Thor.Core.Session
         /// Gets or sets the tracing severity.
         /// </summary>
         public EventLevel Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets allowed assembly name prefixes.
+        /// </summary>
+        public IEnumerable<string> AllowedPrefixes { get; set; }
     }
 }

@@ -57,6 +57,29 @@ namespace Thor.Core.Session.Tests
             Assert.Equal(1, telemetryCount);
         }
 
+        [Fact(DisplayName = "Create: Should have enabled default event providers plus those who where allowed if referenced")]
+        public void Create_VerifyDefaultAndAllowedProviders()
+        {
+            // arrange
+            int applicationId = 1;
+            ProbeTransmitter transmitter = new ProbeTransmitter();
+
+            // act
+            int telemetryCount = 0;
+
+            using (ITelemetrySession session = InProcessTelemetrySession
+                .Create(applicationId, EventLevel.Verbose,
+                    new[] { "System.Threading" }))
+            {
+                session.Attach(transmitter);
+                Application.Start(applicationId);
+                telemetryCount = transmitter.Count;
+            }
+
+            // assert
+            Assert.Equal(1, telemetryCount);
+        }
+
         #endregion
 
         #region EnableProvider

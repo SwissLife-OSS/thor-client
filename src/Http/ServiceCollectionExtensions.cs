@@ -7,18 +7,26 @@ using Microsoft.Extensions.Http;
 namespace Thor.Core.Http
 {
     /// <summary>
-    /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.
+    /// A bunch of convenient extensions methods for
+    /// <see cref="IServiceCollection"/>.
     /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds <see cref="TracingHttpMessageHandler"/> services to the service collection.
+        /// Adds <see cref="TracingHttpMessageHandler"/> services to the
+        /// service collection.
         /// </summary>
-        /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
-        /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
-        /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddTracingHttpMessageHandler(this IServiceCollection services,
-            IConfiguration configuration)
+        /// <param name="services">
+        /// A <see cref="IServiceCollection"/> instance.
+        /// </param>
+        /// <param name="configuration">
+        /// A <see cref="IConfiguration"/> instance.
+        /// </param>
+        /// <returns>
+        /// The provided <see cref="IServiceCollection"/> instance.
+        /// </returns>
+        public static IServiceCollection AddTracingHttpMessageHandler(
+            this IServiceCollection services, IConfiguration configuration)
         {
             if (services == null)
             {
@@ -31,8 +39,9 @@ namespace Thor.Core.Http
             }
 
             services
-                .TryAddEnumerable(ServiceDescriptor.Singleton<IHttpMessageHandlerBuilderFilter,
-                    TracingHttpMessageHandlerBuilderFilter>());
+                .TryAddEnumerable(ServiceDescriptor
+                    .Singleton<IHttpMessageHandlerBuilderFilter,
+                        TracingHttpMessageHandlerBuilderFilter>());
 
             return services
                 .AddTracingCore(configuration)
