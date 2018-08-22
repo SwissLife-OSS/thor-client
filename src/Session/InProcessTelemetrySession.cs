@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Linq;
@@ -12,26 +13,31 @@ namespace Thor.Core.Session
 {
     /// <summary>
     /// An <c>ETW</c> <c>in-process</c> telemetry session to listen to events.
-    /// The telemetry session will automatically enable event providers (Event sources) starting
-    /// with a certain name (ChilliCream). Custom event provider can be enabled by invoking the
-    /// <see cref="EnableProvider"/> method with a specific name. However, custom event provider
-    /// must be exist in one of the referenced assemblies.
+    /// The telemetry session will automatically enable event providers (Event
+    /// sources) starting with a certain name (Thor.Core). Custom event
+    /// provider can be enabled by invoking the <see cref="EnableProvider"/>
+    /// method with a specific name. However, custom event provider must exist
+    /// in one of the referenced assemblies.
     /// </summary>
     public class InProcessTelemetrySession
         : EventListener
         , ITelemetrySession
     {
-        private const string _assemblyPrefix = "Thor.Core";
-        private static readonly Type _attributeType = typeof(EventSourceAttribute);
+        private readonly ImmutableHashSet<string> _allowedPrefixes;
+        private static readonly Type _attributeType =
+            typeof(EventSourceAttribute);
         private static readonly Type _baseType = typeof(EventSource);
         private readonly object _lock = new object();
-        private HashSet<string> _providers = new HashSet<string>();
-        private HashSet<ITelemetryEventTransmitter> _transmitters = new HashSet<ITelemetryEventTransmitter>();
+        private ImmutableHashSet<string> _providers =
+            ImmutableHashSet.Create<string>();
+        private ImmutableHashSet<ITelemetryEventTransmitter> _transmitters =
+            ImmutableHashSet.Create<ITelemetryEventTransmitter>();
         private readonly EventLevel _level;
         private readonly AppDomain _currentDomain;
         private readonly string _sessionName;
 
-        private InProcessTelemetrySession(int applicationId, EventLevel level)
+        private InProcessTelemetrySession(int applicationId, EventLevel level,
+            IEnumerable<string> allowedPrefixes)
         {
             if (applicationId <= 0)
             {
@@ -39,9 +45,18 @@ namespace Thor.Core.Session
                     ExceptionMessages.ApplicationIdMustBeGreaterZero);
             }
 
+            _allowedPrefixes = ImmutableHashSet.Create("Thor.Core");
             _currentDomain = AppDomain.CurrentDomain;
             _sessionName = SessionNameProvider.Create(applicationId);
             _level = level;
+
+            if (allowedPrefixes != null)
+            {
+                foreach (var prefix in allowedPrefixes)
+                {
+                    _allowedPrefixes = _allowedPrefixes.Add(prefix);
+                }
+            }
         }
 
         /// <inheritdoc />
@@ -65,14 +80,10 @@ namespace Thor.Core.Session
 
             lock (_lock)
             {
-                HashSet<ITelemetryEventTransmitter> newTransmitters = new HashSet<ITelemetryEventTransmitter>(_transmitters);
-
-                if (!newTransmitters.Contains(transmitter))
+                if (!_transmitters.Contains(transmitter))
                 {
-                    newTransmitters.Add(transmitter);
+                    _transmitters = _transmitters.Add(transmitter);
                 }
-
-                _transmitters = newTransmitters;
             }
         }
 
@@ -135,12 +146,9 @@ namespace Thor.Core.Session
 
         private void FindAndActivateProviders()
         {
-            IEnumerable<Assembly> assemblies = _currentDomain.GetAssemblies()
-                .Where(a => a.FullName.StartsWith(_assemblyPrefix, StringComparison.Ordinal));
-
-            foreach (Assembly assembly in assemblies)
+            foreach (Assembly assembly in _currentDomain.GetAssemblies())
             {
-                TryActivateProviders(assembly);
+                VerifyAndActivateProviders(assembly);
             }
         }
 
@@ -159,12 +167,19 @@ namespace Thor.Core.Session
         private void RegisterAssemblyLoadCallback()
         {
             _currentDomain.AssemblyLoad += (sender, args) =>
+                VerifyAndActivateProviders(args.LoadedAssembly);
+        }
+
+        private void VerifyAndActivateProviders(Assembly assembly)
+        {
+            foreach (var prefix in _allowedPrefixes)
             {
-                if (args.LoadedAssembly.FullName.StartsWith(_assemblyPrefix, StringComparison.Ordinal))
+                if (assembly.FullName.StartsWith(prefix, StringComparison.Ordinal))
                 {
-                    TryActivateProviders(args.LoadedAssembly);
+                    TryActivateProviders(assembly);
+                    break;
                 }
-            };
+            }
         }
 
         private void TryActivateProvider(string name, EventLevel level)
@@ -212,7 +227,7 @@ namespace Thor.Core.Session
                         ProviderActivationEventSource.Log.Activating(name);
 
                         EnableEvents(instance, level);
-                        _providers = new HashSet<string>(_providers) { name };
+                        _providers = _providers.Add(name);
 
                         ProviderActivationEventSource.Log.Activated(name);
                     }
@@ -266,11 +281,13 @@ namespace Thor.Core.Session
         #region Static Factory Methods
 
         /// <summary>
-        /// Creates a new instance of <see cref="InProcessTelemetrySession"/> with severity
-        /// <see cref="EventLevel.Informational"/>.
+        /// Creates a new instance of <see cref="InProcessTelemetrySession"/>
+        /// with severity <see cref="EventLevel.Informational"/>.
         /// </summary>
         /// <param name="applicationId">An unique application id.</param>
-        /// <returns>A new instance of <see cref="InProcessTelemetrySession"/>.</returns>
+        /// <returns>
+        /// A new instance of <see cref="InProcessTelemetrySession"/>.
+        /// </returns>
         public static InProcessTelemetrySession Create(int applicationId)
         {
             return Create(applicationId, EventLevel.Informational);
@@ -281,10 +298,31 @@ namespace Thor.Core.Session
         /// </summary>
         /// <param name="applicationId">An unique application id.</param>
         /// <param name="level">A level of severity.</param>
-        /// <returns>A new instance of <see cref="InProcessTelemetrySession"/>.</returns>
-        public static InProcessTelemetrySession Create(int applicationId, EventLevel level)
+        /// <returns>
+        /// A new instance of <see cref="InProcessTelemetrySession"/>.
+        /// </returns>
+        public static InProcessTelemetrySession Create(int applicationId,
+            EventLevel level)
         {
-            InProcessTelemetrySession session = new InProcessTelemetrySession(applicationId, level);
+            return Create(applicationId, level, null);
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="InProcessTelemetrySession"/>.
+        /// </summary>
+        /// <param name="applicationId">An unique application id.</param>
+        /// <param name="level">A level of severity.</param>
+        /// <param name="allowedPrefixes">
+        /// A collection of allowed assembly name prefixes.
+        /// </param>
+        /// <returns>
+        /// A new instance of <see cref="InProcessTelemetrySession"/>.
+        /// </returns>
+        public static InProcessTelemetrySession Create(int applicationId,
+            EventLevel level, IEnumerable<string> allowedPrefixes)
+        {
+            InProcessTelemetrySession session = new InProcessTelemetrySession(
+                applicationId, level, allowedPrefixes);
 
             session.FindAndActivateProviders();
             session.RegisterAssemblyLoadCallback();
@@ -295,11 +333,17 @@ namespace Thor.Core.Session
         /// <summary>
         /// Creates a new instance of <see cref="InProcessTelemetrySession"/>.
         /// </summary>
-        /// <param name="configuration">A session configuration instance.</param>
-        /// <returns>A new instance of <see cref="InProcessTelemetrySession"/>.</returns>
-        public static InProcessTelemetrySession Create(SessionConfiguration configuration)
+        /// <param name="configuration">
+        /// A session configuration instance.
+        /// </param>
+        /// <returns>
+        /// A new instance of <see cref="InProcessTelemetrySession"/>.
+        /// </returns>
+        public static InProcessTelemetrySession Create(
+            SessionConfiguration configuration)
         {
-            return Create(configuration.ApplicationId, configuration.Level);
+            return Create(configuration.ApplicationId, configuration.Level,
+                configuration.AllowedPrefixes);
         }
 
         #endregion
