@@ -116,7 +116,6 @@ _TeamCity*
 # Visual Studio code coverage results
 *.coverage
 *.coveragexml
-coverage.xml
 
 # NCrunch
 _NCrunch_*
@@ -288,4 +287,8 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-.packages
+lcov.info
+coverage.json
+.DS_Store
+
+BenchmarkDotNet.Artifacts
