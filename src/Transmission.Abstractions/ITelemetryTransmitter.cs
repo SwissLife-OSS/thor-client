@@ -5,7 +5,7 @@ namespace Thor.Core.Transmission.Abstractions
     /// <summary>
     /// A transmitter for telemetry data.
     /// </summary>
-    public interface ITelemetryTransmitter<TData>
+    public interface ITelemetryTransmitter<in TData>
         where TData : class
     {
         /// <summary>

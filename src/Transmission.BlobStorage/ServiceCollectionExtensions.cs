@@ -38,9 +38,9 @@ namespace Thor.Core.Transmission.BlobStorage
                 .AddSingleton(p =>
                 {
                     BlobStorageConfiguration config = p.GetRequiredService<IOptions<BlobStorageConfiguration>>()?.Value;
-                    CloudStorageAccount account = CloudStorageAccount.Parse(config.ConnectionString);
+                    CloudStorageAccount account = CloudStorageAccount.Parse(config?.ConnectionString);
                     CloudBlobClient client = account.CreateCloudBlobClient();
-                    CloudBlobContainer container = client.GetContainerReference(config.AttachmentContainerName);
+                    CloudBlobContainer container = client.GetContainerReference(config?.AttachmentContainerName);
 
                     container.CreateIfNotExistsAsync().GetAwaiter().GetResult();
 
@@ -52,7 +52,7 @@ namespace Thor.Core.Transmission.BlobStorage
                 {
                     TracingConfiguration config = p.GetRequiredService<IOptions<TracingConfiguration>>()?.Value;
 
-                    return new BlobStorageTransmissionStorage(config.GetAttachmentsStoragePath());
+                    return new BlobStorageTransmissionStorage(config?.GetAttachmentsStoragePath());
                 })
                 .AddSingleton<ITelemetryAttachmentTransmitter, BlobStorageTransmitter>();
         }

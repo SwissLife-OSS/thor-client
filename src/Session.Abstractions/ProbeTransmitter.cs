@@ -13,26 +13,29 @@ namespace Thor.Core.Session.Abstractions
     public class ProbeTransmitter
         : ITelemetryEventTransmitter
     {
-        private readonly ConcurrentQueue<TelemetryEvent> _queue = new ConcurrentQueue<TelemetryEvent>();
+        private readonly ConcurrentQueue<TelemetryEvent> _queue =
+            new ConcurrentQueue<TelemetryEvent>();
 
         /// <inheritdoc/>
         public int Count { get { return _queue.Count; } }
 
         /// <inheritdoc/>
-        public void Enqueue(TelemetryEvent telemetryEvent)
+        public void Enqueue(TelemetryEvent data)
         {
-            _queue.Enqueue(telemetryEvent);
+            _queue.Enqueue(data);
         }
 
         /// <summary>
         /// Dequeues a telemetry event.
         /// </summary>
-        /// <returns>A telemetry event if exists; otherwise <c>null</c>.</returns>
+        /// <returns>
+        /// A telemetry event if exists; otherwise <c>null</c>.
+        /// </returns>
         public TelemetryEvent Dequeue()
         {
-            if (_queue.TryDequeue(out TelemetryEvent telemetryEvent))
+            if (_queue.TryDequeue(out TelemetryEvent data))
             {
-                return telemetryEvent;
+                return data;
             }
 
             return null;
