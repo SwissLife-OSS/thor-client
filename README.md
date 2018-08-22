@@ -1,6 +1,8 @@
-# Thor Core
+![GreenDonut](https://cdn.rawgit.com/ChilliCream/thor-logo/master/img/thor-banner-light.svg)
 
-[![release](https://img.shields.io/github/release/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/releases) [![package](https://img.shields.io/nuget/v/Thor.Core.svg)](https://www.nuget.org/packages/Thor.Core) [![license](https://img.shields.io/github/license/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/blob/master/LICENSE) [![build](https://img.shields.io/appveyor/ci/rstaib/thor-core/master.svg)](https://ci.appveyor.com/project/rstaib/thor-core) [![tests](https://img.shields.io/appveyor/tests/rstaib/thor-core/master.svg)](https://ci.appveyor.com/project/rstaib/thor-core) [![coverage](https://img.shields.io/coveralls/ChilliCream/thor-core.svg)](https://coveralls.io/github/ChilliCream/thor-core?branch=master) [![better code](https://bettercodehub.com/edge/badge/ChilliCream/thor-core)](https://bettercodehub.com/results/ChilliCream/thor-core)
+[![GitHub release](https://img.shields.io/github/release/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/releases) [![NuGet Package](https://img.shields.io/nuget/v/Thor.Core.svg)](https://www.nuget.org/packages/Thor.Core/) [![License](https://img.shields.io/github/license/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/releases) [![Build](https://ci.appveyor.com/api/projects/status/u7uk31dyjp399m59/branch/master?svg=true)](https://ci.appveyor.com/project/rstaib/thor-core/branch/master) [![Tests](https://img.shields.io/appveyor/tests/rstaib/thor-core/master.svg)](https://ci.appveyor.com/project/rstaib/thor-core) [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=ThorCore&metric=coverage)](https://sonarcloud.io/dashboard?id=ThorCore) [![Quality](https://sonarcloud.io/api/project_badges/measure?project=ThorCore&metric=alert_status)](https://sonarcloud.io/dashboard?id=ThorCore) [![better code](https://bettercodehub.com/edge/badge/ChilliCream/thor-core)](https://bettercodehub.com/results/ChilliCream/thor-core)
+
+---
 
 **The _Thor_ tracing core for _.net_**
 
