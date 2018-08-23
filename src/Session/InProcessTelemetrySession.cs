@@ -112,7 +112,8 @@ namespace Thor.Core.Session
                         !string.IsNullOrWhiteSpace((string)a.TypedValue.Value)) == 1;
         }
 
-        private static Dictionary<string, Type> CreateProviderNameMap(Type[] eventSourceTypes)
+        private static Dictionary<string, Type> CreateProviderNameMap(
+            Type[] eventSourceTypes)
         {
             Dictionary<string, Type> eventSourceNameMap = eventSourceTypes
                 .ToDictionary(k => (string)k.CustomAttributes
@@ -135,7 +136,8 @@ namespace Thor.Core.Session
             return providerType;
         }
 
-        private static Dictionary<string, Type> FindSuitableProviders(Assembly assembly)
+        private static Dictionary<string, Type> FindSuitableProviders(
+            Assembly assembly)
         {
             Type[] eventSourceTypes = GetLoadableTypes(assembly)
                 .Where(IsAssignableFrom)
@@ -174,7 +176,8 @@ namespace Thor.Core.Session
         {
             foreach (var prefix in _allowedPrefixes)
             {
-                if (assembly.FullName.StartsWith(prefix, StringComparison.Ordinal))
+                if (assembly.FullName.StartsWith(prefix,
+                    StringComparison.Ordinal))
                 {
                     TryActivateProviders(assembly);
                     break;
@@ -206,7 +209,8 @@ namespace Thor.Core.Session
             }
         }
 
-        private void TryActivateProviderCore(string name, Type type, EventLevel level)
+        private void TryActivateProviderCore(string name, Type type,
+            EventLevel level)
         {
             lock (_lock)
             {
@@ -237,11 +241,13 @@ namespace Thor.Core.Session
 
         private void TryActivateProviders(Assembly assembly)
         {
-            Dictionary<string, Type> eventSourceTypes = FindSuitableProviders(assembly);
+            Dictionary<string, Type> eventSourceTypes = FindSuitableProviders(
+                assembly);
 
             foreach (KeyValuePair<string, Type> info in eventSourceTypes)
             {
-                TryActivateProviderCore(info.Key, eventSourceTypes[info.Key], _level);
+                TryActivateProviderCore(info.Key, eventSourceTypes[info.Key],
+                    _level);
             }
         }
 
@@ -250,24 +256,27 @@ namespace Thor.Core.Session
             if (IsAssignableFrom(type))
             {
                 const string name = "Log";
-                PropertyInfo property = type.GetProperty(name, BindingFlags.Public | BindingFlags.Static);
+                PropertyInfo property = type.GetProperty(name,
+                    BindingFlags.Public | BindingFlags.Static);
 
-                if (property != null && property.PropertyType == type)
+                if (property != null &&
+                    property.PropertyType.IsAssignableFrom(type))
                 {
                     return (EventSource)property.GetValue(null);
                 }
 
-                FieldInfo field = type.GetField(name, BindingFlags.Public | BindingFlags.Static);
+                FieldInfo field = type.GetField(name,
+                    BindingFlags.Public | BindingFlags.Static);
 
                 if (field != null && field.FieldType == type)
                 {
-                    return (EventSource)type
-                        .InvokeMember(name, BindingFlags.GetField, null, null, null,
-                            CultureInfo.InvariantCulture);
+                    return (EventSource)type.InvokeMember(name,
+                        BindingFlags.GetField, null, null, null,
+                        CultureInfo.InvariantCulture);
                 }
 
-                ConstructorInfo constructor = type.GetConstructor(BindingFlags.Public, null,
-                    Type.EmptyTypes, null);
+                ConstructorInfo constructor = type.GetConstructor(
+                    BindingFlags.Public, null, Type.EmptyTypes, null);
 
                 if (constructor != null)
                 {

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.Core.Session.Tests</AssemblyName>
-    <RootNamespace>Thor.Core.Session.Tests</RootNamespace>
+    <AssemblyName>Custom.EventSources.Tests</AssemblyName>
+    <RootNamespace>SwissLife.Tracing.Core.Session.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -55,9 +55,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Custom.EventSources\Custom.EventSources.csproj" />
-    <ProjectReference Include="..\Session\Session.csproj" />
+    <ProjectReference Include="..\Session.Abstractions\Session.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
