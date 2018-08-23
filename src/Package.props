@@ -11,7 +11,7 @@
     <PackageTags>ETW, EventSource, Logging, Tracing</PackageTags>
     <PackageReleaseNotes>Release notes: https://github.com/ChilliCream/thor-core/releases/$(PackageVersion)</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://cdn.rawgit.com/ChilliCream/thor-logo/master/img/thor-signet.png</PackageIconUrl>
+    <PackageIconUrl>https://cdn.rawgit.com/ChilliCream/thor-logo/master/img/thor-signet-red.png</PackageIconUrl>
     <RepositoryType>GitHub</RepositoryType>
   </PropertyGroup>
 
