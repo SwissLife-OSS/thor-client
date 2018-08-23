@@ -79,7 +79,7 @@ if ($RunTests -or $EnableCoverage) {
             $coveralls = [System.IO.Path]::Combine($nugetPackages, "coveralls.io", "*", "tools", "coveralls.net.exe")
             $coveralls = Resolve-Path $coveralls
 
-            & $openCover -register:user -target:"$runTestsCmd" -searchdirs:"$serachDirs" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Thor.Core*]*"
+            & $openCover -register:user -target:"$runTestsCmd" -searchdirs:"$serachDirs" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Thor.Core*]* +[Custom.EventSources*]*"
             if ($PR -eq $false) {
                 & $coveralls --opencover coverage.xml
             }
