@@ -52,7 +52,7 @@ if ($DisableBuild -eq $false) {
 
 if ($RunTests -or $EnableCoverage) {
     # Test
-    $serachDirs = [System.IO.Path]::Combine($PSScriptRoot, "src", "*", "bin", "Debug", "netcoreapp2.0")
+    $serachDirs = [System.IO.Path]::Combine($PSScriptRoot, "src", "*", "bin", "Debug", "netcoreapp2.1")
     $runTestsCmd = [System.Guid]::NewGuid().ToString("N") + ".cmd"
     $runTestsCmd = Join-Path -Path $env:TEMP -ChildPath $runTestsCmd
     $testAssemblies = ""
