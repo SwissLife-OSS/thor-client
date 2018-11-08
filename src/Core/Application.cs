@@ -61,5 +61,18 @@ namespace Thor.Core
                 }
             }
         }
+
+        /// <summary>
+        /// A unhandled exception occurred during application runtime.
+        /// </summary>
+        public static void UnhandledException(Exception exception)
+        {
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(exception));
+            }
+
+            Log.UnhandledExceptionOccurred(exception);
+        }
     }
 }

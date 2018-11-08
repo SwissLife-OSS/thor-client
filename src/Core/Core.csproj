@@ -52,6 +52,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
