@@ -19,7 +19,8 @@ namespace Thor.Core.Session
         /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddInProcessTelemetrySession(this IServiceCollection services,
+        public static IServiceCollection AddInProcessTelemetrySession(
+            this IServiceCollection services,
             IConfiguration configuration)
         {
             if (services == null)
@@ -37,15 +38,12 @@ namespace Thor.Core.Session
                 .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
                 .AddSingleton(p =>
                 {
-                    SessionConfiguration config = p.GetRequiredService<IOptions<SessionConfiguration>>()?.Value;
-                    IEnumerable<ITelemetryAttachmentTransmitter> attachmentTransmitter = p.GetServices<ITelemetryAttachmentTransmitter>();
-                    IEnumerable<ITelemetryEventTransmitter> eventTransmitters = p.GetServices<ITelemetryEventTransmitter>();
-                    ITelemetrySession session = InProcessTelemetrySession.Create(config);
-
-                    foreach (ITelemetryAttachmentTransmitter transmitter in attachmentTransmitter)
-                    {
-                        AttachmentDispatcher.Instance.Attach(transmitter);
-                    }
+                    SessionConfiguration config = p
+                        .GetRequiredService<IOptions<SessionConfiguration>>()?.Value;
+                    IEnumerable<ITelemetryEventTransmitter> eventTransmitters =
+                        p.GetServices<ITelemetryEventTransmitter>();
+                    ITelemetrySession session = InProcessTelemetrySession
+                        .Create(config);
 
                     foreach (ITelemetryEventTransmitter transmitter in eventTransmitters)
                     {
