@@ -19,7 +19,8 @@ namespace Thor.Core.Transmission.BlobStorage
         /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddBlobStorageTelemetryAttachmentTransmission(this IServiceCollection services,
+        public static IServiceCollection AddBlobStorageTelemetryAttachmentTransmission(
+            this IServiceCollection services,
             IConfiguration configuration)
         {
             if (services == null)
@@ -54,7 +55,8 @@ namespace Thor.Core.Transmission.BlobStorage
 
                     return new BlobStorageTransmissionStorage(config?.GetAttachmentsStoragePath());
                 })
-                .AddSingleton<ITelemetryAttachmentTransmitter, BlobStorageTransmitter>();
+                .AddSingleton<ITelemetryAttachmentTransmitter, BlobStorageTransmitter>()
+                .AddSingleton<IAttachmentTransmissionInitializer, AttachmentTransmissionInitializer>();
         }
     }
 }

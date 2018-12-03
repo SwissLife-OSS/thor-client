@@ -52,7 +52,7 @@ if ($DisableBuild -eq $false) {
 
 if ($RunTests -or $EnableCoverage) {
     # Test
-    $serachDirs = [System.IO.Path]::Combine($PSScriptRoot, "src", "*", "bin", "Debug", "netcoreapp2.0")
+    $serachDirs = [System.IO.Path]::Combine($PSScriptRoot, "src", "*", "bin", "Debug", "netcoreapp2.1")
     $runTestsCmd = [System.Guid]::NewGuid().ToString("N") + ".cmd"
     $runTestsCmd = Join-Path -Path $env:TEMP -ChildPath $runTestsCmd
     $testAssemblies = ""
@@ -79,7 +79,7 @@ if ($RunTests -or $EnableCoverage) {
             $coveralls = [System.IO.Path]::Combine($nugetPackages, "coveralls.io", "*", "tools", "coveralls.net.exe")
             $coveralls = Resolve-Path $coveralls
 
-            & $openCover -register:user -target:"$runTestsCmd" -searchdirs:"$serachDirs" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Thor.Core*]*"
+            & $openCover -register:user -target:"$runTestsCmd" -searchdirs:"$serachDirs" -oldstyle -output:coverage.xml -skipautoprops -returntargetcode -filter:"+[Thor.Core*]* +[Custom.EventSources*]*"
             if ($PR -eq $false) {
                 & $coveralls --opencover coverage.xml
             }

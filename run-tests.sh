@@ -1,6 +1,7 @@
 dotnet build src
 dotnet test src/Core.Abstractions.Tests --no-build
 dotnet test src/Core.Tests --no-build
+dotnet test src/Custom.EventSources.Tests --no-build
 dotnet test src/Http.Tests --no-build
 dotnet test src/Session.Abstractions.Tests --no-build
 dotnet test src/Session.Tests --no-build

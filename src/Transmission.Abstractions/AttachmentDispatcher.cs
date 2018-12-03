@@ -16,15 +16,18 @@ namespace Thor.Core.Transmission.Abstractions
             : this(new HashSet<ITelemetryAttachmentTransmitter>())
         { }
 
-        internal AttachmentDispatcher(HashSet<ITelemetryAttachmentTransmitter> transmitters)
+        internal AttachmentDispatcher(
+            HashSet<ITelemetryAttachmentTransmitter> transmitters)
         {
-            _transmitters = transmitters ?? throw new ArgumentNullException(nameof(transmitters));
+            _transmitters = transmitters ?? 
+                throw new ArgumentNullException(nameof(transmitters));
         }
 
         /// <summary>
         /// Gets a singelton instance of <see cref="AttachmentDispatcher"/>.
         /// </summary>
-        public static AttachmentDispatcher Instance { get; } = new AttachmentDispatcher();
+        public static AttachmentDispatcher Instance { get; } =
+            new AttachmentDispatcher();
 
         /// <summary>
         /// Attaches a transmitter for telemetry attachment transmission.
@@ -42,14 +45,15 @@ namespace Thor.Core.Transmission.Abstractions
 
             lock (_sync)
             {
-                HashSet<ITelemetryAttachmentTransmitter> newTransmitters = new HashSet<ITelemetryAttachmentTransmitter>(_transmitters);
-
-                if (!newTransmitters.Contains(transmitter))
+                if (!_transmitters.Contains(transmitter))
                 {
-                    newTransmitters.Add(transmitter);
-                }
+                    var newTransmitters =
+                        new HashSet<ITelemetryAttachmentTransmitter>(
+                            _transmitters);
 
-                _transmitters = newTransmitters;
+                    newTransmitters.Add(transmitter);
+                    _transmitters = newTransmitters;
+                }
             }
         }
 
@@ -69,11 +73,15 @@ namespace Thor.Core.Transmission.Abstractions
 
             lock (_sync)
             {
-                HashSet<ITelemetryAttachmentTransmitter> newTransmitters = new HashSet<ITelemetryAttachmentTransmitter>(_transmitters);
+                if (_transmitters.Contains(transmitter))
+                {
+                    var newTransmitters =
+                        new HashSet<ITelemetryAttachmentTransmitter>(
+                            _transmitters);
 
-                newTransmitters.Remove(transmitter);
-
-                _transmitters = newTransmitters;
+                    newTransmitters.Remove(transmitter);
+                    _transmitters = newTransmitters;
+                }
             }
         }
 
@@ -96,7 +104,7 @@ namespace Thor.Core.Transmission.Abstractions
                 throw new ArgumentOutOfRangeException(nameof(attachments));
             }
 
-            AttachmentDescriptor[] descriptors = new AttachmentDescriptor[attachments.Length];
+            var descriptors = new AttachmentDescriptor[attachments.Length];
 
             for (int i = 0; i < attachments.Length; i++)
             {
@@ -109,7 +117,7 @@ namespace Thor.Core.Transmission.Abstractions
                 };
             }
 
-            foreach (ITelemetryAttachmentTransmitter transmitter in _transmitters)
+            foreach (var transmitter in _transmitters)
             {
                 foreach (AttachmentDescriptor descriptor in descriptors)
                 {
