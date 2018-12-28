@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>Thor.HotChocolate</PackageId>
     <AssemblyName>Thor.HotChocolate</AssemblyName>
     <RootNamespace>Thor.HotChocolate</RootNamespace>
@@ -49,9 +49,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj" />
-    <ProjectReference Include="..\..\Session.Abstractions\Session.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DiagnosticAdapter" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Http\Http.csproj" />
+    <ProjectReference Include="..\..\Session\Session.csproj" />
+    <ProjectReference Include="..\..\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
+    <ProjectReference Include="..\..\Transmission.EventHub\Transmission.EventHub.csproj" />
   </ItemGroup>
 
 </Project>

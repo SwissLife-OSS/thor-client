@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Thor.HotChocolate.FunctionalTest
+namespace Thor.HotChocolate.Tests
 {
-    public class Startup
+    public class TestServerStartup
     {
-        public Startup(IConfiguration configuration)
+        public TestServerStartup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -17,18 +17,11 @@ namespace Thor.HotChocolate.FunctionalTest
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddTracing(Configuration)
-                .AddMvc();
+                .AddTracing(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseMvc();
         }
     }
 }
