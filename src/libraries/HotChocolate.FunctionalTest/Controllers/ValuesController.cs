@@ -1,32 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HotChocolate.FunctionalTest.Controllers
+namespace Thor.HotChocolate.FunctionalTest.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IHttpClientFactory _factory;
-
-        public ValuesController(IHttpClientFactory factory)
-        {
-            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-        }
-
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<string>> Get()
+        public IEnumerable<string> Get()
         {
-            HttpClient client = _factory.CreateClient();
-
-            HttpResponseMessage response = await client.GetAsync("http://localhost:29375/api/values/1").ConfigureAwait(false);
-
-            Debug.Write(response);
-
             return new string[] { "value1", "value2" };
         }
 
@@ -34,7 +18,9 @@ namespace HotChocolate.FunctionalTest.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            throw new InvalidOperationException();
+
+            //return "value";
         }
 
         // POST api/values

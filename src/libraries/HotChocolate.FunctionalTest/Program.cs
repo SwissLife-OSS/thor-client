@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace HotChocolate.FunctionalTest
+namespace Thor.HotChocolate.FunctionalTest
 {
     public class Program
     {
