@@ -45,6 +45,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HotChocolate.Abstractions" Version="0.7.0-preview.22" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
   </ItemGroup>
 
@@ -58,10 +59,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Http\Http.csproj" />
-    <ProjectReference Include="..\..\Session\Session.csproj" />
-    <ProjectReference Include="..\..\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
-    <ProjectReference Include="..\..\Transmission.EventHub\Transmission.EventHub.csproj" />
+    <ProjectReference Include="..\..\Core\Core.csproj" />
+    <ProjectReference Include="..\..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Thor.AspNetCore;
 
 namespace Thor.HotChocolate.FunctionalTest
 {
@@ -18,6 +19,7 @@ namespace Thor.HotChocolate.FunctionalTest
         {
             services
                 .AddTracing(Configuration)
+                .AddHotCocolateTracing(Configuration)
                 .AddMvc();
         }
 

@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Thor.Core.Abstractions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Thor.HotChocolate.Tests
 {
@@ -33,12 +35,12 @@ namespace Thor.HotChocolate.Tests
             IConfiguration configuration = builder.Build();
 
             // act
-            services.AddTracing(configuration);
+            services.AddHotCocolateTracing(configuration);
 
             // assert
             ServiceProvider provider = services.BuildServiceProvider();
 
-            Assert.IsType<TracingStartupFilter>(provider.GetService<IStartupFilter>());
+            Assert.IsType<HotChocolateDiagnosticsListener>(provider.GetService<IDiagnosticsListener>());
         }
 
         #endregion

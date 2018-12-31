@@ -1,4 +1,4 @@
-﻿namespace Thor.HotChocolate
+﻿namespace Thor.Core.Abstractions
 {
     internal interface IDiagnosticsListener
     {
