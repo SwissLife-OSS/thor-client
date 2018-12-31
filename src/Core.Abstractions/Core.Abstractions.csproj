@@ -45,6 +45,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IDiagnosticsListener.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="IDiagnosticsListener.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 

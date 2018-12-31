@@ -52,13 +52,14 @@
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" >
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core.Abstractions\Core.Abstractions.csproj" />
     <ProjectReference Include="..\HotChocolate\HotChocolate.csproj" />
   </ItemGroup>
 

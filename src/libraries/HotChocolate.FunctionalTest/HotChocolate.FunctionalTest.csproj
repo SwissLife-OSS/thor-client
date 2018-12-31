@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
+    <PackageReference Include="Thor.AspNetCore" Version="1.0.0-preview-0005" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Core\Core.csproj" />
+    <ProjectReference Include="..\..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
     <ProjectReference Include="..\HotChocolate\HotChocolate.csproj" />
   </ItemGroup>
 

@@ -17,7 +17,7 @@ namespace Thor.HotChocolate.Tests
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddTracing(Configuration);
+                .AddHotCocolateTracing(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
