@@ -8,7 +8,7 @@ namespace Thor.Core
     /// <summary>
     /// A <see cref="DiagnosticListener"/> initializer for tracing.
     /// </summary>
-    internal class DiagnosticsListenerInitializer
+    public class DiagnosticsListenerInitializer
         : IDisposable
         , IObserver<DiagnosticListener>
     {
