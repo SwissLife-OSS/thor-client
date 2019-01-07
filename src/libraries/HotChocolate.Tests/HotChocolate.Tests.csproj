@@ -42,6 +42,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="0.7.0-preview.26" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
@@ -51,6 +52,7 @@
     <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
+    <PackageReference Include="Thor.AspNetCore" Version="1.0.0-preview-0005" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -59,7 +61,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Http\Http.csproj" />
+    <ProjectReference Include="..\..\Session\Session.csproj" />
+    <ProjectReference Include="..\..\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
+    <ProjectReference Include="..\..\Transmission.EventHub\Transmission.EventHub.csproj" />
     <ProjectReference Include="..\HotChocolate\HotChocolate.csproj" />
   </ItemGroup>
 
