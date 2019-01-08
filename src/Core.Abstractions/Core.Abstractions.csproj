@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
@@ -43,14 +43,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <DefineConstants>TRACE;NET461</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="IDiagnosticsListener.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="IDiagnosticsListener.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
