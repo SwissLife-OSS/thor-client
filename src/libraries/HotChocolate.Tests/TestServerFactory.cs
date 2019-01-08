@@ -24,12 +24,11 @@ namespace Thor.HotChocolate.Tests
         public TestServer Create(
             QueryMiddlewareOptions options)
         {
+            IConfiguration configuration = CreateConfiguration();
             IWebHostBuilder builder = new WebHostBuilder()
                 .Configure(app => app.UseGraphQL(options))
                 .ConfigureServices(services =>
                 {
-                    IConfiguration configuration = CreateConfiguration();
-
                     services
                         .AddGraphQL(c => { c.RegisterQueryType<QueryType>(); })
                         .AddSingleton<IAttachmentTransmissionInitializer>(

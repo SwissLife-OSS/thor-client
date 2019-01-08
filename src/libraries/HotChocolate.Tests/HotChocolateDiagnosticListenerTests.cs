@@ -11,7 +11,8 @@ namespace Thor.HotChocolate.Tests
     public class HotChocolateDiagnosticListenerTests
         : IClassFixture<TestServerFactory>
     {
-        public HotChocolateDiagnosticListenerTests(TestServerFactory testServerFactory)
+        public HotChocolateDiagnosticListenerTests(
+            TestServerFactory testServerFactory)
         {
             TestServerFactory = testServerFactory;
         }
@@ -33,9 +34,11 @@ namespace Thor.HotChocolate.Tests
             HttpResponseMessage message =
                 await server.SendRequestAsync(request);
 
+            // assert
             Assert.Equal(HttpStatusCode.OK, message.StatusCode);
-
-            // TODO: HttpContext check activity
+            var hotChocolateActivity = Context
+                .Features.Get<HotChocolateActivity>();
+            Assert.NotNull(hotChocolateActivity);
         }
 
         private TestServer CreateTestServer(string path = null)

@@ -52,7 +52,7 @@
     <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
-    <PackageReference Include="Thor.AspNetCore" Version="1.0.0-preview-0005" />
+    <PackageReference Include="Thor.AspNetCore" Version="1.0.0-preview-0006" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
