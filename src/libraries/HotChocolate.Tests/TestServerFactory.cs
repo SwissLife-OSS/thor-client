@@ -35,7 +35,6 @@ namespace Thor.HotChocolate.Tests
                             provider =>
                                 new AttachmentTransmissionInitializer(
                                     Enumerable.Empty<ITelemetryAttachmentTransmitter>()))
-                        .AddTracingHttpMessageHandler(configuration)
                         .AddInProcessTelemetrySession(configuration)
                         .AddTracingMinimum(configuration)
                         .AddHotCocolateTracing(configuration);
