@@ -11,7 +11,7 @@ namespace Thor.HotChocolate
     internal class HotChocolateDiagnosticsListener
         : IDiagnosticsListener
     {
-        public string Name { get; } = "HotChocolate";
+        public string Name { get; } = "HotChocolate.Execution";
 
         [DiagnosticName("Query")]
         public virtual void OnQuery()
