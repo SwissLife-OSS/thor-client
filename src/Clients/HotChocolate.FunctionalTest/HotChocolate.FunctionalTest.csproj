@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core.Abstractions\Core.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Core\Core.csproj" />
-    <ProjectReference Include="..\..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Core\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Core\Core\Core.csproj" />
+    <ProjectReference Include="..\..\Core\Transmission.Abstractions\Transmission.Abstractions.csproj" />
     <ProjectReference Include="..\HotChocolate\HotChocolate.csproj" />
   </ItemGroup>
 

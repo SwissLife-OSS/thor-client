@@ -61,11 +61,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Http\Http.csproj" />
-    <ProjectReference Include="..\..\Session\Session.csproj" />
-    <ProjectReference Include="..\..\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
-    <ProjectReference Include="..\..\Transmission.EventHub\Transmission.EventHub.csproj" />
+    <ProjectReference Include="..\..\Core\Session\Session.csproj" />
+    <ProjectReference Include="..\..\Core\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
+    <ProjectReference Include="..\..\Core\Transmission.EventHub\Transmission.EventHub.csproj" />
     <ProjectReference Include="..\HotChocolate\HotChocolate.csproj" />
+    <ProjectReference Include="..\Http\Http.csproj" />
   </ItemGroup>
 
   <ItemGroup>
