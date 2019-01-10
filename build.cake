@@ -132,7 +132,7 @@ Task("Tests")
             .Append($"/p:CoverletOutput=\"../../{testOutputDir}/classic_{i++}\" --blame")
     };
 
-    // DotNetCoreTest("./src/Server/AspNetClassic.Tests", buildSettings);    
+    // DotNetCoreTest("./src/Server/AspNetClassic.Tests", buildSettings);
 });
 
 
@@ -144,7 +144,7 @@ Task("SonarBegin")
     {
         Url = "https://sonarcloud.io",
         Login = sonarLogin,
-        Key = "Thor-Client",
+        Key = "ChilliCream_thor-client",
         Organization = "chillicream",
         VsTestReportsPath = "**/*.trx",
         OpenCoverReportsPath = "**/*.opencover.xml",
