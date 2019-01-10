@@ -59,8 +59,17 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    DotNetCoreRestore("./src/Core");
-    DotNetCoreRestore("./src/Clients");
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Core /t:restore /p:configuration=" + configuration }))
+    {
+        process.WaitForExit();
+    }
+
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Clients /t:restore /p:configuration=" + configuration }))
+    {
+        process.WaitForExit();
+    }
 });
 
 Task("Build")
@@ -159,23 +168,6 @@ Task("SonarBegin")
             return a;
         }
     });
-});
-
-Task("Restore")
-    .IsDependentOn("Clean")
-    .Does(() =>
-{
-    using(var process = StartAndReturnProcess("msbuild",
-        new ProcessSettings{ Arguments = "src/Core /t:restore /p:configuration=" + configuration }))
-    {
-        process.WaitForExit();
-    }
-
-    using(var process = StartAndReturnProcess("msbuild",
-        new ProcessSettings{ Arguments = "src/Server /t:restore /p:configuration=" + configuration }))
-    {
-        process.WaitForExit();
-    }
 });
 
 Task("SonarEnd")
