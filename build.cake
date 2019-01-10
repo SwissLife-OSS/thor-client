@@ -67,43 +67,34 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    var buildSettings = new DotNetCoreBuildSettings
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Core /t:build /p:configuration=" + configuration }))
     {
-        Configuration = configuration,
-        NoRestore = true
-    };
+        process.WaitForExit();
+    }
 
-    DotNetCoreBuild("./src/Core", buildSettings);
-    DotNetCoreBuild("./src/Clients", buildSettings);
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Clients /t:build /p:configuration=" + configuration }))
+    {
+        process.WaitForExit();
+    }
 });
 
 Task("Publish")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var settings = new DotNetCorePackSettings
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Core /t:pack /p:configuration=" + configuration + " /p:IncludeSource=true /p:IncludeSymbols=true" }))
     {
-        Configuration = configuration,
-        OutputDirectory = publishOutputDir,
-        NoRestore = true,
-        NoBuild = true,
-        IncludeSource = true,
-        IncludeSymbols = true,
-        ArgumentCustomization = args =>
-        {
-            var a = args;
+        process.WaitForExit();
+    }
 
-            if(!string.IsNullOrEmpty(packageVersion))
-            {
-                a = a.Append($"/p:PackageVersion={packageVersion}");
-                a = a.Append($"/p:VersionPrefix={packageVersion.Split('-').First()}");
-            }
-
-            return a;
-        }
-    };
-    DotNetCorePack("./src/Core", settings);
-    DotNetCorePack("./src/Clients", settings);
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Clients /t:pack /p:configuration=" + configuration + " /p:IncludeSource=true /p:IncludeSymbols=true" }))
+    {
+        process.WaitForExit();
+    }
 });
 
 Task("Tests")
@@ -138,7 +129,6 @@ Task("Tests")
     }
 });
 
-
 Task("SonarBegin")
     .IsDependentOn("EnvironmentSetup")
     .Does(() =>
@@ -169,6 +159,23 @@ Task("SonarBegin")
             return a;
         }
     });
+});
+
+Task("Restore")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Core /t:restore /p:configuration=" + configuration }))
+    {
+        process.WaitForExit();
+    }
+
+    using(var process = StartAndReturnProcess("msbuild",
+        new ProcessSettings{ Arguments = "src/Server /t:restore /p:configuration=" + configuration }))
+    {
+        process.WaitForExit();
+    }
 });
 
 Task("SonarEnd")
