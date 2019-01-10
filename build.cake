@@ -132,7 +132,10 @@ Task("Tests")
             .Append($"/p:CoverletOutput=\"../../{testOutputDir}/classic_{i++}\" --blame")
     };
 
-    // DotNetCoreTest("./src/Server/AspNetClassic.Tests", buildSettings);
+    foreach(var file in GetFiles("./**/*.Tests.csproj"))
+    {
+        DotNetCoreTest(file.FullPath, testSettings);
+    }
 });
 
 
