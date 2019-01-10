@@ -59,13 +59,8 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    var buildSettings = new DotNetCoreBuildSettings
-    {
-        Configuration = configuration
-    };
-
-    DotNetCoreResotre("./src/Core", buildSettings);
-    DotNetCoreResotre("./src/Clients", buildSettings);
+    DotNetCoreRestore("./src/Core");
+    DotNetCoreRestore("./src/Clients");
 });
 
 Task("Build")
