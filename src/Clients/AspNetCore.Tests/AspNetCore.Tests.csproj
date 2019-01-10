@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.HotChocolate.Tests</AssemblyName>
-    <RootNamespace>Thor.HotChocolate.Tests</RootNamespace>
+    <AssemblyName>Thor.AspNetCore.Tests</AssemblyName>
+    <RootNamespace>Thor.AspNetCore.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -33,26 +34,15 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NET461</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DefineConstants>TRACE;NET461</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="HotChocolate.AspNetCore" Version="0.7.0-preview.26" />
+    <PackageReference Include="coveralls.io" Version="1.4.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
-    <PackageReference Include="coveralls.io" Version="1.4.2" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="15.9.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="Moq" Version="4.9.0" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
-    <PackageReference Include="Thor.Analyzer" Version="1.0.4" />
-    <PackageReference Include="Thor.AspNetCore" Version="1.0.0-preview-0006" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -61,11 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Http\Http.csproj" />
-    <ProjectReference Include="..\..\Session\Session.csproj" />
-    <ProjectReference Include="..\..\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
-    <ProjectReference Include="..\..\Transmission.EventHub\Transmission.EventHub.csproj" />
-    <ProjectReference Include="..\HotChocolate\HotChocolate.csproj" />
+    <ProjectReference Include="..\AspNetCore\AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

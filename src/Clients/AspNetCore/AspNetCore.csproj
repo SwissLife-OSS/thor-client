@@ -1,12 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageId>Thor.HotChocolate</PackageId>
-    <AssemblyName>Thor.HotChocolate</AssemblyName>
-    <RootNamespace>Thor.HotChocolate</RootNamespace>
+    <PackageId>Thor.AspNetCore</PackageId>
+    <AssemblyName>Thor.AspNetCore</AssemblyName>
+    <RootNamespace>Thor.AspNetCore</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Description>Provides a diagnostics observer for Hot Chocolate.</Description>
+    <Description>Provides tracing capabilities for AspNet core 2.0 and higher.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
@@ -36,31 +36,15 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NET461</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DefineConstants>TRACE;NET461</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="HotChocolate.Abstractions" Version="0.7.0-preview.22" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DiagnosticAdapter" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj" />
-    <ProjectReference Include="..\..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
+    <PackageReference Include="Thor.Core.Http" Version="1.0.0-preview-0010" />
+    <PackageReference Include="Thor.Core.Session" Version="1.0.0-preview-0010" />
+    <PackageReference Include="Thor.Core.Transmission.BlobStorage" Version="1.0.0-preview-0010" />
+    <PackageReference Include="Thor.Core.Transmission.EventHub" Version="1.0.0-preview-0010" />
   </ItemGroup>
 
 </Project>
