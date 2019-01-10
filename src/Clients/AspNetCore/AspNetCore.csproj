@@ -41,10 +41,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
-    <PackageReference Include="Thor.Core.Http" Version="1.0.0-preview-0010" />
-    <PackageReference Include="Thor.Core.Session" Version="1.0.0-preview-0010" />
-    <PackageReference Include="Thor.Core.Transmission.BlobStorage" Version="1.0.0-preview-0010" />
-    <PackageReference Include="Thor.Core.Transmission.EventHub" Version="1.0.0-preview-0010" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Session\Session.csproj" />
+    <ProjectReference Include="..\..\Core\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
+    <ProjectReference Include="..\..\Core\Transmission.EventHub\Transmission.EventHub.csproj" />
+    <ProjectReference Include="..\Http\Http.csproj" />
   </ItemGroup>
 
 </Project>
