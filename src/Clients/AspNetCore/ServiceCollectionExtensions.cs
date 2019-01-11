@@ -36,12 +36,23 @@ namespace Thor.AspNetCore
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            return services
+            TracingConfiguration tracingConfiguration = configuration
+                .GetSection("Tracing")
+                .Get<TracingConfiguration>();
+
+            services
                 .AddTracingHttpMessageHandler(configuration)
                 .AddBlobStorageTelemetryAttachmentTransmission(configuration)
-                .AddEventHubTelemetryEventTransmission(configuration)
-                .AddInProcessTelemetrySession(configuration)
                 .AddTracingMinimum(configuration);
+
+            if (tracingConfiguration.InProcess)
+            {
+                services
+                    .AddEventHubTelemetryEventTransmission(configuration)
+                    .AddInProcessTelemetrySession(configuration);
+            }
+
+            return services;
         }
 
         /// <summary>
