@@ -45,17 +45,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotChocolate.Abstractions" Version="0.7.0-preview.22" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="HotChocolate.Abstractions" Version="0.7.0-preview.30" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DiagnosticAdapter" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>
