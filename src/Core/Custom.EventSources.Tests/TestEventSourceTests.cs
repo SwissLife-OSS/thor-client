@@ -1,5 +1,3 @@
-// forked from https://github.com/ChilliCream/thor-core
-
 using System.Diagnostics.Tracing;
 using System.Linq;
 using Thor.Core.Session.Abstractions;
