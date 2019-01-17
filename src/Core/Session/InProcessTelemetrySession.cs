@@ -313,7 +313,7 @@ namespace Thor.Core.Session
         public static InProcessTelemetrySession Create(int applicationId,
             EventLevel level)
         {
-            return Create(applicationId, level, null);
+            return Create(applicationId, level, Enumerable.Empty<IProvidersDescriptor>());
         }
 
         /// <summary>
@@ -345,14 +345,18 @@ namespace Thor.Core.Session
         /// <param name="configuration">
         /// A session configuration instance.
         /// </param>
+        /// <param name="providersDescriptors">
+        /// A collection of provider descriptors.
+        /// </param>
         /// <returns>
         /// A new instance of <see cref="InProcessTelemetrySession"/>.
         /// </returns>
         public static InProcessTelemetrySession Create(
-            SessionConfiguration configuration)
+            SessionConfiguration configuration,
+            IEnumerable<IProvidersDescriptor> providersDescriptors)
         {
             return Create(configuration.ApplicationId, configuration.Level,
-                configuration.AllowedPrefixes);
+                providersDescriptors);
         }
 
         #endregion

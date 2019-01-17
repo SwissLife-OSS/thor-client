@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using Thor.Core.Abstractions;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
@@ -72,7 +74,7 @@ namespace Thor.Core.Session.Tests
 
             using (ITelemetrySession session = InProcessTelemetrySession
                 .Create(applicationId, EventLevel.Verbose,
-                    new[] { "Custom" }))
+                    new[] { new TestProviderDescriptor() }))
             {
                 session.Attach(transmitter);
                 Application.Start(applicationId);
@@ -83,6 +85,12 @@ namespace Thor.Core.Session.Tests
 
             // assert
             Assert.Equal(3, telemetryCount);
+        }
+
+        private class TestProviderDescriptor : IProvidersDescriptor
+        {
+            public IEnumerable<string> Assemblies { get; } =
+                new[] {"Custom"};
         }
 
         #endregion

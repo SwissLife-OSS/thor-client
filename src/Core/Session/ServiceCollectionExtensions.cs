@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Thor.Core.Abstractions;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
@@ -43,7 +44,7 @@ namespace Thor.Core.Session
                     IEnumerable<ITelemetryEventTransmitter> eventTransmitters =
                         p.GetServices<ITelemetryEventTransmitter>();
                     ITelemetrySession session = InProcessTelemetrySession
-                        .Create(config);
+                        .Create(config, p.GetServices<IProvidersDescriptor>());
 
                     foreach (ITelemetryEventTransmitter transmitter in eventTransmitters)
                     {
