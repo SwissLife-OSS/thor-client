@@ -21,7 +21,7 @@ namespace Thor.Core.Session
     /// </summary>
     public class InProcessTelemetrySession
         : EventListener
-            , ITelemetrySession
+        , ITelemetrySession
     {
         private readonly ImmutableHashSet<string> _allowedPrefixes =
             ImmutableHashSet<string>.Empty;

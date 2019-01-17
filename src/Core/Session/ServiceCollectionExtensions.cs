@@ -37,6 +37,7 @@ namespace Thor.Core.Session
             return services
                 .AddTracingCore(configuration)
                 .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
+                .AddSingleton<IProvidersDescriptor, SessionConfigurationProvidersDescriptor>()
                 .AddSingleton(p =>
                 {
                     SessionConfiguration config = p
