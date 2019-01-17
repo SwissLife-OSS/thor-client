@@ -8,9 +8,9 @@ namespace Thor.Core.Session
     /// </summary>
     public class SessionConfiguration
     {
-        /// <summary>	
-        /// Gets or sets allowed assembly name prefixes.	
-        /// </summary>	
+        /// <summary>
+        /// Gets or sets allowed assembly name prefixes.
+        /// </summary>
         public IEnumerable<string> AllowedPrefixes { get; set; }
 
         /// <summary>
