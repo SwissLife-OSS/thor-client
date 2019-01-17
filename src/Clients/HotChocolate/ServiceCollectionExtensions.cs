@@ -31,7 +31,8 @@ namespace Thor.HotChocolate
             }
 
             return services
-                .AddSingleton<IDiagnosticsListener, HotChocolateDiagnosticsListener>();
+                .AddSingleton<IDiagnosticsListener, HotChocolateDiagnosticsListener>()
+                .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>();
         }
     }
 }

@@ -23,7 +23,8 @@ namespace Thor.Core.Session
         : EventListener
             , ITelemetrySession
     {
-        private readonly ImmutableHashSet<string> _allowedPrefixes;
+        private readonly ImmutableHashSet<string> _allowedPrefixes =
+            ImmutableHashSet<string>.Empty;
         private static readonly Type _attributeType =
             typeof(EventSourceAttribute);
         private static readonly Type _baseType = typeof(EventSource);
@@ -45,7 +46,6 @@ namespace Thor.Core.Session
                     ExceptionMessages.ApplicationIdMustBeGreaterZero);
             }
 
-            _allowedPrefixes = ImmutableHashSet.Create("Thor.Core");
             _currentDomain = AppDomain.CurrentDomain;
             _sessionName = SessionNameProvider.Create(applicationId);
             _level = level;
