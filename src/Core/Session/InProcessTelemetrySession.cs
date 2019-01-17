@@ -21,7 +21,7 @@ namespace Thor.Core.Session
     /// </summary>
     public class InProcessTelemetrySession
         : EventListener
-        , ITelemetrySession
+            , ITelemetrySession
     {
         private readonly ImmutableHashSet<string> _allowedPrefixes;
         private static readonly Type _attributeType =
@@ -37,7 +37,7 @@ namespace Thor.Core.Session
         private readonly string _sessionName;
 
         private InProcessTelemetrySession(int applicationId, EventLevel level,
-            IEnumerable<string> allowedPrefixes)
+            IEnumerable<IProvidersDescriptor> providersDescriptors)
         {
             if (applicationId <= 0)
             {
@@ -50,9 +50,9 @@ namespace Thor.Core.Session
             _sessionName = SessionNameProvider.Create(applicationId);
             _level = level;
 
-            if (allowedPrefixes != null)
+            if (providersDescriptors != null)
             {
-                foreach (var prefix in allowedPrefixes)
+                foreach (var prefix in providersDescriptors.SelectMany(p => p.Assemblies))
                 {
                     _allowedPrefixes = _allowedPrefixes.Add(prefix);
                 }
@@ -106,10 +106,10 @@ namespace Thor.Core.Session
         private static bool IsAssignableFrom(Type type)
         {
             return type.IsClass && type != _baseType && _baseType.IsAssignableFrom(type) &&
-                type.CustomAttributes.Count(a => a.AttributeType == _attributeType) == 1 &&
-                type.CustomAttributes.First(a => a.AttributeType == _attributeType)
-                    .NamedArguments.Count(a => a.MemberName == "Name" &&
-                        !string.IsNullOrWhiteSpace((string)a.TypedValue.Value)) == 1;
+                   type.CustomAttributes.Count(a => a.AttributeType == _attributeType) == 1 &&
+                   type.CustomAttributes.First(a => a.AttributeType == _attributeType)
+                       .NamedArguments.Count(a => a.MemberName == "Name" &&
+                            !string.IsNullOrWhiteSpace((string)a.TypedValue.Value)) == 1;
         }
 
         private static Dictionary<string, Type> CreateProviderNameMap(
@@ -321,17 +321,17 @@ namespace Thor.Core.Session
         /// </summary>
         /// <param name="applicationId">An unique application id.</param>
         /// <param name="level">A level of severity.</param>
-        /// <param name="allowedPrefixes">
-        /// A collection of allowed assembly name prefixes.
+        /// <param name="providersDescriptors">
+        /// A collection of provider descriptors.
         /// </param>
         /// <returns>
         /// A new instance of <see cref="InProcessTelemetrySession"/>.
         /// </returns>
         public static InProcessTelemetrySession Create(int applicationId,
-            EventLevel level, IEnumerable<string> allowedPrefixes)
+            EventLevel level, IEnumerable<IProvidersDescriptor> providersDescriptors)
         {
             InProcessTelemetrySession session = new InProcessTelemetrySession(
-                applicationId, level, allowedPrefixes);
+                applicationId, level, providersDescriptors);
 
             session.FindAndActivateProviders();
             session.RegisterAssemblyLoadCallback();
