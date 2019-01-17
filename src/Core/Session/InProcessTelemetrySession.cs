@@ -106,10 +106,10 @@ namespace Thor.Core.Session
         private static bool IsAssignableFrom(Type type)
         {
             return type.IsClass && type != _baseType && _baseType.IsAssignableFrom(type) &&
-                   type.CustomAttributes.Count(a => a.AttributeType == _attributeType) == 1 &&
-                   type.CustomAttributes.First(a => a.AttributeType == _attributeType)
-                       .NamedArguments.Count(a => a.MemberName == "Name" &&
-                            !string.IsNullOrWhiteSpace((string)a.TypedValue.Value)) == 1;
+               type.CustomAttributes.Count(a => a.AttributeType == _attributeType) == 1 &&
+               type.CustomAttributes.First(a => a.AttributeType == _attributeType)
+                   .NamedArguments.Count(a => a.MemberName == "Name" &&
+                        !string.IsNullOrWhiteSpace((string)a.TypedValue.Value)) == 1;
         }
 
         private static Dictionary<string, Type> CreateProviderNameMap(
