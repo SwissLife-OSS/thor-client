@@ -12,9 +12,11 @@ namespace Thor.Core.Session
     public class SessionConfigurationProvidersDescriptor : IProvidersDescriptor
     {
         /// <summary>
-        /// Creates a SessionConfigurationProvidersDescriptor
+        /// Creates a new instance of <see cref="SessionConfigurationProvidersDescriptor"/>
         /// </summary>
-        /// <param name="sessionConfiguration"></param>
+        /// <param name="sessionConfiguration">
+        /// Configuration for the telemetry event session.
+        /// </param>
         public SessionConfigurationProvidersDescriptor(
             IOptions<SessionConfiguration> sessionConfiguration)
         {
