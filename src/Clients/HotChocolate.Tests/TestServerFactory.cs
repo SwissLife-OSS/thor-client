@@ -22,19 +22,21 @@ namespace Thor.HotChocolate.Tests
         private readonly List<TestServer> _instances = new List<TestServer>();
 
         public TestServer Create(
-            QueryMiddlewareOptions options)
+            QueryMiddlewareOptions options,
+            IConfiguration configuration)
         {
-            IConfiguration configuration = CreateConfiguration();
             IWebHostBuilder builder = new WebHostBuilder()
                 .Configure(app => app.UseGraphQL(options))
                 .ConfigureServices(services =>
                 {
                     services
+                        .AddSingleton<IStartupFilter, TestStartupFilter>()
                         .AddGraphQL(c => { c.RegisterQueryType<QueryType>(); })
                         .AddSingleton<IAttachmentTransmissionInitializer>(
                             provider =>
                                 new AttachmentTransmissionInitializer(
                                     Enumerable.Empty<ITelemetryAttachmentTransmitter>()))
+                        .AddTracingHttpMessageHandler(configuration)
                         .AddInProcessTelemetrySession(configuration)
                         .AddTracingMinimum(configuration)
                         .AddHotCocolateTracing(configuration);
@@ -44,18 +46,6 @@ namespace Thor.HotChocolate.Tests
 
             _instances.Add(server);
             return server;
-        }
-
-        private IConfiguration CreateConfiguration()
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>
-            {
-                {"Tracing:ApplicationId", "5"},
-            };
-
-            return new ConfigurationBuilder()
-                .AddInMemoryCollection(data)
-                .Build();
         }
 
         public void Dispose()

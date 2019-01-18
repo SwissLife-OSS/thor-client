@@ -1,9 +1,14 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
+using CoreEventSources = Thor.Core.Abstractions.EventSourceNames;
+using HotChocolateEventSources = Thor.HotChocolate.EventSourceNames;
+using Thor.Core.Session.Abstractions;
 using Xunit;
 
 namespace Thor.HotChocolate.Tests
@@ -41,6 +46,30 @@ namespace Thor.HotChocolate.Tests
             Assert.NotNull(hotChocolateActivity);
         }
 
+        [Fact]
+        public async Task HttpAndHotChocolateEvents_AreFired()
+        {
+            // arrange
+            TestServer server = CreateTestServer();
+            var request = new
+            {
+                Query = @"{ customProperty }"
+            };
+
+            // act
+            HttpResponseMessage message =
+                await server.SendRequestAsync(request);
+
+            // assert
+            Assert.Equal(HttpStatusCode.OK, message.StatusCode);
+            var transmitter = ProbeTransmitter.Instance;
+            Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Start"));
+            Assert.True(transmitter.Contains(HotChocolateEventSources.HotChocolate, "Start"));
+            Assert.True(transmitter.Contains(HotChocolateEventSources.HotChocolate, "Stop"));
+            Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Stop"));
+        }
+
+        
         private TestServer CreateTestServer(string path = null)
         {
             return TestServerFactory.Create(
@@ -53,7 +82,19 @@ namespace Thor.HotChocolate.Tests
                         properties["foo"] = "bar";
                         return Task.CompletedTask;
                     }
-                });
+                }, CreateConfiguration());
+        }
+
+        private IConfiguration CreateConfiguration()
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>
+            {
+                {"Tracing:ApplicationId", "5"},
+            };
+
+            return new ConfigurationBuilder()
+                .AddInMemoryCollection(data)
+                .Build();
         }
 
     }
