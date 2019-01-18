@@ -48,7 +48,7 @@ namespace Thor.Core.Session.Abstractions
                 Level = source.Level,
                 Message = source.GetFormattedMessage(),
                 Name = source.EventName,
-                Payload = source.GetPayloads(),
+                Payloads = source.GetPayloads(),
                 ProcessId = 0,
                 ProcessName = null,
                 ProviderId = source.EventSource.Guid,

@@ -372,11 +372,11 @@ namespace Thor.Core.Http.Tests
 
             if (expectedCount == 0)
             {
-                Assert.Null(item.Payload);
+                Assert.Null(item.Payloads);
             }
             else
             {
-                Assert.Equal(expectedCount, item.Payload.Count);
+                Assert.Equal(expectedCount, item.Payloads.Count);
             }
         }
     }
