@@ -72,7 +72,7 @@ namespace Thor.Core.Session.Abstractions.Tests
                 Assert.Null(result.Payload);
                 Assert.Equal(0, result.ProcessId);
                 Assert.Null(result.ProcessName);
-                Assert.Equal("ChilliCream-Test", result.ProviderName);
+                Assert.Equal("Thor-Test", result.ProviderName);
                 Assert.Equal(Guid.Empty, result.RelatedActivityId);
                 Assert.Equal("8809", result.SessionName);
                 Assert.Equal(0, result.ThreadId);

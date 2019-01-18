@@ -2,10 +2,10 @@
 {
     internal static class EventSourceNames
     {
-        public const string Activity = "ChilliCream-Activity";
-        public const string Application = "ChilliCream-Application";
-        public const string Default = "ChilliCream-Common";
-        public const string ProviderActivation = "ChilliCream-Diagnostics-ProviderActivation";
-        public const string RequestActivity = "ChilliCream-RequestActivity";
+        public const string Activity = "Thor-Activity";
+        public const string Application = "Thor-Application";
+        public const string Default = "Thor-Common";
+        public const string ProviderActivation = "Thor-Diagnostics-ProviderActivation";
+        public const string RequestActivity = "Thor-RequestActivity";
     }
 }

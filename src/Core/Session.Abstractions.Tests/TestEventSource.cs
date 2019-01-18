@@ -2,7 +2,7 @@
 
 namespace Thor.Core
 {
-    [EventSource(Name = "ChilliCream-Test")]
+    [EventSource(Name = "Thor-Test")]
     public sealed class TestEventSource
         : EventSource
     {

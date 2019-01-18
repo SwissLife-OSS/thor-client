@@ -2,6 +2,6 @@
 {
     internal static class EventSourceNames
     {
-        public const string HotChocolate = "ChilliCream-HotChocolate";
+        public const string HotChocolate = "Thor-HotChocolate";
     }
 }
