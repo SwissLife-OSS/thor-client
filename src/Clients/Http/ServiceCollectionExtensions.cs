@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Http;
+using Thor.Core.Abstractions;
 
 namespace Thor.Core.Http
 {
@@ -45,7 +46,8 @@ namespace Thor.Core.Http
 
             return services
                 .AddTracingCore(configuration)
-                .AddHttpClient();
+                .AddHttpClient()
+                .AddSingleton<IProvidersDescriptor, HttpProvidersDescriptor>();
         }
     }
 }
