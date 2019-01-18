@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Thor.Core.Abstractions;
 
 namespace Thor.Core
 {
@@ -36,6 +37,7 @@ namespace Thor.Core
             }
 
             return services
+                .AddSingleton<IProvidersDescriptor, CoreProvidersDescriptor>()
                 .AddOptions()
                 .Configure<TracingConfiguration>(configuration
                     .GetSection("Tracing"));

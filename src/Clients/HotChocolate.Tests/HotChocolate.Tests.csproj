@@ -62,6 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.Abstractions\Core.Abstractions.csproj" />
     <ProjectReference Include="..\..\Core\Session\Session.csproj" />
     <ProjectReference Include="..\..\Core\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
     <ProjectReference Include="..\..\Core\Transmission.EventHub\Transmission.EventHub.csproj" />

@@ -7,7 +7,7 @@ using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.HotChocolate
 {
-    [EventSource(Name = "ChilliCream-HotChocolate")]
+    [EventSource(Name = EventSourceNames.HotChocolate)]
     internal sealed class HotChocolateActivityEventSource
         : EventSourceBase
     {
