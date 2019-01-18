@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Thor.Hosting.GenericHost.FunctionalTest</AssemblyName>
+    <RootNamespace>Thor.Hosting.GenericHost.FunctionalTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

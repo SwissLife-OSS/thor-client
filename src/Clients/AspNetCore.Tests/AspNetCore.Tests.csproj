@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.AspNetCore.Tests</AssemblyName>
-    <RootNamespace>Thor.AspNetCore.Tests</RootNamespace>
+    <AssemblyName>Thor.Hosting.AspNetCore.Tests</AssemblyName>
+    <RootNamespace>Thor.Hosting.AspNetCore.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 

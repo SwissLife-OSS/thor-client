@@ -5,7 +5,7 @@ using Microsoft.Extensions.DiagnosticAdapter;
 using Thor.Core.Abstractions;
 using Thor.Core.Http;
 
-namespace Thor.AspNetCore
+namespace Thor.Hosting.AspNetCore
 {
     internal class HostingDiagnosticsListener
         : IDiagnosticsListener

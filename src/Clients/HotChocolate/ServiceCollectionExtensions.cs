@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Abstractions;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.

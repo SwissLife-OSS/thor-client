@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Thor.GenericHost;
 
-namespace GenericHost.Sample
+namespace Thor.Hosting.GenericHost.FunctionalTest
 {
     class Program
     {

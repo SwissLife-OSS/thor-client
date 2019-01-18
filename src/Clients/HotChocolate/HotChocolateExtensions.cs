@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     internal static class HotChocolateExtensions
     {

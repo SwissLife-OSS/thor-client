@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Thor.GenericHost.Tests")]
+[assembly: InternalsVisibleTo("Thor.Hosting.GenericHost.Tests")]

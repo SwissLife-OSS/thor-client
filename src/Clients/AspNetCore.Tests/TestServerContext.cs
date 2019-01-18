@@ -3,7 +3,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 
-namespace Thor.AspNetCore.Tests
+namespace Thor.Hosting.AspNetCore.Tests
 {
     public class TestServerContext
         : IDisposable

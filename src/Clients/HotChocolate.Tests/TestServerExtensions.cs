@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 
-namespace Thor.HotChocolate.Tests
+namespace Thor.Extensions.HotChocolate.Tests
 {
     internal static class TestServerExtensions
     {

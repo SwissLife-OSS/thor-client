@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.Hosting;
 using Thor.Core;
 
-namespace Thor.GenericHost
+namespace Thor.Hosting.GenericHost
 {
     internal static class HostExtensions
     {

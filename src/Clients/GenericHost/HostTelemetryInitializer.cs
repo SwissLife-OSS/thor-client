@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Thor.Core;
 using Thor.Core.Session.Abstractions;
 
-namespace Thor.GenericHost
+namespace Thor.Hosting.GenericHost
 {
     internal class HostTelemetryInitializer
     {

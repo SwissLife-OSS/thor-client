@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace Thor.AspNetCore.Tests
+namespace Thor.Hosting.AspNetCore.Tests
 {
     public class ServiceCollectionExtensionsTests
     {

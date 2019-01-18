@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Thor.Core.Abstractions;
 
-namespace Thor.AspNetCore
+namespace Thor.Hosting.AspNetCore
 {
     internal static class HttpRequestExtensions
     {

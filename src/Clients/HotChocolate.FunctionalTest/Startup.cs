@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Thor.AspNetCore;
+using Thor.Hosting.AspNetCore;
 
-namespace Thor.HotChocolate.FunctionalTest
+namespace Thor.Extensions.HotChocolate.FunctionalTest
 {
     public class Startup
     {

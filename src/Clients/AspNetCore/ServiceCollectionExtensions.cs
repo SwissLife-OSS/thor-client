@@ -9,7 +9,7 @@ using Thor.Core.Session;
 using Thor.Core.Transmission.BlobStorage;
 using Thor.Core.Transmission.EventHub;
 
-namespace Thor.AspNetCore
+namespace Thor.Hosting.AspNetCore
 {
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.

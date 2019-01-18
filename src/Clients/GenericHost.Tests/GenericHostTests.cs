@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Thor.GenericHost.Tests
+namespace Thor.Hosting.GenericHost.Tests
 {
     public class GenericHostTests
     {

@@ -1,10 +1,7 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Thor.Core;
 
-namespace Thor.GenericHost
+namespace Thor.Hosting.GenericHost
 {
     /// <summary>
     /// Extension methods for Generic Host Builder
