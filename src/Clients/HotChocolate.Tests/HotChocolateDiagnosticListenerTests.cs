@@ -58,6 +58,7 @@ namespace Thor.Extensions.HotChocolate.Tests
             // act
             HttpResponseMessage message =
                 await server.SendRequestAsync(request);
+            await Task.Delay(100);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, message.StatusCode);
