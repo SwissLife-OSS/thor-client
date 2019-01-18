@@ -63,7 +63,7 @@ namespace Thor.Core.Abstractions
         /// <summary>
         /// Gets or sets the payloads.
         /// </summary>
-        public Dictionary<string, object> Payload { get; set; }
+        public Dictionary<string, object> Payloads { get; set; }
 
         /// <summary>
         /// Gets or sets the process id for the process that logged the event.
