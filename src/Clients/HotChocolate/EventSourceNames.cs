@@ -1,4 +1,4 @@
-﻿namespace Thor.HotChocolate
+﻿namespace Thor.Extensions.HotChocolate
 {
     internal static class EventSourceNames
     {

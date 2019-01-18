@@ -6,7 +6,7 @@ using Thor.Core.Session;
 using Thor.Core.Transmission.BlobStorage;
 using Thor.Core.Transmission.EventHub;
 
-namespace Thor.GenericHost
+namespace Thor.Hosting.GenericHost
 {
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.

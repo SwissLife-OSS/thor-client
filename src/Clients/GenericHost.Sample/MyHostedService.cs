@@ -1,8 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Thor.GenericHost;
 
-namespace GenericHost.Sample
+namespace Thor.Hosting.GenericHost.FunctionalTest
 {
     internal class MyHostedService : HostedServiceBase
     {

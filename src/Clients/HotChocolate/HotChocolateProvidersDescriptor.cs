@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Thor.Core.Abstractions;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     /// <summary>
     /// HotChocolate event sources location

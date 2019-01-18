@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>Thor.GenericHost</PackageId>
-    <AssemblyName>Thor.GenericHost</AssemblyName>
-    <RootNamespace>Thor.GenericHost</RootNamespace>
+    <AssemblyName>Thor.Hosting.GenericHost</AssemblyName>
+    <RootNamespace>Thor.Hosting.GenericHost</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>Provides tracing capabilities for GenericHost core 2.0 and higher.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyName>Thor.AspNetCore.FunctionalTest</AssemblyName>
-    <RootNamespace>Thor.AspNetCore.FunctionalTest</RootNamespace>
+    <AssemblyName>Thor.Hosting.AspNetCore.FunctionalTest</AssemblyName>
+    <RootNamespace>Thor.Hosting.AspNetCore.FunctionalTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

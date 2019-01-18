@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Thor.Core;
 
-namespace Thor.GenericHost
+namespace Thor.Hosting.GenericHost
 {
     /// <summary>
     /// Provides base functionality of catching exeptions in a BackgroundService

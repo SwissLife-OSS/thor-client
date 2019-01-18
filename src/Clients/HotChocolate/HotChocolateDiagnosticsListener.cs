@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DiagnosticAdapter;
 using Thor.Core.Abstractions;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     internal class HotChocolateDiagnosticsListener
         : IDiagnosticsListener

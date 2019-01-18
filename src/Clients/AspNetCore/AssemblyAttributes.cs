@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Thor.AspNetCore.Tests")]
+[assembly: InternalsVisibleTo("Thor.Hosting.AspNetCore.Tests")]

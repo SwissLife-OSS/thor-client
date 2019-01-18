@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Thor.AspNetCore
+namespace Thor.Hosting.AspNetCore
 {
     internal static class ClaimsPrincipalExtensions
     {

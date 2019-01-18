@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using Thor.Core.Abstractions;
-using static Thor.HotChocolate.HotChocolateActivityEventSource;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     /// <summary>
     /// A server-side HotChocolate request activity to group telemetry events across threads and processes.
@@ -33,13 +32,13 @@ namespace Thor.HotChocolate
 
             if (context._relatedActivityId != Guid.Empty)
             {
-                Log.BeginTransfer(context._relatedActivityId);
-                Log.Start(context.Id, request);
-                Log.EndTransfer(context.Id, context._relatedActivityId);
+                HotChocolateActivityEventSource.Log.BeginTransfer(context._relatedActivityId);
+                HotChocolateActivityEventSource.Log.Start(context.Id, request);
+                HotChocolateActivityEventSource.Log.EndTransfer(context.Id, context._relatedActivityId);
             }
             else
             {
-                Log.Start(context.Id, request);
+                HotChocolateActivityEventSource.Log.Start(context.Id, request);
             }
 
             return context;
@@ -56,7 +55,7 @@ namespace Thor.HotChocolate
                 throw new ArgumentNullException(nameof(exception));
             }
 
-            Log.OnQueryError(exception);
+            HotChocolateActivityEventSource.Log.OnQueryError(exception);
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace Thor.HotChocolate
 
             if (errors.Count > 0)
             {
-                Log.OnValidationError(errors
+                HotChocolateActivityEventSource.Log.OnValidationError(errors
                     .Select(e =>
                         new HotChocolateError
                         {
@@ -99,7 +98,7 @@ namespace Thor.HotChocolate
             {
                 if (disposing)
                 {
-                    Log.Stop(Id);
+                    HotChocolateActivityEventSource.Log.Stop(Id);
 
                     _popWhenDispose?.Dispose();
                     _popWhenDispose = null;

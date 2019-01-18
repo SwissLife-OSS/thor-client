@@ -1,4 +1,4 @@
-﻿namespace Thor.AspNetCore
+﻿namespace Thor.Hosting.AspNetCore
 {
     internal static class JwtClaimNames
     {

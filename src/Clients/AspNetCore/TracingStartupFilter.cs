@@ -7,7 +7,7 @@ using Thor.Core;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.AspNetCore
+namespace Thor.Hosting.AspNetCore
 {
     /// <summary>
     /// A <see cref="IStartupFilter"/> to initialize tracing.

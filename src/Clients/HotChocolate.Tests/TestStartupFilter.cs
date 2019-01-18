@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Session.Abstractions;
 
-namespace Thor.HotChocolate.Tests
+namespace Thor.Extensions.HotChocolate.Tests
 {
     public class TestStartupFilter : IStartupFilter
     {
