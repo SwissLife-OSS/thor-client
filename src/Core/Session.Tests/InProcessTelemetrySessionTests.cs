@@ -38,30 +38,6 @@ namespace Thor.Core.Session.Tests
             Assert.Null(Record.Exception(verify));
         }
 
-        [Fact(DisplayName = "Create: Should have enabled default event providers if referenced")]
-        public void Create_VerifyDefaultProviders()
-        {
-            // arrange
-            int applicationId = 1;
-            ProbeTransmitter transmitter = new ProbeTransmitter();
-
-            // act
-            int telemetryCount = 0;
-
-            using (ITelemetrySession session = InProcessTelemetrySession
-                .Create(applicationId, EventLevel.Verbose))
-            {
-                session.Attach(transmitter);
-                Application.Start(applicationId);
-                Custom.EventSources.TestEventSource.Log.RunProcess(1234);
-                Application.Stop();
-                telemetryCount = transmitter.Count;
-            }
-
-            // assert
-            Assert.Equal(2, telemetryCount);
-        }
-
         [Fact(DisplayName = "Create: Should have enabled default event providers plus those who where allowed if referenced")]
         public void Create_VerifyDefaultAndAllowedProviders()
         {
@@ -84,7 +60,7 @@ namespace Thor.Core.Session.Tests
             }
 
             // assert
-            Assert.Equal(3, telemetryCount);
+            Assert.Equal(1, telemetryCount);
         }
 
         private class TestProviderDescriptor : IProvidersDescriptor
