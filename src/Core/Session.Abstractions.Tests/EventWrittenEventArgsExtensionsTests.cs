@@ -69,7 +69,7 @@ namespace Thor.Core.Session.Abstractions.Tests
                 Assert.Equal("DoSomething", result.Name);
                 Assert.Equal(0, result.OpcodeId);
                 Assert.Equal("Info", result.OpcodeName);
-                Assert.Null(result.Payload);
+                Assert.Null(result.Payloads);
                 Assert.Equal(0, result.ProcessId);
                 Assert.Null(result.ProcessName);
                 Assert.Equal("Thor-Test", result.ProviderName);
