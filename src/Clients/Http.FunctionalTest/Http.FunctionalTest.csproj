@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Thor.Extensions.Http.FunctionalTest</AssemblyName>
+    <RootNamespace>Thor.Extensions.Http.FunctionalTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

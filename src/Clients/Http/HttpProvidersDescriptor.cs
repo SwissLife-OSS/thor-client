@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Thor.Core.Abstractions;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     /// <summary>
     /// Http event sources location

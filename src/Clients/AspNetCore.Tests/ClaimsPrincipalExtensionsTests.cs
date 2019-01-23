@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Claims;
-using Thor.Hosting.AspNetCore;
 using Xunit;
 
 namespace Thor.Hosting.AspNetCore.Tests

@@ -1,8 +1,9 @@
 ﻿using System;
+using Thor.Core;
 using Thor.Core.Session.Abstractions;
 using Xunit;
 
-namespace Thor.Core.Http.Tests
+namespace Thor.Extensions.Http.Tests
 {
     public class ClientRequestActivityTests
     {

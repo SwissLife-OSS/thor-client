@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core;
 using Thor.Core.Abstractions;
-using Thor.Core.Http;
 using Thor.Core.Session;
 using Thor.Core.Transmission.BlobStorage;
 using Thor.Core.Transmission.EventHub;
+using Thor.Extensions.Http;
 
 namespace Thor.Hosting.AspNetCore
 {

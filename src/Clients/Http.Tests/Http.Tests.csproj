@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Thor.Core.Http.Tests</AssemblyName>
-    <RootNamespace>Thor.Core.Http.Tests</RootNamespace>
+    <AssemblyName>Thor.Extensions.Http.Tests</AssemblyName>
+    <RootNamespace>Thor.Extensions.Http.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 

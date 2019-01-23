@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
 using Xunit;
 
-namespace Thor.Core.Http.Tests
+namespace Thor.Extensions.Http.Tests
 {
     public class ServiceCollectionExtensionsTests
     {

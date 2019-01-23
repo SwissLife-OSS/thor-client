@@ -3,9 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Http;
+using Thor.Core;
 using Thor.Core.Abstractions;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     /// <summary>
     /// A bunch of convenient extensions methods for

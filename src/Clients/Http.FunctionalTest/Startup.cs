@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Thor.Core.Http;
 
-namespace Http.FunctionalTest
+namespace Thor.Extensions.Http.FunctionalTest
 {
     public class Startup
     {

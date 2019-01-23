@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Http;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     internal class TracingHttpMessageHandlerBuilderFilter
         : IHttpMessageHandlerBuilderFilter

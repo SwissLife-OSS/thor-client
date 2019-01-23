@@ -1,8 +1,8 @@
 ﻿using System;
 using Thor.Core.Abstractions;
-using static Thor.Core.Http.RequestActivityEventSource;
+using static Thor.Extensions.Http.RequestActivityEventSource;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     /// <summary>
     /// A server-side HTTP request activity to group telemetry events across threads and processes.
