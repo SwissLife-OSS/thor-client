@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.Tracing;
 using Thor.Core.Abstractions;
 
-namespace Thor.Core
+namespace Thor.Core.Session
 {
     [EventSource(Name = EventSourceNames.ProviderActivation)]
     internal sealed class ProviderActivationEventSource

@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Thor.AspNetCore;
-using Thor.Core.Http;
 using Thor.Core.Session;
 using Thor.Core.Transmission.Abstractions;
 using Thor.Core.Transmission.BlobStorage;
+using Thor.Extensions.Http;
+using Thor.Hosting.AspNetCore;
 
-namespace Thor.HotChocolate.Tests
+namespace Thor.Extensions.HotChocolate.Tests
 {
     public class TestServerFactory
         : IDisposable

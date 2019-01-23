@@ -8,7 +8,7 @@ using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
-namespace Thor.Core.Http.Tests
+namespace Thor.Extensions.Http.Tests
 {
     public class RequestActivityEventSourceTests
     {

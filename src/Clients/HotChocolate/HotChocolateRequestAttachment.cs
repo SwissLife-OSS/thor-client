@@ -1,6 +1,6 @@
 ﻿using Thor.Core.Abstractions;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     internal class HotChocolateRequestAttachment
         : IAttachment

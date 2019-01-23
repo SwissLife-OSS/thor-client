@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Thor.AspNetCore.FunctionalTest.Controllers
+namespace Thor.Hosting.AspNetCore.FunctionalTest.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller

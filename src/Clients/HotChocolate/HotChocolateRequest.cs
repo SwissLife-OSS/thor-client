@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     internal class HotChocolateRequest
     {

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47</TargetFrameworks>
     <PackageId>Thor.Core.Http</PackageId>
-    <AssemblyName>Thor.Core.Http</AssemblyName>
-    <RootNamespace>Thor.Core.Http</RootNamespace>
+    <AssemblyName>Thor.Extensions.Http</AssemblyName>
+    <RootNamespace>Thor.Extensions.Http</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>Provides HTTP logger build on .Net Standard 2.0.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>

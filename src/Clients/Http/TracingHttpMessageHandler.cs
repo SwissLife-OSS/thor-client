@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Abstractions;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     /// <summary>
     /// A message handler for tracing which especially creates a client HTTP activity and sets the

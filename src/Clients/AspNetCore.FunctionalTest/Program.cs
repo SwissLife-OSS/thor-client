@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Thor.AspNetCore.FunctionalTest
+namespace Thor.Hosting.AspNetCore.FunctionalTest
 {
     public class Program
     {

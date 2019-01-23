@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Thor.AspNetCore.Tests
+namespace Thor.Hosting.AspNetCore.Tests
 {
     public class TestServerStartup
     {

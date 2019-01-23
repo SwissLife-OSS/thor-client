@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.DiagnosticAdapter;
 using Thor.Core.Abstractions;
-using Thor.Core.Http;
+using Thor.Extensions.Http;
 
-namespace Thor.AspNetCore
+namespace Thor.Hosting.AspNetCore
 {
     internal class HostingDiagnosticsListener
         : IDiagnosticsListener

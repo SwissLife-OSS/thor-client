@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyName>Thor.HotChocolate.FunctionalTest</AssemblyName>
-    <RootNamespace>Thor.HotChocolate.FunctionalTest</RootNamespace>
+    <AssemblyName>Thor.Extensions.HotChocolate.FunctionalTest</AssemblyName>
+    <RootNamespace>Thor.Extensions.HotChocolate.FunctionalTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

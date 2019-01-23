@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Abstractions;
 using Xunit;
 
-namespace Thor.Core.Http.Tests
+namespace Thor.Extensions.Http.Tests
 {
     public class TracingHttpMessageHandlerTests
     {

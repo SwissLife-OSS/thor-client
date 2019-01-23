@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
+using Thor.Core;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     [EventSource(Name = EventSourceNames.RequestActivity)]
     internal sealed class RequestActivityEventSource

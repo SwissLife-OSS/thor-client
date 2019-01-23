@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Xunit;
 
-namespace Thor.AspNetCore.Tests
+namespace Thor.Hosting.AspNetCore.Tests
 {
     public class ClaimsPrincipalExtensionsTests
     {

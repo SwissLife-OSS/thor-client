@@ -1,7 +1,7 @@
 ﻿using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     /// <summary>
     /// A bunch of convenient <see cref="AttachmentDispatcher"/> extensions.

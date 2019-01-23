@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Http.FunctionalTest.Controllers
+namespace Thor.Extensions.Http.FunctionalTest.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller

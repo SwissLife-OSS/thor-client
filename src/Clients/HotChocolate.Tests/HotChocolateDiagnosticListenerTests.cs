@@ -6,12 +6,11 @@ using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using CoreEventSources = Thor.Core.Abstractions.EventSourceNames;
-using HotChocolateEventSources = Thor.HotChocolate.EventSourceNames;
 using Thor.Core.Session.Abstractions;
 using Xunit;
+using CoreEventSources = Thor.Core.Abstractions.EventSourceNames;
 
-namespace Thor.HotChocolate.Tests
+namespace Thor.Extensions.HotChocolate.Tests
 {
     public class HotChocolateDiagnosticListenerTests
         : IClassFixture<TestServerFactory>
@@ -59,13 +58,14 @@ namespace Thor.HotChocolate.Tests
             // act
             HttpResponseMessage message =
                 await server.SendRequestAsync(request);
+            await Task.Delay(100);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, message.StatusCode);
             var transmitter = ProbeTransmitter.Instance;
             Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Start"));
-            Assert.True(transmitter.Contains(HotChocolateEventSources.HotChocolate, "Start"));
-            Assert.True(transmitter.Contains(HotChocolateEventSources.HotChocolate, "Stop"));
+            Assert.True(transmitter.Contains(EventSourceNames.HotChocolate, "Start"));
+            Assert.True(transmitter.Contains(EventSourceNames.HotChocolate, "Stop"));
             Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Stop"));
         }
 

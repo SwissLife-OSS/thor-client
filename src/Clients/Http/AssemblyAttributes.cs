@@ -1,4 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Thor.Core.Http.Tests")]
-[assembly:InternalsVisibleTo("Thor.HotChocoloate.Tests")]
+[assembly:InternalsVisibleTo("Thor.Extensions.Http.Tests")]
+[assembly:InternalsVisibleTo("Thor.Extensions.HotChocoloate.Tests")]

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Thor.Core.Http
+namespace Thor.Extensions.Http
 {
     internal static class IntExtensions
     {

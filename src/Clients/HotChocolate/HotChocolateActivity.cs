@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using Thor.Core.Abstractions;
-using static Thor.HotChocolate.HotChocolateActivityEventSource;
+using static Thor.Extensions.HotChocolate.HotChocolateActivityEventSource;
 
-namespace Thor.HotChocolate
+namespace Thor.Extensions.HotChocolate
 {
     /// <summary>
     /// A server-side HotChocolate request activity to group telemetry events across threads and processes.
@@ -27,7 +27,8 @@ namespace Thor.HotChocolate
         /// <inheritdoc />
         public Guid Id { get; } = Guid.NewGuid();
 
-        public static HotChocolateActivity Create(HotChocolateRequest request)
+        public static HotChocolateActivity Create(
+            HotChocolateRequest request)
         {
             HotChocolateActivity context = new HotChocolateActivity();
 
@@ -63,7 +64,8 @@ namespace Thor.HotChocolate
         /// Handles query validation error.
         /// </summary>
         /// <param name="errors">Validation errors.</param>
-        public void HandleValidationError(IReadOnlyCollection<IError> errors)
+        public void HandleValidationError(
+            IReadOnlyCollection<IError> errors)
         {
             if (errors == null)
             {

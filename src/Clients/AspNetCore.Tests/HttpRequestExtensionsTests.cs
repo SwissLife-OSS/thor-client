@@ -5,7 +5,7 @@ using Microsoft.Extensions.Primitives;
 using Thor.Core.Abstractions;
 using Xunit;
 
-namespace Thor.AspNetCore.Tests
+namespace Thor.Hosting.AspNetCore.Tests
 {
     public class HttpRequestExtensionsTests
     {
