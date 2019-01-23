@@ -2,16 +2,12 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.DiagnosticAdapter;
-using Thor.Core.Abstractions;
 using Thor.Extensions.Http;
 
 namespace Thor.Hosting.AspNetCore
 {
     internal class HostingDiagnosticsListener
-        : IDiagnosticsListener
     {
-        public string Name { get; } = "Microsoft.AspNetCore";
-
         [DiagnosticName("Microsoft.AspNetCore.Diagnostics.HandledException")]
         public void OnDiagnosticsHandledException(HttpContext httpContext, Exception exception)
         {

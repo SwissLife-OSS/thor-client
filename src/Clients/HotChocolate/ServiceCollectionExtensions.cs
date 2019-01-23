@@ -1,4 +1,5 @@
 ﻿using System;
+using HotChocolate.Execution.Instrumentation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Abstractions;
@@ -29,10 +30,11 @@ namespace Thor.Extensions.HotChocolate
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
+            
+            DiagnosticEvents.SubscribeWithAdapter(
+                new HotChocolateDiagnosticsListener());
 
             return services
-                .AddSingleton<IDiagnosticsListener,
-                    HotChocolateDiagnosticsListener>()
                 .AddSingleton<IProvidersDescriptor,
                     HotChocolateProvidersDescriptor>();
         }

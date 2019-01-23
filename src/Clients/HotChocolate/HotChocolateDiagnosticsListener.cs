@@ -4,21 +4,17 @@ using HotChocolate;
 using HotChocolate.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DiagnosticAdapter;
-using Thor.Core.Abstractions;
 
 namespace Thor.Extensions.HotChocolate
 {
     internal class HotChocolateDiagnosticsListener
-        : IDiagnosticsListener
     {
-        public string Name { get; } = "HotChocolate.Execution";
-
-        [DiagnosticName("Query")]
+        [DiagnosticName("HotChocolate.Execution.Query")]
         public virtual void OnQuery()
         {
         }
 
-        [DiagnosticName("Query.Start")]
+        [DiagnosticName("HotChocolate.Execution.Query.Start")]
         public virtual void OnQueryStart(
             IReadOnlyQueryRequest request)
         {
@@ -35,7 +31,7 @@ namespace Thor.Extensions.HotChocolate
             httpContext.Features.Set(activity);
         }
 
-        [DiagnosticName("Query.Stop")]
+        [DiagnosticName("HotChocolate.Execution.Query.Stop")]
         public virtual void OnQueryStop(
             IReadOnlyQueryRequest request)
         {
@@ -46,7 +42,7 @@ namespace Thor.Extensions.HotChocolate
                 ?.Dispose();
         }
 
-        [DiagnosticName("QueryError")]
+        [DiagnosticName("HotChocolate.Execution.Query.Error")]
         public virtual void OnQueryError(
             IReadOnlyQueryRequest request,
             Exception exception)
@@ -58,7 +54,7 @@ namespace Thor.Extensions.HotChocolate
                 ?.HandleQueryError(exception);
         }
 
-        [DiagnosticName("ValidationError")]
+        [DiagnosticName("HotChocolate.Execution.Validation.Error")]
         public virtual void OnValidationError(
             IReadOnlyQueryRequest request,
             IReadOnlyCollection<IError> errors)
