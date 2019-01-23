@@ -18,9 +18,12 @@ namespace Thor.Hosting.GenericHost
             ITelemetrySession session,
             IOptions<TracingConfiguration> configurationAccessor)
         {
-            _applicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
-            _configurationAccessor = configurationAccessor ?? throw new ArgumentNullException(nameof(configurationAccessor));
+            _applicationLifetime = applicationLifetime ??
+                throw new ArgumentNullException(nameof(applicationLifetime));
+            _session = session ??
+                throw new ArgumentNullException(nameof(session));
+            _configurationAccessor = configurationAccessor ??
+                throw new ArgumentNullException(nameof(configurationAccessor));
 
             RegisterForUnhandledExceptions();
         }
@@ -29,7 +32,8 @@ namespace Thor.Hosting.GenericHost
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                Application.UnhandledException(args.ExceptionObject as Exception);
+                Application.UnhandledException(
+                    args.ExceptionObject as Exception);
                 _session?.Dispose();
             };
 

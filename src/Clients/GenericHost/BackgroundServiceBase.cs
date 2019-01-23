@@ -12,18 +12,22 @@ namespace Thor.Hosting.GenericHost
     public abstract class BackgroundServiceBase : BackgroundService
     {
         /// <inheritdoc cref="BackgroundService"/>
-        protected abstract Task OnExecuteAsync(CancellationToken stoppingToken);
+        protected abstract Task OnExecuteAsync(
+            CancellationToken stoppingToken);
 
         /// <inheritdoc cref="BackgroundService"/>
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(
+            CancellationToken stoppingToken)
         {
             try
             {
-                await OnExecuteAsync(stoppingToken);
+                await OnExecuteAsync(stoppingToken)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 Application.UnhandledException(ex);
+                throw;
             }
         }
     }

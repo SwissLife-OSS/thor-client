@@ -5,11 +5,12 @@ using Microsoft.Extensions.Hosting;
 
 namespace Thor.Hosting.GenericHost.FunctionalTest
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> configuration = new Dictionary<string, string>
+            Dictionary<string, string> configuration =
+                new Dictionary<string, string>
             {
                 {"Tracing:ApplicationId", "999"},
                 {"Tracing:Level", "Verbose"},

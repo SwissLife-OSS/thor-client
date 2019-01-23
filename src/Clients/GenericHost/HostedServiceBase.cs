@@ -12,34 +12,42 @@ namespace Thor.Hosting.GenericHost
     public abstract class HostedServiceBase : IHostedService
     {
         /// <inheritdoc cref="IHostedService"/>
-        protected abstract Task OnStartAsync(CancellationToken cancellationToken);
+        protected abstract Task OnStartAsync(
+            CancellationToken cancellationToken);
 
         /// <inheritdoc cref="IHostedService"/>
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(
+            CancellationToken cancellationToken)
         {
             try
             {
-                await OnStartAsync(cancellationToken);
+                await OnStartAsync(cancellationToken)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 Application.UnhandledException(ex);
+                throw;
             }
         }
 
         /// <inheritdoc cref="IHostedService"/>
-        protected abstract Task OnStopAsync(CancellationToken cancellationToken);
+        protected abstract Task OnStopAsync(
+            CancellationToken cancellationToken);
 
         /// <inheritdoc cref="IHostedService"/>
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(
+            CancellationToken cancellationToken)
         {
             try
             {
-                await OnStopAsync(cancellationToken);
+                await OnStopAsync(cancellationToken)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 Application.UnhandledException(ex);
+                throw;
             }
         }
     }

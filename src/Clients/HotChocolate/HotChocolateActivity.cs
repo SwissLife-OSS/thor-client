@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using Thor.Core.Abstractions;
+using static Thor.Extensions.HotChocolate.HotChocolateActivityEventSource;
 
 namespace Thor.Extensions.HotChocolate
 {
@@ -26,19 +27,20 @@ namespace Thor.Extensions.HotChocolate
         /// <inheritdoc />
         public Guid Id { get; } = Guid.NewGuid();
 
-        public static HotChocolateActivity Create(HotChocolateRequest request)
+        public static HotChocolateActivity Create(
+            HotChocolateRequest request)
         {
             HotChocolateActivity context = new HotChocolateActivity();
 
             if (context._relatedActivityId != Guid.Empty)
             {
-                HotChocolateActivityEventSource.Log.BeginTransfer(context._relatedActivityId);
-                HotChocolateActivityEventSource.Log.Start(context.Id, request);
-                HotChocolateActivityEventSource.Log.EndTransfer(context.Id, context._relatedActivityId);
+                Log.BeginTransfer(context._relatedActivityId);
+                Log.Start(context.Id, request);
+                Log.EndTransfer(context.Id, context._relatedActivityId);
             }
             else
             {
-                HotChocolateActivityEventSource.Log.Start(context.Id, request);
+                Log.Start(context.Id, request);
             }
 
             return context;
@@ -55,14 +57,15 @@ namespace Thor.Extensions.HotChocolate
                 throw new ArgumentNullException(nameof(exception));
             }
 
-            HotChocolateActivityEventSource.Log.OnQueryError(exception);
+            Log.OnQueryError(exception);
         }
 
         /// <summary>
         /// Handles query validation error.
         /// </summary>
         /// <param name="errors">Validation errors.</param>
-        public void HandleValidationError(IReadOnlyCollection<IError> errors)
+        public void HandleValidationError(
+            IReadOnlyCollection<IError> errors)
         {
             if (errors == null)
             {
@@ -71,7 +74,7 @@ namespace Thor.Extensions.HotChocolate
 
             if (errors.Count > 0)
             {
-                HotChocolateActivityEventSource.Log.OnValidationError(errors
+                Log.OnValidationError(errors
                     .Select(e =>
                         new HotChocolateError
                         {
@@ -98,7 +101,7 @@ namespace Thor.Extensions.HotChocolate
             {
                 if (disposing)
                 {
-                    HotChocolateActivityEventSource.Log.Stop(Id);
+                    Log.Stop(Id);
 
                     _popWhenDispose?.Dispose();
                     _popWhenDispose = null;
