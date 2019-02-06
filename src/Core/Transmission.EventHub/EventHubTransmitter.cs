@@ -16,12 +16,10 @@ namespace Thor.Core.Transmission.EventHub
     {
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
-        private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
         private readonly ITransmissionBuffer<EventData> _buffer;
         private readonly ITransmissionSender<EventData> _sender;
         private bool _disposed;
         private Task _transmission;
-        private bool _transmissionStopped;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
@@ -92,7 +90,7 @@ namespace Thor.Core.Transmission.EventHub
         {
             _transmission = Task.Run(async () =>
             {
-                while (!_disposeToken.IsCancellationRequested || _buffer.Count > 0)
+                while (!_disposeToken.IsCancellationRequested)
                 {
                     await SendBatchAsync().ConfigureAwait(false);
 
@@ -101,9 +99,6 @@ namespace Thor.Core.Transmission.EventHub
                         await Task.Delay(_delay).ConfigureAwait(false);
                     }
                 }
-
-                _transmissionStopped = true;
-                _resetEvent.Set();
             });
         }
 
@@ -114,16 +109,12 @@ namespace Thor.Core.Transmission.EventHub
         {
             if (!_disposed)
             {
-                _disposeToken.Cancel();
-
-                if (!_transmissionStopped)
+                _transmission.GetAwaiter().OnCompleted(() =>
                 {
-                    _resetEvent.Wait(TimeSpan.FromSeconds(5));
-                }
+                    _disposeToken?.Dispose();
+                });
 
-                _disposeToken?.Dispose();
-                _resetEvent?.Dispose();
-                _transmission?.Dispose();
+                _disposeToken.Cancel();
                 _disposed = true;
             }
         }
