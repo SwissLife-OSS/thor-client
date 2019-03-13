@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using HotChocolate;
 using Thor.Core;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
@@ -17,6 +18,7 @@ namespace Thor.Extensions.HotChocolate
         private const int EndTransferEventId = 4;
         private const int ValidationErrorEventId = 5;
         private const int QueryErrorEventId = 6;
+        private const int ResolverErrorEventId = 7;
 
         public static HotChocolateActivityEventSource Log { get; }
             = new HotChocolateActivityEventSource();
@@ -130,6 +132,29 @@ namespace Thor.Extensions.HotChocolate
         [Event(QueryErrorEventId, Level = EventLevel.Error,
             Message = "Query Error", Version = 1)]
         private void OnQueryError(int applicationId, Guid activityId,
+            string attachmentId)
+        {
+            WriteEventWithAttachment(
+                QueryErrorEventId, applicationId, activityId, attachmentId);
+        }
+
+        /// <summary>
+        /// A query error occurred during query execution.
+        /// </summary>
+        [NonEvent]
+        public void OnResolverError(IReadOnlyCollection<IError> errors)
+        {
+            AttachmentId attachmentId = AttachmentId.NewId();
+            ObjectAttachment attachment = AttachmentFactory
+                .Create(attachmentId, nameof(errors), errors);
+
+            AttachmentDispatcher.Instance.Dispatch(attachment);
+            OnResolverError(Application.Id, ActivityStack.Id, attachmentId);
+        }
+
+        [Event(ResolverErrorEventId, Level = EventLevel.Error,
+            Message = "Resolver Error", Version = 1)]
+        private void OnResolverError(int applicationId, Guid activityId,
             string attachmentId)
         {
             WriteEventWithAttachment(
