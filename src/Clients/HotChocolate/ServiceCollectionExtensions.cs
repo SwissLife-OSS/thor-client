@@ -10,16 +10,15 @@ namespace Thor.Extensions.HotChocolate
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.
     /// </summary>
-    public static class QueryExecutionBuilderExtensions
+    public static class ServiceCollectionExtensions
     {
         /// <summary>
         /// Adds <c>Thor HotChocolate Tracing</c> services to the service collection
         /// </summary>
         /// <param name="builder">A <see cref="IQueryExecutionBuilder"/> instance.</param>
-        /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IQueryExecutionBuilder AddHotCocolateTracing(
-            this IQueryExecutionBuilder builder)
+        public static IServiceCollection AddHotCocolateTracing(
+            this IServiceCollection builder)
         {
             if (builder == null)
             {
@@ -27,7 +26,8 @@ namespace Thor.Extensions.HotChocolate
             }
 
             return builder
-                .AddDiagnosticObserver<HotChocolateDiagnosticsListener>();
+                .AddDiagnosticObserver<HotChocolateDiagnosticsListener>()
+                .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>();
         }
     }
 }

@@ -9,6 +9,7 @@ using HotChocolate.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Thor.Analyzer;
 using Thor.Core.Session.Abstractions;
 using Xunit;
 using CoreEventSources = Thor.Core.Abstractions.EventSourceNames;
@@ -27,6 +28,15 @@ namespace Thor.Extensions.HotChocolate.Tests
         private TestServerFactory TestServerFactory { get; set; }
 
         private HttpContext Context { get; set; }
+
+        [Fact]
+        public void HotChocolateActivity_EventSource_IsValid()
+        {
+            var analyzer = new EventSourceAnalyzer();
+            Report report = analyzer.Inspect(
+                HotChocolateActivityEventSource.Log);
+            Assert.False(report.HasErrors);
+        }
 
         [Fact]
         public async Task HotChocolateActivity_Exist()

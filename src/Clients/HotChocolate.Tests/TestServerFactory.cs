@@ -33,23 +33,15 @@ namespace Thor.Extensions.HotChocolate.Tests
                 {
                     services
                         .AddSingleton<IStartupFilter, TestStartupFilter>()
-                        .AddGraphQL(
-                            Schema.Create(c =>
-                                c.RegisterQueryType<QueryType>())
-                                .MakeExecutable(b =>
-                                    b.UseDefaultPipeline(
-                                        new QueryExecutionOptions
-                                        {
-                                            TracingPreference = TracingPreference.Always
-                                        })
-                                        .AddHotCocolateTracing()))
+                        .AddGraphQL(c => c.RegisterQueryType<QueryType>())
                         .AddSingleton<IAttachmentTransmissionInitializer>(
                             provider =>
                                 new AttachmentTransmissionInitializer(
                                     Enumerable.Empty<ITelemetryAttachmentTransmitter>()))
                         .AddTracingHttpMessageHandler(configuration)
                         .AddInProcessTelemetrySession(configuration)
-                        .AddTracingMinimum(configuration);
+                        .AddTracingMinimum(configuration)
+                        .AddHotCocolateTracing();
                 });
 
             var server = new TestServer(builder);
