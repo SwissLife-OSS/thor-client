@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using HotChocolate.AspNetCore;
+using HotChocolate.Execution;
+using HotChocolate.Execution.Configuration;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -31,7 +33,7 @@ namespace Thor.Extensions.HotChocolate.Tests
                 {
                     services
                         .AddSingleton<IStartupFilter, TestStartupFilter>()
-                        .AddGraphQL(c => { c.RegisterQueryType<QueryType>(); })
+                        .AddGraphQL(c => c.RegisterQueryType<QueryType>())
                         .AddSingleton<IAttachmentTransmissionInitializer>(
                             provider =>
                                 new AttachmentTransmissionInitializer(
@@ -39,7 +41,7 @@ namespace Thor.Extensions.HotChocolate.Tests
                         .AddTracingHttpMessageHandler(configuration)
                         .AddInProcessTelemetrySession(configuration)
                         .AddTracingMinimum(configuration)
-                        .AddHotCocolateTracing(configuration);
+                        .AddHotCocolateTracing();
                 });
 
             var server = new TestServer(builder);
@@ -63,7 +65,7 @@ namespace Thor.Extensions.HotChocolate.Tests
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
             descriptor.Field("customProperty")
-                .Resolver(ctx => ctx.CustomProperty<string>("foo"));
+                .Resolver(ctx => "foo");
         }
     }
 }

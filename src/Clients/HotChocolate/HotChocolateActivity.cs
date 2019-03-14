@@ -61,6 +61,20 @@ namespace Thor.Extensions.HotChocolate
         }
 
         /// <summary>
+        /// Handles query error.
+        /// </summary>
+        /// <param name="exception">Query exception.</param>
+        public void HandlesResolverErrors(IReadOnlyCollection<IError> errors)
+        {
+            if (errors == null)
+            {
+                throw new ArgumentNullException(nameof(errors));
+            }
+
+            Log.OnResolverError(errors);
+        }
+
+        /// <summary>
         /// Handles query validation error.
         /// </summary>
         /// <param name="errors">Validation errors.</param>

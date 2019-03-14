@@ -1,69 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HotChocolate;
 using HotChocolate.Execution;
+using HotChocolate.Execution.Instrumentation;
+using HotChocolate.Resolvers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DiagnosticAdapter;
-using Thor.Core.Abstractions;
 
 namespace Thor.Extensions.HotChocolate
 {
-    internal class HotChocolateDiagnosticsListener
-        : IDiagnosticsListener
+    public class HotChocolateDiagnosticsListener
+        : IDiagnosticObserver
     {
-        public string Name { get; } = "HotChocolate.Execution";
-
-        [DiagnosticName("Query")]
-        public virtual void OnQuery()
+        public HotChocolateDiagnosticsListener()
         {
+
         }
 
-        [DiagnosticName("Query.Start")]
-        public virtual void OnQueryStart(
-            IReadOnlyQueryRequest request)
+        [DiagnosticName("HotChocolate.Execution.Query")]
+        public void QueryExecute()
         {
-            HttpContext httpContext = request.GetHttpContext();
+            // This method is required to enable recording "Query.Start" and
+            // "Query.Stop" diagnostic events. Do not write code in here.
+        }
+
+        [DiagnosticName("HotChocolate.Execution.Query.Start")]
+        public void BeginQueryExecute(IQueryContext context)
+        {
+            HttpContext httpContext = context.GetHttpContext();
             HotChocolateActivity activity = HotChocolateActivity
                 .Create(
                     new HotChocolateRequest
                     {
-                        Query = request.Query,
-                        OperationName = request.OperationName,
-                        VariableValues = request.VariableValues
+                        Query = context.Request.Query,
+                        OperationName = context.Request.OperationName,
+                        VariableValues = context.Request.VariableValues
                     });
 
             httpContext.Features.Set(activity);
         }
 
-        [DiagnosticName("Query.Stop")]
-        public virtual void OnQueryStop(
-            IReadOnlyQueryRequest request)
+        [DiagnosticName("HotChocolate.Execution.Query.Stop")]
+        public void EndQueryExecute(
+            IQueryContext context,
+            IExecutionResult result)
         {
-            request
+            context
                 .GetHttpContext()
                 .Features
                 .Get<HotChocolateActivity>()
                 ?.Dispose();
         }
 
-        [DiagnosticName("QueryError")]
+        [DiagnosticName("HotChocolate.Execution.Query.Error")]
         public virtual void OnQueryError(
-            IReadOnlyQueryRequest request,
+            IQueryContext context,
             Exception exception)
         {
-            request
+            context
                 .GetHttpContext()
                 .Features
                 .Get<HotChocolateActivity>()
                 ?.HandleQueryError(exception);
         }
 
-        [DiagnosticName("ValidationError")]
+        [DiagnosticName("HotChocolate.Execution.Resolver.Error")]
+        public virtual void OnResolverError(
+            IResolverContext context,
+            IEnumerable<IError> errors)
+        {
+            context
+                .GetHttpContext()
+                .Features
+                .Get<HotChocolateActivity>()
+                ?.HandlesResolverErrors(errors.ToList());
+        }
+
+        [DiagnosticName("HotChocolate.Execution.Validation.Error")]
         public virtual void OnValidationError(
-            IReadOnlyQueryRequest request,
+            IQueryContext context,
             IReadOnlyCollection<IError> errors)
         {
-            request
+            context
                 .GetHttpContext()
                 .Features
                 .Get<HotChocolateActivity>()

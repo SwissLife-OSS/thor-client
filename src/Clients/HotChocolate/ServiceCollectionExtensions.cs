@@ -1,4 +1,6 @@
 ﻿using System;
+using HotChocolate.Execution;
+using HotChocolate.Execution.Instrumentation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Abstractions;
@@ -13,28 +15,19 @@ namespace Thor.Extensions.HotChocolate
         /// <summary>
         /// Adds <c>Thor HotChocolate Tracing</c> services to the service collection
         /// </summary>
-        /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
-        /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
+        /// <param name="builder">A <see cref="IQueryExecutionBuilder"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
         public static IServiceCollection AddHotCocolateTracing(
-            this IServiceCollection services,
-            IConfiguration configuration)
+            this IServiceCollection builder)
         {
-            if (services == null)
+            if (builder == null)
             {
-                throw new ArgumentNullException(nameof(services));
+                throw new ArgumentNullException(nameof(builder));
             }
 
-            if (configuration == null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
-
-            return services
-                .AddSingleton<IDiagnosticsListener,
-                    HotChocolateDiagnosticsListener>()
-                .AddSingleton<IProvidersDescriptor,
-                    HotChocolateProvidersDescriptor>();
+            return builder
+                .AddDiagnosticObserver<HotChocolateDiagnosticsListener>()
+                .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,8 +79,8 @@ namespace Thor.Hosting.AspNetCore
             {
                 builder
                     .ApplicationServices
-                    .GetService<DiagnosticsListenerInitializer>()
-                    .Start();
+                    .GetRequiredService<DiagnosticListener>()
+                    .SubscribeWithAdapter(new HostingDiagnosticsListener());
 
                 next(builder);
             };

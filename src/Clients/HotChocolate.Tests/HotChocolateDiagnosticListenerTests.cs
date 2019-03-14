@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using HotChocolate;
 using HotChocolate.AspNetCore;
+using HotChocolate.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Thor.Analyzer;
 using Thor.Core.Session.Abstractions;
 using Xunit;
 using CoreEventSources = Thor.Core.Abstractions.EventSourceNames;
@@ -22,6 +26,7 @@ namespace Thor.Extensions.HotChocolate.Tests
         }
 
         private TestServerFactory TestServerFactory { get; set; }
+
         private HttpContext Context { get; set; }
 
         [Fact]
@@ -69,17 +74,15 @@ namespace Thor.Extensions.HotChocolate.Tests
             Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Stop"));
         }
 
-        
         private TestServer CreateTestServer(string path = null)
         {
             return TestServerFactory.Create(
                 new QueryMiddlewareOptions
                 {
                     Path = path ?? "/",
-                    OnCreateRequest = (context, request, properties, ct) =>
+                    OnCreateRequest = (context, builder, ct) =>
                     {
                         Context = context;
-                        properties["foo"] = "bar";
                         return Task.CompletedTask;
                     }
                 }, CreateConfiguration());
