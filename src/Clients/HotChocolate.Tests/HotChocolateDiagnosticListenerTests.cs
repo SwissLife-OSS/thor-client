@@ -30,15 +30,6 @@ namespace Thor.Extensions.HotChocolate.Tests
         private HttpContext Context { get; set; }
 
         [Fact]
-        public void HotChocolateActivity_EventSource_IsValid()
-        {
-            var analyzer = new EventSourceAnalyzer();
-            Report report = analyzer.Inspect(
-                HotChocolateActivityEventSource.Log);
-            Assert.False(report.HasErrors);
-        }
-
-        [Fact]
         public async Task HotChocolateActivity_Exist()
         {
             // arrange

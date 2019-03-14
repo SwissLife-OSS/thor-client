@@ -158,7 +158,7 @@ namespace Thor.Extensions.HotChocolate
             string attachmentId)
         {
             WriteEventWithAttachment(
-                QueryErrorEventId, applicationId, activityId, attachmentId);
+                ResolverErrorEventId, applicationId, activityId, attachmentId);
         }
 
         public static class Tasks
