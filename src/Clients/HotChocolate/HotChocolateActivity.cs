@@ -79,7 +79,8 @@ namespace Thor.Extensions.HotChocolate
                         {
                             Message = e.Message,
                             Code = e.Code,
-                            Path = e.Path
+                            Path = e.Path,
+                            Exception = e.Exception
                         }));
             }
         }
