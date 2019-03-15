@@ -142,11 +142,12 @@ namespace Thor.Extensions.HotChocolate
         /// A query error occurred during query execution.
         /// </summary>
         [NonEvent]
-        public void OnResolverError(IReadOnlyCollection<IError> errors)
+        public void OnResolverError(IEnumerable<HotChocolateError> errors)
         {
             AttachmentId attachmentId = AttachmentId.NewId();
-            ObjectAttachment attachment = AttachmentFactory
-                .Create(attachmentId, nameof(errors), errors);
+            HotChocolateErrorsAttachment attachment = AttachmentFactory
+                .Create<HotChocolateErrorsAttachment, IEnumerable<HotChocolateError>>(
+                    attachmentId, nameof(errors), errors);
 
             AttachmentDispatcher.Instance.Dispatch(attachment);
             OnResolverError(Application.Id, ActivityStack.Id, attachmentId);
