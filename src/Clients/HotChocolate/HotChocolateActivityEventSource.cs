@@ -185,8 +185,8 @@ namespace Thor.Extensions.HotChocolate
                     data[0].Size = 4;
                     data[1].DataPointer = (IntPtr)(&activityId);
                     data[1].Size = 16;
-                    data[4].DataPointer = (IntPtr)attachmentIdBytes;
-                    data[4].Size = ((attachmentId.Length + 1) * 2);
+                    data[2].DataPointer = (IntPtr)attachmentIdBytes;
+                    data[2].Size = ((attachmentId.Length + 1) * 2);
 
                     WriteEventCore(eventId, dataCount, data);
                 }
