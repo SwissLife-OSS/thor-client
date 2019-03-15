@@ -7,7 +7,7 @@ namespace Thor.Extensions.HotChocolate
     {
         public string Message { get; set; }
         public string Code { get; set; }
-        public IReadOnlyList<object> Path { get; set; }
+        public IReadOnlyCollection<object> Path { get; set; }
         public Exception Exception { get; set; }
     }
 }
