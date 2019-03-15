@@ -71,7 +71,18 @@ namespace Thor.Extensions.HotChocolate
                 throw new ArgumentNullException(nameof(errors));
             }
 
-            Log.OnResolverError(errors);
+            if (errors.Count > 0)
+            {
+                Log.OnResolverError(errors
+                    .Select(e =>
+                        new HotChocolateError
+                        {
+                            Message = e.Message,
+                            Code = e.Code,
+                            Path = e.Path,
+                            Exception = e.Exception
+                        }));
+            }
         }
 
         /// <summary>
@@ -93,7 +104,8 @@ namespace Thor.Extensions.HotChocolate
                         new HotChocolateError
                         {
                             Message = e.Message,
-                            Code = e.Code
+                            Code = e.Code,
+                            Path = e.Path
                         }));
             }
         }

@@ -142,11 +142,12 @@ namespace Thor.Extensions.HotChocolate
         /// A query error occurred during query execution.
         /// </summary>
         [NonEvent]
-        public void OnResolverError(IReadOnlyCollection<IError> errors)
+        public void OnResolverError(IEnumerable<HotChocolateError> errors)
         {
             AttachmentId attachmentId = AttachmentId.NewId();
-            ObjectAttachment attachment = AttachmentFactory
-                .Create(attachmentId, nameof(errors), errors);
+            HotChocolateErrorsAttachment attachment = AttachmentFactory
+                .Create<HotChocolateErrorsAttachment, IEnumerable<HotChocolateError>>(
+                    attachmentId, nameof(errors), errors);
 
             AttachmentDispatcher.Instance.Dispatch(attachment);
             OnResolverError(Application.Id, ActivityStack.Id, attachmentId);
@@ -185,8 +186,8 @@ namespace Thor.Extensions.HotChocolate
                     data[0].Size = 4;
                     data[1].DataPointer = (IntPtr)(&activityId);
                     data[1].Size = 16;
-                    data[4].DataPointer = (IntPtr)attachmentIdBytes;
-                    data[4].Size = ((attachmentId.Length + 1) * 2);
+                    data[2].DataPointer = (IntPtr)attachmentIdBytes;
+                    data[2].Size = ((attachmentId.Length + 1) * 2);
 
                     WriteEventCore(eventId, dataCount, data);
                 }
