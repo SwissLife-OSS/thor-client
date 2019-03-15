@@ -1,4 +1,7 @@
-﻿namespace Thor.Extensions.HotChocolate
+﻿using System;
+using System.Collections.Generic;
+
+namespace Thor.Extensions.HotChocolate
 {
     internal class HotChocolateError
     {
