@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using HotChocolate;
@@ -31,13 +32,16 @@ namespace Thor.Extensions.HotChocolate
         [NonEvent]
         public void Start(Guid activityId, HotChocolateRequest request)
         {
-            AttachmentId attachmentId = AttachmentId.NewId();
-            IAttachment attachment = AttachmentFactory
-                .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
-                    attachmentId, nameof(request), request);
+            if (IsEnabled())
+            {
+                AttachmentId attachmentId = AttachmentId.NewId();
+                IAttachment attachment = AttachmentFactory
+                    .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
+                        attachmentId, nameof(request), request);
 
-            AttachmentDispatcher.Instance.Dispatch(attachment);
-            Start(Application.Id, activityId, attachmentId);
+                AttachmentDispatcher.Instance.Dispatch(attachment);
+                Start(Application.Id, activityId, attachmentId);
+            }
         }
 
         [Event(StartEventId, Level = EventLevel.LogAlways, Message = "Query start",
@@ -54,7 +58,10 @@ namespace Thor.Extensions.HotChocolate
         [NonEvent]
         public void Stop(Guid activityId)
         {
-            Stop(Application.Id, activityId);
+            if (IsEnabled())
+            {
+                Stop(Application.Id, activityId);
+            }
         }
 
         [Event(StopEventId, Level = EventLevel.LogAlways, Message = "Query stop",
@@ -67,7 +74,10 @@ namespace Thor.Extensions.HotChocolate
         [NonEvent]
         public void BeginTransfer(Guid relatedActivityId)
         {
-            BeginTransfer(Application.Id, relatedActivityId);
+            if (IsEnabled())
+            {
+                BeginTransfer(Application.Id, relatedActivityId);
+            }
         }
 
         [Event(BeginTransferEventId, Level = EventLevel.LogAlways, Message = "Begin activity transfer",
@@ -80,7 +90,10 @@ namespace Thor.Extensions.HotChocolate
         [NonEvent]
         public void EndTransfer(Guid activityId, Guid relatedActivityId)
         {
-            EndTransfer(relatedActivityId, Application.Id, activityId);
+            if (IsEnabled())
+            {
+                EndTransfer(relatedActivityId, Application.Id, activityId);
+            }
         }
 
         [Event(EndTransferEventId, Level = EventLevel.LogAlways, Message = "End activity transfer",
@@ -95,24 +108,38 @@ namespace Thor.Extensions.HotChocolate
         /// A validation error occurred during query execution.
         /// </summary>
         [NonEvent]
-        public void OnValidationError(IEnumerable<HotChocolateError> errors)
+        public void OnValidationError(
+            string message,
+            HotChocolateRequest request,
+            IEnumerable<HotChocolateError> errors)
         {
-            AttachmentId attachmentId = AttachmentId.NewId();
-            HotChocolateErrorsAttachment attachment = AttachmentFactory
-                .Create<HotChocolateErrorsAttachment, IEnumerable<HotChocolateError>>(
-                    attachmentId, nameof(errors), errors);
+            if (IsEnabled())
+            {
+                AttachmentId attachmentId = AttachmentId.NewId();
 
-            AttachmentDispatcher.Instance.Dispatch(attachment);
-            OnValidationError(Application.Id, ActivityStack.Id, attachmentId);
+                IAttachment requestAttachment = AttachmentFactory
+                    .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
+                        attachmentId, nameof(request), request);
+
+                HotChocolateErrorsAttachment errorAttachments = AttachmentFactory
+                    .Create<HotChocolateErrorsAttachment, IEnumerable<HotChocolateError>>(
+                        attachmentId, nameof(errors), errors);
+
+                AttachmentDispatcher.Instance.Dispatch(errorAttachments, requestAttachment);
+
+                OnValidationError(Application.Id, ActivityStack.Id,
+                    attachmentId, message);
+            }
         }
 
         [Event(ValidationErrorEventId, Level = EventLevel.Error,
-            Message = "Validation Error", Version = 1)]
+            Message = "{3}", Version = 2)]
         private void OnValidationError(int applicationId, Guid activityId,
-            string attachmentId)
+            string attachmentId, string message)
         {
-            WriteEventWithAttachment(
-                ValidationErrorEventId, applicationId, activityId, attachmentId);
+            WriteEventWithAttachmentAndMessage(
+                ValidationErrorEventId, applicationId,
+                activityId, attachmentId, message);
         }
 
         /// <summary>
@@ -121,45 +148,69 @@ namespace Thor.Extensions.HotChocolate
         [NonEvent]
         public void OnQueryError(Exception exception)
         {
-            AttachmentId attachmentId = AttachmentId.NewId();
-            ExceptionAttachment attachment = AttachmentFactory
-                .Create(attachmentId, nameof(exception), exception);
+            if (IsEnabled())
+            {
+                AttachmentId attachmentId = AttachmentId.NewId();
 
-            AttachmentDispatcher.Instance.Dispatch(attachment);
-            OnQueryError(Application.Id, ActivityStack.Id, attachmentId);
+                ExceptionAttachment attachment = AttachmentFactory
+                    .Create(attachmentId, nameof(exception), exception);
+
+                AttachmentDispatcher.Instance.Dispatch(attachment);
+
+                OnQueryError(
+                    Application.Id, ActivityStack.Id,
+                    attachmentId, exception.Message);
+            }
         }
 
         [Event(QueryErrorEventId, Level = EventLevel.Error,
-            Message = "Query Error", Version = 1)]
+            Message = "{3}", Version = 2)]
         private void OnQueryError(int applicationId, Guid activityId,
-            string attachmentId)
+            string attachmentId, string message)
         {
-            WriteEventWithAttachment(
-                QueryErrorEventId, applicationId, activityId, attachmentId);
+            WriteEventWithAttachmentAndMessage(
+                QueryErrorEventId, applicationId, activityId,
+                attachmentId, message);
         }
 
         /// <summary>
         /// A query error occurred during query execution.
         /// </summary>
         [NonEvent]
-        public void OnResolverError(IEnumerable<HotChocolateError> errors)
+        public void OnResolverError(
+            string message,
+            HotChocolateRequest request,
+            IEnumerable<HotChocolateError> errors)
         {
-            AttachmentId attachmentId = AttachmentId.NewId();
-            HotChocolateErrorsAttachment attachment = AttachmentFactory
-                .Create<HotChocolateErrorsAttachment, IEnumerable<HotChocolateError>>(
-                    attachmentId, nameof(errors), errors);
+            if (IsEnabled())
+            {
+                AttachmentId attachmentId = AttachmentId.NewId();
 
-            AttachmentDispatcher.Instance.Dispatch(attachment);
-            OnResolverError(Application.Id, ActivityStack.Id, attachmentId);
+                IAttachment requestAttachment = AttachmentFactory
+                    .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
+                        attachmentId, nameof(request), request);
+
+                HotChocolateErrorsAttachment errorAttachments = AttachmentFactory
+                    .Create<HotChocolateErrorsAttachment, IEnumerable<HotChocolateError>>(
+                        attachmentId, nameof(errors), errors);
+
+                AttachmentDispatcher.Instance.Dispatch(
+                    errorAttachments, requestAttachment);
+
+                OnResolverError(
+                    Application.Id, ActivityStack.Id,
+                    attachmentId, message);
+            }
         }
 
         [Event(ResolverErrorEventId, Level = EventLevel.Error,
-            Message = "Resolver Error", Version = 1)]
+            Message = "{3}", Version = 2)]
         private void OnResolverError(int applicationId, Guid activityId,
-            string attachmentId)
+            string attachmentId, string message)
         {
-            WriteEventWithAttachment(
-                ResolverErrorEventId, applicationId, activityId, attachmentId);
+            WriteEventWithAttachmentAndMessage(
+                ResolverErrorEventId, applicationId, activityId,
+                attachmentId, message);
         }
 
         public static class Tasks
@@ -173,24 +224,48 @@ namespace Thor.Extensions.HotChocolate
         private unsafe void WriteEventWithAttachment(
             int eventId, int applicationId, Guid activityId, string attachmentId)
         {
-            if (IsEnabled())
+            StringExtensions.SetToEmptyIfNull(ref attachmentId);
+
+            fixed (char* attachmentIdBytes = attachmentId)
             {
-                StringExtensions.SetToEmptyIfNull(ref attachmentId);
+                const short dataCount = 3;
+                EventData* data = stackalloc EventData[dataCount];
 
-                fixed (char* attachmentIdBytes = attachmentId)
-                {
-                    const short dataCount = 3;
-                    EventData* data = stackalloc EventData[dataCount];
+                data[0].DataPointer = (IntPtr)(&applicationId);
+                data[0].Size = 4;
+                data[1].DataPointer = (IntPtr)(&activityId);
+                data[1].Size = 16;
+                data[2].DataPointer = (IntPtr)attachmentIdBytes;
+                data[2].Size = ((attachmentId.Length + 1) * 2);
 
-                    data[0].DataPointer = (IntPtr)(&applicationId);
-                    data[0].Size = 4;
-                    data[1].DataPointer = (IntPtr)(&activityId);
-                    data[1].Size = 16;
-                    data[2].DataPointer = (IntPtr)attachmentIdBytes;
-                    data[2].Size = ((attachmentId.Length + 1) * 2);
+                WriteEventCore(eventId, dataCount, data);
+            }
+        }
 
-                    WriteEventCore(eventId, dataCount, data);
-                }
+        [NonEvent]
+        private unsafe void WriteEventWithAttachmentAndMessage(
+            int eventId, int applicationId, Guid activityId,
+            string attachmentId, string message)
+        {
+            StringExtensions.SetToEmptyIfNull(ref attachmentId);
+            StringExtensions.SetToEmptyIfNull(ref message);
+
+            fixed (char* messageBytes = message)
+            fixed (char* attachmentIdBytes = attachmentId)
+            {
+                const short dataCount = 3;
+                EventData* data = stackalloc EventData[dataCount];
+
+                data[0].DataPointer = (IntPtr)(&applicationId);
+                data[0].Size = 4;
+                data[1].DataPointer = (IntPtr)(&activityId);
+                data[1].Size = 16;
+                data[2].DataPointer = (IntPtr)attachmentIdBytes;
+                data[2].Size = ((attachmentId.Length + 1) * 2);
+                data[3].DataPointer = (IntPtr)messageBytes;
+                data[3].Size = ((message.Length + 1) * 2);
+
+                WriteEventCore(eventId, dataCount, data);
             }
         }
     }
