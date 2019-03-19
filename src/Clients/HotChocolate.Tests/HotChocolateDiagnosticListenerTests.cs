@@ -77,9 +77,14 @@ namespace Thor.Extensions.HotChocolate.Tests
         [Fact]
         public void Inspect_HotChocolateActivityEventSource()
         {
+            // arrange
             var analyzer = new EventSourceAnalyzer();
+
+            // act
             Report report = analyzer.Inspect(
                 HotChocolateActivityEventSource.Log);
+
+            // assert
             Assert.False(report.HasErrors);
         }
 
