@@ -28,15 +28,18 @@ namespace Thor.Extensions.HotChocolate
         [DiagnosticName("HotChocolate.Execution.Query.Start")]
         public void BeginQueryExecute(IQueryContext context)
         {
+            HotChocolateRequest request = new HotChocolateRequest
+            {
+                Query = context.Request.Query,
+                OperationName = context.Request.OperationName,
+                VariableValues = context.Request.VariableValues
+            };
+
+            context.ContextData[nameof(HotChocolateRequest)] = request;
+
             HttpContext httpContext = context.GetHttpContext();
-            HotChocolateActivity activity = HotChocolateActivity
-                .Create(
-                    new HotChocolateRequest
-                    {
-                        Query = context.Request.Query,
-                        OperationName = context.Request.OperationName,
-                        VariableValues = context.Request.VariableValues
-                    });
+            HotChocolateActivity activity =
+                HotChocolateActivity.Create(request);
 
             httpContext.Features.Set(activity);
         }
@@ -74,7 +77,9 @@ namespace Thor.Extensions.HotChocolate
                 .GetHttpContext()
                 .Features
                 .Get<HotChocolateActivity>()
-                ?.HandlesResolverErrors(errors.ToList());
+                ?.HandlesResolverErrors(
+                    TryGetRequest(context.ContextData),
+                    errors.ToList());
         }
 
         [DiagnosticName("HotChocolate.Execution.Validation.Error")]
@@ -86,7 +91,21 @@ namespace Thor.Extensions.HotChocolate
                 .GetHttpContext()
                 .Features
                 .Get<HotChocolateActivity>()
-                ?.HandleValidationError(errors);
+                ?.HandleValidationError(
+                    TryGetRequest(context.ContextData),
+                    errors.ToList());
+        }
+
+        private static HotChocolateRequest TryGetRequest(
+            IDictionary<string, object> contextData)
+        {
+            if (contextData.TryGetValue(nameof(HotChocolateRequest),
+                out object request)
+                && request is HotChocolateRequest r)
+            {
+                return r;
+            }
+            return null;
         }
     }
 }

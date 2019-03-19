@@ -61,11 +61,19 @@ namespace Thor.Extensions.HotChocolate
         }
 
         /// <summary>
-        /// Handles query error.
+        /// Handles resolver error tracing.
         /// </summary>
-        /// <param name="exception">Query exception.</param>
-        public void HandlesResolverErrors(IReadOnlyCollection<IError> errors)
+        /// <param name="request">The request details.</param>
+        /// <param name="errors">The error details.</param>
+        public void HandlesResolverErrors(
+            HotChocolateRequest request,
+            IReadOnlyCollection<IError> errors)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             if (errors == null)
             {
                 throw new ArgumentNullException(nameof(errors));
@@ -73,23 +81,33 @@ namespace Thor.Extensions.HotChocolate
 
             if (errors.Count > 0)
             {
-                Log.OnResolverError(errors
-                    .Select(e =>
+                List<HotChocolateError> formattedErrors =
+                     errors.Select(e =>
                         new HotChocolateError
                         {
                             Message = e.Message,
                             Code = e.Code,
                             Path = e.Path,
                             Exception = e.Exception
-                        }));
+                        }).ToList();
+
+                HotChocolateError firstError = formattedErrors[0];
+
+                string message = firstError.Exception == null
+                    ? firstError.Message
+                    : firstError.Exception.Message;
+
+                Log.OnResolverError(message, request, formattedErrors);
             }
         }
 
         /// <summary>
-        /// Handles query validation error.
+        /// Handles validation error tracing.
         /// </summary>
-        /// <param name="errors">Validation errors.</param>
+        /// <param name="request">The request details.</param>
+        /// <param name="errors">The error details.</param>
         public void HandleValidationError(
+            HotChocolateRequest request,
             IReadOnlyCollection<IError> errors)
         {
             if (errors == null)
@@ -99,14 +117,23 @@ namespace Thor.Extensions.HotChocolate
 
             if (errors.Count > 0)
             {
-                Log.OnValidationError(errors
-                    .Select(e =>
+                List<HotChocolateError> formattedErrors =
+                     errors.Select(e =>
                         new HotChocolateError
                         {
                             Message = e.Message,
                             Code = e.Code,
-                            Path = e.Path
-                        }));
+                            Path = e.Path,
+                            Exception = e.Exception
+                        }).ToList();
+
+                HotChocolateError firstError = formattedErrors[0];
+
+                string message = firstError.Exception == null
+                    ? firstError.Message
+                    : firstError.Exception.Message;
+
+                Log.OnValidationError(message, request, formattedErrors);
             }
         }
 
