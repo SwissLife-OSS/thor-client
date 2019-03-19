@@ -44,8 +44,12 @@ namespace Thor.Extensions.HotChocolate
             }
         }
 
-        [Event(StartEventId, Level = EventLevel.LogAlways, Message = "Query start",
-            Task = Tasks.Server, Opcode = EventOpcode.Start, Version = 1)]
+        [Event(StartEventId,
+            Level = EventLevel.LogAlways,
+            Message = "Query start",
+            Task = Tasks.Server,
+            Opcode = EventOpcode.Start,
+            Version = 1)]
         private void Start(int applicationId, Guid activityId, string attachmentId)
         {
             WriteEventWithAttachment(
@@ -80,8 +84,12 @@ namespace Thor.Extensions.HotChocolate
             }
         }
 
-        [Event(BeginTransferEventId, Level = EventLevel.LogAlways, Message = "Begin activity transfer",
-            Task = Tasks.Transfer, Opcode = EventOpcode.Send, Version = 1)]
+        [Event(BeginTransferEventId,
+            Level = EventLevel.LogAlways,
+            Message = "Begin activity transfer",
+            Task = Tasks.Transfer,
+            Opcode = EventOpcode.Send,
+            Version = 1)]
         private void BeginTransfer(int applicationId, Guid activityId)
         {
             WriteEmptyCore(BeginTransferEventId, applicationId, activityId);
@@ -96,8 +104,12 @@ namespace Thor.Extensions.HotChocolate
             }
         }
 
-        [Event(EndTransferEventId, Level = EventLevel.LogAlways, Message = "End activity transfer",
-            Task = Tasks.Transfer, Opcode = EventOpcode.Receive, Version = 1)]
+        [Event(EndTransferEventId,
+            Level = EventLevel.LogAlways,
+            Message = "End activity transfer",
+            Task = Tasks.Transfer,
+            Opcode = EventOpcode.Receive,
+            Version = 1)]
         private void EndTransfer(Guid relatedActivityId, int applicationId, Guid activityId)
         {
             WriteEmptyWithRelatedActivityIdCore(EndTransferEventId, relatedActivityId,
@@ -132,9 +144,12 @@ namespace Thor.Extensions.HotChocolate
             }
         }
 
-        [Event(ValidationErrorEventId, Level = EventLevel.Error,
-            Message = "{3}", Version = 2)]
-        private void OnValidationError(int applicationId, Guid activityId,
+        [Event(ValidationErrorEventId,
+            Level = EventLevel.Error,
+            Message = "{3}",
+            Version = 2)]
+        private void OnValidationError(
+            int applicationId, Guid activityId,
             string attachmentId, string message)
         {
             WriteEventWithAttachmentAndMessage(
@@ -163,8 +178,10 @@ namespace Thor.Extensions.HotChocolate
             }
         }
 
-        [Event(QueryErrorEventId, Level = EventLevel.Error,
-            Message = "{3}", Version = 2)]
+        [Event(QueryErrorEventId,
+            Level = EventLevel.Error,
+            Message = "{3}",
+            Version = 2)]
         private void OnQueryError(int applicationId, Guid activityId,
             string attachmentId, string message)
         {
@@ -203,8 +220,10 @@ namespace Thor.Extensions.HotChocolate
             }
         }
 
-        [Event(ResolverErrorEventId, Level = EventLevel.Error,
-            Message = "{3}", Version = 2)]
+        [Event(ResolverErrorEventId,
+            Level = EventLevel.Error,
+            Message = "{3}",
+            Version = 2)]
         private void OnResolverError(int applicationId, Guid activityId,
             string attachmentId, string message)
         {
@@ -253,7 +272,7 @@ namespace Thor.Extensions.HotChocolate
             fixed (char* messageBytes = message)
             fixed (char* attachmentIdBytes = attachmentId)
             {
-                const short dataCount = 3;
+                const short dataCount = 4;
                 EventData* data = stackalloc EventData[dataCount];
 
                 data[0].DataPointer = (IntPtr)(&applicationId);

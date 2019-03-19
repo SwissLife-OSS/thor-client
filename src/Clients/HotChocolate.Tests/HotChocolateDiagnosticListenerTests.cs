@@ -74,6 +74,20 @@ namespace Thor.Extensions.HotChocolate.Tests
             Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Stop"));
         }
 
+        [Fact]
+        public void Inspect_HotChocolateActivityEventSource()
+        {
+            // arrange
+            var analyzer = new EventSourceAnalyzer();
+
+            // act
+            Report report = analyzer.Inspect(
+                HotChocolateActivityEventSource.Log);
+
+            // assert
+            Assert.False(report.HasErrors);
+        }
+
         private TestServer CreateTestServer(string path = null)
         {
             return TestServerFactory.Create(
