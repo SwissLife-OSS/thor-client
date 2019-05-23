@@ -10,15 +10,15 @@ namespace Thor.Extensions.HotChocolate
         internal static HttpContext GetHttpContext(
             this IQueryContext queryContext)
         {
-            return queryContext
-                .Services
-                .GetService<HttpContext>();
+            return (HttpContext)queryContext
+                .ContextData[nameof(HttpContext)];
         }
 
         internal static HttpContext GetHttpContext(
             this IResolverContext resolverContext)
         {
-            return resolverContext.Service<HttpContext>();
+            return (HttpContext)resolverContext
+                .ContextData[nameof(HttpContext)];
         }
     }
 }
