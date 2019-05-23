@@ -64,6 +64,7 @@ namespace Thor.Extensions.HotChocolate.Tests
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
+            descriptor.Field("Query");
             descriptor.Field("customProperty")
                 .Resolver(ctx => "foo");
         }
