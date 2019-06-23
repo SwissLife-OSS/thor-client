@@ -1,9 +1,9 @@
 ﻿using System;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.BlobStorage

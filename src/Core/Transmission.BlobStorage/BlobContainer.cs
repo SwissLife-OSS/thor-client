@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.BlobStorage
