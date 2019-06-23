@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
@@ -9,8 +9,6 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
 {
     public class BlobContainerTests
     {
-        #region Constructor
-
         [Fact(DisplayName = "Constructor: Should throw an argument null exception for container")]
         public void Constructor_ContainerNull()
         {
@@ -40,10 +38,6 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             Assert.Null(Record.Exception(verify));
         }
 
-        #endregion
-
-        #region UploadAsync
-
         [Fact(DisplayName = "UploadAsync: Should throw an argument null exception for descriptor")]
         public async Task UploadAsync_DescriptorNull()
         {
@@ -61,7 +55,5 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             // arrange
             await Assert.ThrowsAsync<ArgumentNullException>("descriptor", verify).ConfigureAwait(false);
         }
-
-        #endregion
     }
 }
