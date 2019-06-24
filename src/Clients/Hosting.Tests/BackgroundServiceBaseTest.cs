@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Thor.Core;
 using Thor.Core.Abstractions;
@@ -17,11 +16,7 @@ namespace Thor.Extensions.Hosting.Tests
         {
             // arrange
             var backgroundService = new BackgroundServiceTest();
-            var host = new HostBuilder()
-                .ConfigureServices(services =>
-                    services.AddTransient<IHostedService, BackgroundServiceTest>(
-                        provider => backgroundService))
-                .Build();
+            var host = HostHelper.Build(backgroundService);
 
             // act
             var hostRun = host.RunAsync();
@@ -32,15 +27,11 @@ namespace Thor.Extensions.Hosting.Tests
         }
 
         [Fact]
-        public void BackgroundServiceBase_WhenException_ShouldFail()
+        public void BackgroundServiceBase_WhenException_ShouldFireEvent()
         {
             // arrange
             var backgroundService = new BackgroundServiceTest {ShouldFail = true};
-            var host = new HostBuilder()
-                .ConfigureServices(services =>
-                    services.AddTransient<IHostedService, BackgroundServiceTest>(
-                        provider => backgroundService))
-                .Build();
+            var host = HostHelper.Build(backgroundService);
             List<TelemetryEvent> events = new List<TelemetryEvent>();
 
             // act
