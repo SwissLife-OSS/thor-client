@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using HotChocolate.AspNetCore;
+using HotChocolate.AspNetCore.Interceptors;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types;
@@ -25,7 +26,8 @@ namespace Thor.Extensions.HotChocolate.Tests
 
         public TestServer Create(
             QueryMiddlewareOptions options,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            OnCreateRequestAsync onCreateRequestAsync)
         {
             IWebHostBuilder builder = new WebHostBuilder()
                 .Configure(app => app.UseGraphQL(options))
@@ -41,6 +43,7 @@ namespace Thor.Extensions.HotChocolate.Tests
                         .AddTracingHttpMessageHandler(configuration)
                         .AddInProcessTelemetrySession(configuration)
                         .AddTracingMinimum(configuration)
+                        .AddQueryRequestInterceptor(onCreateRequestAsync)
                         .AddHotCocolateTracing();
                 });
 
