@@ -30,7 +30,7 @@ namespace Thor.Extensions.HotChocolate
         {
             HotChocolateRequest request = new HotChocolateRequest
             {
-                Query = context.Request.Query,
+                Query = context.Request.Query.ToString(),
                 OperationName = context.Request.OperationName,
                 VariableValues = context.Request.VariableValues
             };
