@@ -1,8 +1,7 @@
 ﻿using System;
 using HotChocolate.Execution;
-using HotChocolate.Execution.Instrumentation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Thor.Core.Abstractions;
 
 namespace Thor.Extensions.HotChocolate
@@ -17,7 +16,7 @@ namespace Thor.Extensions.HotChocolate
         /// </summary>
         /// <param name="builder">A <see cref="IQueryExecutionBuilder"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddHotCocolateTracing(
+        public static IServiceCollection AddHotChocolateTracing(
             this IServiceCollection builder)
         {
             if (builder == null)
@@ -25,9 +24,12 @@ namespace Thor.Extensions.HotChocolate
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            return builder
+            builder
                 .AddDiagnosticObserver<HotChocolateDiagnosticsListener>()
-                .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>();
+                .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>()
+                .TryAddSingleton<IRequestFormatter, DefaultRequestFormatter>();
+
+            return builder;
         }
     }
 }

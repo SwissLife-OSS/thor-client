@@ -1,11 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Thor.Extensions.HotChocolate
 {
-    internal class HotChocolateRequest
+    public class HotChocolateRequest
     {
-        public string Query { get; set; }
-        public string OperationName { get; set; }
-        public IReadOnlyDictionary<string, object> VariableValues { get; set; }
+        public HotChocolateRequest(
+            string query,
+            string operationName,
+            IReadOnlyDictionary<string, object> variableValues)
+        {
+            Query = query
+                ?? throw new ArgumentNullException(nameof(query));
+            OperationName = operationName
+                ?? throw new ArgumentNullException(nameof(operationName));
+            VariableValues = variableValues
+                ?? throw new ArgumentNullException(nameof(variableValues));
+        }
+
+        public string Query { get; }
+        public string OperationName { get; }
+        public IReadOnlyDictionary<string, object> VariableValues { get; }
     }
 }
