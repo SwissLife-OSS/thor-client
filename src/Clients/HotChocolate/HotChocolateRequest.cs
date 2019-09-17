@@ -10,12 +10,9 @@ namespace Thor.Extensions.HotChocolate
             string operationName,
             IReadOnlyDictionary<string, object> variableValues)
         {
-            Query = query
-                ?? throw new ArgumentNullException(nameof(query));
-            OperationName = operationName
-                ?? throw new ArgumentNullException(nameof(operationName));
-            VariableValues = variableValues
-                ?? throw new ArgumentNullException(nameof(variableValues));
+            Query = query;
+            OperationName = operationName;
+            VariableValues = variableValues;
         }
 
         public string Query { get; }
