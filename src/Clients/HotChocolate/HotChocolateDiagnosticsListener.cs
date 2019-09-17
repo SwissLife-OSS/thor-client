@@ -13,38 +13,32 @@ namespace Thor.Extensions.HotChocolate
     public class HotChocolateDiagnosticsListener
         : IDiagnosticObserver
     {
-        public HotChocolateDiagnosticsListener()
-        {
+        private readonly IRequestFormatter _formatter;
 
+        public HotChocolateDiagnosticsListener(IRequestFormatter formatter)
+        {
+            _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         }
 
-        [DiagnosticName("HotChocolate.Execution.Query")]
+        [DiagnosticName(DiagnosticNames.Query)]
         public void QueryExecute()
         {
             // This method is required to enable recording "Query.Start" and
             // "Query.Stop" diagnostic events. Do not write code in here.
         }
 
-        [DiagnosticName("HotChocolate.Execution.Query.Start")]
+        [DiagnosticName(DiagnosticNames.StartQuery)]
         public void BeginQueryExecute(IQueryContext context)
         {
-            HotChocolateRequest request = new HotChocolateRequest
-            {
-                Query = context.Request.Query.ToString(),
-                OperationName = context.Request.OperationName,
-                VariableValues = context.Request.VariableValues
-            };
-
+            HotChocolateRequest request = _formatter.Serialize(context.Request);
             context.ContextData[nameof(HotChocolateRequest)] = request;
 
             HttpContext httpContext = context.GetHttpContext();
-            HotChocolateActivity activity =
-                HotChocolateActivity.Create(request);
-
+            HotChocolateActivity activity = HotChocolateActivity.Create(request);
             httpContext.Features.Set(activity);
         }
 
-        [DiagnosticName("HotChocolate.Execution.Query.Stop")]
+        [DiagnosticName(DiagnosticNames.StopQuery)]
         public void EndQueryExecute(
             IQueryContext context,
             IExecutionResult result)

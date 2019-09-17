@@ -44,7 +44,7 @@ namespace Thor.Extensions.HotChocolate.Tests
                         .AddInProcessTelemetrySession(configuration)
                         .AddTracingMinimum(configuration)
                         .AddQueryRequestInterceptor(onCreateRequestAsync)
-                        .AddHotCocolateTracing();
+                        .AddHotChocolateTracing();
                 });
 
             var server = new TestServer(builder);
