@@ -27,8 +27,7 @@ namespace Thor.Extensions.HotChocolate
         /// <inheritdoc />
         public Guid Id { get; } = Guid.NewGuid();
 
-        public static HotChocolateActivity Create(
-            HotChocolateRequest request)
+        public static HotChocolateActivity Create(HotChocolateRequest request)
         {
             HotChocolateActivity context = new HotChocolateActivity();
 

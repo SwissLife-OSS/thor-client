@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HotChocolate;
 using HotChocolate.AspNetCore;
-using HotChocolate.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +33,7 @@ namespace Thor.Extensions.HotChocolate.Tests
             TestServer server = CreateTestServer();
             var request = new
             {
-                Query = @"{ customProperty }"
+                query = @"{ customProperty }"
             };
 
             // act
@@ -57,7 +54,7 @@ namespace Thor.Extensions.HotChocolate.Tests
             TestServer server = CreateTestServer();
             var request = new
             {
-                Query = @"{ customProperty }"
+                query = @"{ customProperty }"
             };
 
             // act
@@ -94,12 +91,13 @@ namespace Thor.Extensions.HotChocolate.Tests
                 new QueryMiddlewareOptions
                 {
                     Path = path ?? "/",
-                    OnCreateRequest = (context, builder, ct) =>
-                    {
-                        Context = context;
-                        return Task.CompletedTask;
-                    }
-                }, CreateConfiguration());
+                },
+                CreateConfiguration(),
+                (context, builder, ct) =>
+                {
+                    Context = context;
+                    return Task.CompletedTask;
+                });
         }
 
         private IConfiguration CreateConfiguration()
