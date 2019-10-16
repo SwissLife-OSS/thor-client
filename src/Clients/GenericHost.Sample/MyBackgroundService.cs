@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Thor.Extensions.Hosting;
 
 namespace Thor.Hosting.GenericHost.FunctionalTest
 {

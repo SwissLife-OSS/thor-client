@@ -14,6 +14,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\GenericHost\GenericHost.csproj" />
+    <ProjectReference Include="..\Hosting\Hosting.csproj" />
   </ItemGroup>
 
 </Project>
