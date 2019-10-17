@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>Thor.Hosting.AspNetCore.Tests</AssemblyName>
     <RootNamespace>Thor.Hosting.AspNetCore.Tests</RootNamespace>
