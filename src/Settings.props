@@ -26,8 +26,4 @@
     <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net461'">
-    <DefineConstants>$(DefineConstants);NET461</DefineConstants>
-  </PropertyGroup>
-
 </Project>
