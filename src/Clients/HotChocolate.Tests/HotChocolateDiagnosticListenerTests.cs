@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,13 +25,13 @@ namespace Thor.Extensions.HotChocolate.Tests
 
         private TestServerFactory TestServerFactory { get; set; }
 
-        private HttpContext Context { get; set; }
-
         [Fact]
         public async Task HotChocolateActivity_Exist()
         {
             // arrange
-            TestServer server = CreateTestServer();
+            HotChocolateActivity hotChocolateActivity = null;
+            TestServer server = CreateTestServer(ctx =>
+                hotChocolateActivity = ctx.Features.Get<HotChocolateActivity>());
             var request = new
             {
                 query = @"{ customProperty }"
@@ -42,8 +43,6 @@ namespace Thor.Extensions.HotChocolate.Tests
 
             // assert
             Assert.Equal(HttpStatusCode.OK, message.StatusCode);
-            var hotChocolateActivity = Context
-                .Features.Get<HotChocolateActivity>();
             Assert.NotNull(hotChocolateActivity);
         }
 
@@ -85,7 +84,9 @@ namespace Thor.Extensions.HotChocolate.Tests
             Assert.False(report.HasErrors);
         }
 
-        private TestServer CreateTestServer(string path = null)
+        private TestServer CreateTestServer(
+            Action<HttpContext> onRequestFinish = null,
+            string path = null)
         {
             return TestServerFactory.Create(
                 new QueryMiddlewareOptions
@@ -93,11 +94,7 @@ namespace Thor.Extensions.HotChocolate.Tests
                     Path = path ?? "/",
                 },
                 CreateConfiguration(),
-                (context, builder, ct) =>
-                {
-                    Context = context;
-                    return Task.CompletedTask;
-                });
+                onRequestFinish);
         }
 
         private IConfiguration CreateConfiguration()
