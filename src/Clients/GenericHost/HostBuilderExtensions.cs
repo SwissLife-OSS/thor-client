@@ -17,12 +17,12 @@ namespace Thor.Hosting.GenericHost
             IHost host = hostBuilder
                 .ConfigureServices((context, builder) =>
                     builder.AddTracing(context.Configuration))
-                .Build();   
+                .Build();
 
-            host
-                .Services
-                .GetService<HostTelemetryInitializer>()
-                .Initialize();
+            var hostTelemetryInitializer = host.Services
+                .GetService<HostTelemetryInitializer>();
+            
+            hostTelemetryInitializer?.Initialize();
 
             host.RunSafe();
         }
