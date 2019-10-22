@@ -179,11 +179,11 @@ namespace Thor.Core.Abstractions.Tests
                 await writer.FlushAsync();
 
                 // act
-                Action verify = () => attachment = AttachmentFactory
-                    .Create<ObjectAttachment>(correlationId, payloadName, payloadValue);
+                Func<Task> verify = async () => attachment = await AttachmentFactory
+                    .CreateAsync<ObjectAttachment>(correlationId, payloadName, payloadValue);
 
                 // assert
-                Assert.Null(Record.Exception(verify));
+                Assert.Null(await Record.ExceptionAsync(verify));
                 Assert.Null(attachment);
             }
         }
@@ -203,17 +203,17 @@ namespace Thor.Core.Abstractions.Tests
                 await writer.FlushAsync();
 
                 // act
-                Action verify = () => attachment = AttachmentFactory
-                    .Create<ObjectAttachment>(correlationId, payloadName, payloadValue);
+                Func<Task> verify = async () => attachment = await AttachmentFactory
+                    .CreateAsync<ObjectAttachment>(correlationId, payloadName, payloadValue);
 
                 // assert
-                Assert.Null(Record.Exception(verify));
+                Assert.Null(await Record.ExceptionAsync(verify));
                 Assert.Null(attachment);
             }
         }
 
         [Fact(DisplayName = "Create: Should not throw an argument null exception for payloadValue")]
-        public void Dispatch_Stream_PayloadValueNull()
+        public async Task Dispatch_Stream_PayloadValueNull()
         {
             // arrange
             ObjectAttachment attachment = null;
@@ -222,11 +222,11 @@ namespace Thor.Core.Abstractions.Tests
             Stream payloadValue = null;
 
             // act
-            Action verify = () => attachment = AttachmentFactory
-                .Create<ObjectAttachment>(correlationId, payloadName, payloadValue);
+            Func<Task> verify = async () => attachment = await AttachmentFactory
+                .CreateAsync<ObjectAttachment>(correlationId, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
             Assert.Null(attachment);
         }
 
@@ -245,11 +245,11 @@ namespace Thor.Core.Abstractions.Tests
                 await writer.FlushAsync();
 
                 // act
-                Action verify = () => attachment = AttachmentFactory
-                    .Create<ObjectAttachment>(correlationId, payloadName, payloadValue);
+                Func<Task> verify = async () => attachment = await AttachmentFactory
+                    .CreateAsync<ObjectAttachment>(correlationId, payloadName, payloadValue);
 
                 // assert
-                Assert.Null(Record.Exception(verify));
+                Assert.Null(await Record.ExceptionAsync(verify));
                 Assert.NotNull(attachment);
                 Assert.IsType<ObjectAttachment>(attachment);
                 Assert.Equal("\"Value-919\"", Encoding.UTF8.GetString(attachment.Value));

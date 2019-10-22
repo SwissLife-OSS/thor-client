@@ -65,7 +65,7 @@ namespace Thor.Core.Abstractions
         /// <param name="payloadName">A payload name.</param>
         /// <param name="payloadValue">A payload value.</param>
         /// <returns>A new attachment instance.</returns>
-        public static async Task<TAttachment> Create<TAttachment>(
+        public static async Task<TAttachment> CreateAsync<TAttachment>(
             AttachmentId id,
             string payloadName,
             Stream payloadValue)
