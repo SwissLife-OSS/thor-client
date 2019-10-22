@@ -50,7 +50,7 @@ namespace Thor.Hosting.AspNetCore
             if (activity != null)
             {
                 activity.SetResponse(httpContext.Response.StatusCode, httpContext.User.GetId());
-                activity.Dispose();
+                activity.Dispose(); // TODO: Can we call here DisposeAsync() ?
             }
         }
 

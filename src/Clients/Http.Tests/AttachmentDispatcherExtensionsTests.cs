@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
@@ -14,7 +15,7 @@ namespace Thor.Extensions.Http.Tests
         #region Dispatch (HttpRequest)
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument null exception for dispatcher")]
-        public void Dispatch_HttpRequest_DispatcherNull()
+        public async Task Dispatch_HttpRequest_DispatcherNull()
         {
             // arrange
             AttachmentId id = AttachmentId.NewId();
@@ -23,14 +24,14 @@ namespace Thor.Extensions.Http.Tests
             HttpRequest payloadValue = new HttpRequest();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument exception for id")]
-        public void Dispatch_HttpRequest_IdEmpty()
+        public async Task Dispatch_HttpRequest_IdEmpty()
         {
             // arrange
             AttachmentId id = AttachmentId.Empty;
@@ -39,14 +40,14 @@ namespace Thor.Extensions.Http.Tests
             HttpRequest payloadValue = new HttpRequest();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument null exception for payloadName")]
-        public void Dispatch_HttpRequest_PayloadNameNull()
+        public async Task Dispatch_HttpRequest_PayloadNameNull()
         {
             // arrange
             AttachmentId id = AttachmentId.NewId();
@@ -55,14 +56,14 @@ namespace Thor.Extensions.Http.Tests
             HttpRequest payloadValue = new HttpRequest();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument null exception for payloadValue")]
-        public void Dispatch_HttpRequest_PayloadValueNull()
+        public async Task Dispatch_HttpRequest_PayloadValueNull()
         {
             // arrange
             AttachmentId id = AttachmentId.NewId();
@@ -71,15 +72,15 @@ namespace Thor.Extensions.Http.Tests
             HttpRequest payloadValue = null;
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
 
         }
 
         [Fact(DisplayName = "Dispatch: Should call the internal dispatch method once when the body is empty")]
-        public void Dispatch_HttpRequest_BodyEmpty()
+        public async Task Dispatch_HttpRequest_BodyEmpty()
         {
             // arrange
             int callCount = 0;
@@ -105,15 +106,15 @@ namespace Thor.Extensions.Http.Tests
             HttpRequest payloadValue = new HttpRequest();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
             Assert.Equal(1, callCount);
         }
 
         [Fact(DisplayName = "Dispatch: Should call the internal dispatch method twice")]
-        public void Dispatch_HttpRequest()
+        public async Task Dispatch_HttpRequest()
         {
             // arrange
             int callCount = 0;
@@ -142,10 +143,10 @@ namespace Thor.Extensions.Http.Tests
             };
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
             Assert.Equal(2, callCount);
         }
 
@@ -154,7 +155,7 @@ namespace Thor.Extensions.Http.Tests
         #region Dispatch (HttpResponse)
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument null exception for dispatcher")]
-        public void Dispatch_HttpResponse_DispatcherNull()
+        public async Task Dispatch_HttpResponse_DispatcherNull()
         {
             // arrange
             AttachmentId id = AttachmentId.NewId();
@@ -163,14 +164,14 @@ namespace Thor.Extensions.Http.Tests
             HttpResponse payloadValue = new HttpResponse();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument exception for id")]
-        public void Dispatch_HttpResponse_IdEmpty()
+        public async Task Dispatch_HttpResponse_IdEmpty()
         {
             // arrange
             AttachmentId id = AttachmentId.Empty;
@@ -179,14 +180,14 @@ namespace Thor.Extensions.Http.Tests
             HttpResponse payloadValue = new HttpResponse();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument null exception for payloadName")]
-        public void Dispatch_HttpResponse_PayloadNameNull()
+        public async Task Dispatch_HttpResponse_PayloadNameNull()
         {
             // arrange
             AttachmentId id = AttachmentId.NewId();
@@ -195,14 +196,14 @@ namespace Thor.Extensions.Http.Tests
             HttpResponse payloadValue = new HttpResponse();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         [Fact(DisplayName = "Dispatch: Should not throw an argument null exception for payloadValue")]
-        public void Dispatch_HttpResponse_PayloadValueNull()
+        public async Task Dispatch_HttpResponse_PayloadValueNull()
         {
             // arrange
             AttachmentId id = AttachmentId.NewId();
@@ -211,15 +212,15 @@ namespace Thor.Extensions.Http.Tests
             HttpResponse payloadValue = null;
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
 
         }
 
         [Fact(DisplayName = "Dispatch: Should call the internal dispatch method once when the body is empty")]
-        public void Dispatch_HttpResponse_BodyEmpty()
+        public async Task Dispatch_HttpResponse_BodyEmpty()
         {
             // arrange
             int callCount = 0;
@@ -245,15 +246,15 @@ namespace Thor.Extensions.Http.Tests
             HttpResponse payloadValue = new HttpResponse();
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
             Assert.Equal(1, callCount);
         }
 
         [Fact(DisplayName = "Dispatch: Should call the internal dispatch method once because the body dispatch is disabled")]
-        public void Dispatch_HttpResponse()
+        public async Task Dispatch_HttpResponse()
         {
             // arrange
             int callCount = 0;
@@ -282,10 +283,10 @@ namespace Thor.Extensions.Http.Tests
             };
 
             // act
-            Action verify = () => dispatcher.Dispatch(id, payloadName, payloadValue);
+            Func<Task> verify = async () => await dispatcher.DispatchAsync(id, payloadName, payloadValue);
 
             // assert
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
             Assert.Equal(1, callCount);
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Threading.Tasks;
 using Thor.Analyzer;
 using Thor.Core.Abstractions;
 using Thor.Core.Session.Abstractions;
@@ -105,9 +106,9 @@ namespace Thor.Extensions.Http.Tests
         }
 
         [Fact(DisplayName = "Start: Should log a server reqeust start (HttpRequest)")]
-        public void Start_HttpRequest()
+        public async Task Start_HttpRequest()
         {
-            RequestActivityEventSource.Log.Listen(listener =>
+            await RequestActivityEventSource.Log.ListenAsync(async listener =>
             {
                 // arrange
                 const string expectedMessage = "Request GET http://127.0.0.1/api/events";
@@ -119,7 +120,7 @@ namespace Thor.Extensions.Http.Tests
                 };
 
                 // act
-                RequestActivityEventSource.Log.Start(activityId, request);
+                await RequestActivityEventSource.Log.StartAsync(activityId, request);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -159,9 +160,9 @@ namespace Thor.Extensions.Http.Tests
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop (HttpResponse)")]
-        public void Stop_HttpResponse()
+        public async Task Stop_HttpResponse()
         {
-            RequestActivityEventSource.Log.Listen(listener =>
+            await RequestActivityEventSource.Log.ListenAsync(async listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 200 OK";
@@ -174,7 +175,7 @@ namespace Thor.Extensions.Http.Tests
                 };
 
                 // act
-                RequestActivityEventSource.Log.Stop(activityId, response);
+                await RequestActivityEventSource.Log.StopAsync(activityId, response);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -189,9 +190,9 @@ namespace Thor.Extensions.Http.Tests
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop without a status code and user id (HttpResponse)")]
-        public void Stop_HttpResponse_NoStatusAndUserId()
+        public async Task Stop_HttpResponse_NoStatusAndUserId()
         {
-            RequestActivityEventSource.Log.Listen(listener =>
+            await RequestActivityEventSource.Log.ListenAsync(async listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -203,7 +204,7 @@ namespace Thor.Extensions.Http.Tests
                 };
 
                 // act
-                RequestActivityEventSource.Log.Stop(activityId, response);
+                await RequestActivityEventSource.Log.StopAsync(activityId, response);
 
                 // assert
                 TelemetryEvent firstItem = listener
@@ -218,9 +219,9 @@ namespace Thor.Extensions.Http.Tests
         }
 
         [Fact(DisplayName = "Stop: Should log a server reqeust stop with response null (HttpResponse)")]
-        public void Stop_HttpResponse_Null()
+        public async Task Stop_HttpResponse_Null()
         {
-            RequestActivityEventSource.Log.Listen(listener =>
+            await RequestActivityEventSource.Log.ListenAsync(async listener =>
             {
                 // arrange
                 const string expectedMessage = "Response 0 UNKNOWN";
@@ -228,7 +229,7 @@ namespace Thor.Extensions.Http.Tests
                 HttpResponse response = null;
 
                 // act
-                RequestActivityEventSource.Log.Stop(activityId, response);
+                await RequestActivityEventSource.Log.StopAsync(activityId, response);
 
                 // assert
                 TelemetryEvent firstItem = listener

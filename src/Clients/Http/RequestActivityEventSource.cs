@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
+using System.Threading.Tasks;
 using Thor.Core;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
@@ -84,14 +85,14 @@ namespace Thor.Extensions.Http
         /// Starts processing a request on the server-side.
         /// </summary>
         [NonEvent]
-        public void Start(Guid activityId, HttpRequest request)
+        public async Task StartAsync(Guid activityId, HttpRequest request)
         {
             if (IsEnabled())
             {
                 AttachmentId id = AttachmentId.NewId();
 
                 Start(Application.Id, activityId, request.Method, request.Uri, id);
-                AttachmentDispatcher.Instance.Dispatch(id, nameof(request), request);
+                await AttachmentDispatcher.Instance.DispatchAsync(id, nameof(request), request);
             }
         }
 
@@ -119,7 +120,7 @@ namespace Thor.Extensions.Http
         /// Stops processing a request on the server-side.
         /// </summary>
         [NonEvent]
-        public void Stop(Guid activityId, HttpResponse response)
+        public async Task StopAsync(Guid activityId, HttpResponse response)
         {
             if (IsEnabled())
             {
@@ -128,7 +129,7 @@ namespace Thor.Extensions.Http
                 Guid userId = response?.UserId ?? Guid.Empty;
 
                 Stop(Application.Id, activityId, userId, statusCode, statusCode.GetHttpStatusText(), id);
-                AttachmentDispatcher.Instance.Dispatch(id, nameof(response), response);
+                await AttachmentDispatcher.Instance.DispatchAsync(id, nameof(response), response);
             }
         }
 

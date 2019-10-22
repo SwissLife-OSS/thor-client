@@ -1,4 +1,5 @@
-﻿using Thor.Core.Abstractions;
+﻿using System.Threading.Tasks;
+using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Extensions.Http
@@ -16,8 +17,11 @@ namespace Thor.Extensions.Http
         /// <param name="payloadName">A payload name.</param>
         /// <param name="payloadValue">A HTTP request.</param>
         /// <remarks>This method may not break because it is called from EventSources.</remarks>
-        public static void Dispatch(this AttachmentDispatcher dispatcher, AttachmentId id,
-            string payloadName, HttpRequest payloadValue)
+        public static async Task DispatchAsync(
+            this AttachmentDispatcher dispatcher,
+            AttachmentId id,
+            string payloadName,
+            HttpRequest payloadValue)
         {
             if (dispatcher != null && id != AttachmentId.Empty &&
                 !string.IsNullOrWhiteSpace(payloadName) && payloadValue != null)
@@ -29,8 +33,8 @@ namespace Thor.Extensions.Http
 
                 if (payloadValue.Body != null && payloadValue.Body.Length > 0)
                 {
-                    HttpRequestBodyAttachment requestBody = AttachmentFactory
-                        .Create<HttpRequestBodyAttachment>(id, payloadName,
+                    HttpRequestBodyAttachment requestBody = await AttachmentFactory
+                        .CreateAsync<HttpRequestBodyAttachment>(id, payloadName,
                             payloadValue.Body);
                 
                     dispatcher.Dispatch(requestBody);
@@ -46,8 +50,11 @@ namespace Thor.Extensions.Http
         /// <param name="payloadName">A payload name.</param>
         /// <param name="payloadValue">A HTTP response.</param>
         /// <remarks>This method may not break because it is called from EventSources.</remarks>
-        public static void Dispatch(this AttachmentDispatcher dispatcher, AttachmentId id,
-            string payloadName, HttpResponse payloadValue)
+        public static async Task DispatchAsync(
+            this AttachmentDispatcher dispatcher,
+            AttachmentId id,
+            string payloadName,
+            HttpResponse payloadValue)
         {
             if (dispatcher != null && id != AttachmentId.Empty &&
                 !string.IsNullOrWhiteSpace(payloadName) && payloadValue != null)
@@ -57,16 +64,14 @@ namespace Thor.Extensions.Http
 
                 dispatcher.Dispatch(response);
 
-#pragma warning disable S125 // Sections of code should not be "commented out"
-                //if (payloadValue.Body != null && payloadValue.Body.Length > 0)
-                //{
-                //    HttpResponseBodyAttachment responseBody = AttachmentFactory
-                //        .Create<HttpResponseBodyAttachment>(id, payloadName,
-                //            payloadValue.Body);
-                //
-                //    dispatcher.Dispatch(responseBody);
-                //}
-#pragma warning disable S125 // Sections of code should not be "commented out"
+                if (payloadValue.Body != null && payloadValue.Body.Length > 0)
+                {
+                    HttpResponseBodyAttachment responseBody = await AttachmentFactory
+                        .CreateAsync<HttpResponseBodyAttachment>(id, payloadName,
+                            payloadValue.Body);
+
+                    dispatcher.Dispatch(responseBody);
+                }
             }
         }
     }
