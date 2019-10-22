@@ -49,34 +49,40 @@ namespace Thor.Core.Transmission.BlobStorage
         }
 
         /// <inheritdoc/>
-        public Task<AttachmentDescriptor[]> DequeueAsync(CancellationToken cancellationToken)
+        public async Task<AttachmentDescriptor[]> DequeueAsync(
+            CancellationToken cancellationToken)
         {
             AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
-            string fileName;
 
-            if (_attachments.TryDequeue(out fileName))
+            if (_attachments.TryDequeue(out var fileName))
             {
-                string[] fileNameParts = Path.GetFileNameWithoutExtension(fileName).Split('_');
-
-                batch = new[] 
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                if (fileNameWithoutExtension != null)
                 {
-                    new AttachmentDescriptor
-                    {
-                        Id = fileNameParts[0],
-                        Name = fileNameParts[1],
-                        TypeName = fileNameParts[2],
-                        Value = File.ReadAllBytes(fileName),
-                    }
-                };
+                    string[] fileNameParts = fileNameWithoutExtension.Split('_');
 
-                File.Delete(fileName);
+                    batch = new[]
+                    {
+                        new AttachmentDescriptor
+                        {
+                            Id = fileNameParts[0],
+                            Name = fileNameParts[1],
+                            TypeName = fileNameParts[2],
+                            Value = await FileHelper.ReadAllBytesAsync(fileName)
+                        }
+                    };
+
+                    File.Delete(fileName);
+                }
             }
 
-            return Task.FromResult(batch);
+            return batch;
         }
 
         /// <inheritdoc/>
-        public Task EnqueueAsync(AttachmentDescriptor[] batch, CancellationToken cancellationToken)
+        public async Task EnqueueAsync(
+            AttachmentDescriptor[] batch,
+            CancellationToken cancellationToken)
         {
             if (batch == null)
             {
@@ -85,18 +91,18 @@ namespace Thor.Core.Transmission.BlobStorage
 
             if (batch.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(batch), ExceptionMessages.CollectionIsEmpty);
+                throw new ArgumentOutOfRangeException(
+                    nameof(batch), ExceptionMessages.CollectionIsEmpty);
             }
 
             foreach (AttachmentDescriptor descriptor in batch)
             {
-                string fileName = Path.Combine(_storagePath, $"{descriptor.Id}_{descriptor.Name}_{descriptor.TypeName}.tmp");
+                string fileName = Path.Combine(
+                    _storagePath, $"{descriptor.Id}_{descriptor.Name}_{descriptor.TypeName}.tmp");
 
-                File.WriteAllBytes(fileName, descriptor.Value);
+                await FileHelper.WriteAllBytesAsync(fileName, descriptor.Value);
                 _attachments.Enqueue(fileName);
             }
-
-            return Task.FromResult(0);
         }
     }
 }
