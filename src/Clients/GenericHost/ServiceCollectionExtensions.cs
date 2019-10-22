@@ -46,15 +46,18 @@ namespace Thor.Hosting.GenericHost
                 .GetSection("Tracing")
                 .Get<TracingConfiguration>();
 
-            services
-                .AddBlobStorageTelemetryAttachmentTransmission(configuration)
-                .AddTracingMinimum(configuration);
-
-            if (tracingConfiguration.InProcess)
+            if (tracingConfiguration.Enabled)
             {
                 services
-                    .AddEventHubTelemetryEventTransmission(configuration)
-                    .AddInProcessTelemetrySession(configuration);
+                    .AddBlobStorageTelemetryAttachmentTransmission(configuration)
+                    .AddTracingMinimum(configuration);
+
+                if (tracingConfiguration.InProcess)
+                {
+                    services
+                        .AddEventHubTelemetryEventTransmission(configuration)
+                        .AddInProcessTelemetrySession(configuration);
+                }
             }
 
             return services;

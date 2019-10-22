@@ -16,6 +16,7 @@ namespace Thor.Core
             ApplicationRootPath = Directory.GetCurrentDirectory();
             Debug = Debugger.IsAttached;
             InProcess = true;
+            Enabled = true;
         }
 
         /// <summary>
@@ -40,5 +41,11 @@ namespace Thor.Core
         /// <c>out-of-process</c> mode. The default value is <c>true</c>.
         /// </summary>
         public bool InProcess { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the tracing session is enabled or disabled.
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public bool Enabled { get; set; }
     }
 }

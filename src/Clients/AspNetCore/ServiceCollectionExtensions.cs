@@ -40,16 +40,19 @@ namespace Thor.Hosting.AspNetCore
                 .GetSection("Tracing")
                 .Get<TracingConfiguration>();
 
-            services
-                .AddTracingHttpMessageHandler(configuration)
-                .AddBlobStorageTelemetryAttachmentTransmission(configuration)
-                .AddTracingMinimum(configuration);
-
-            if (tracingConfiguration.InProcess)
+            if (tracingConfiguration.Enabled)
             {
                 services
-                    .AddEventHubTelemetryEventTransmission(configuration)
-                    .AddInProcessTelemetrySession(configuration);
+                    .AddTracingHttpMessageHandler(configuration)
+                    .AddBlobStorageTelemetryAttachmentTransmission(configuration)
+                    .AddTracingMinimum(configuration);
+
+                if (tracingConfiguration.InProcess)
+                {
+                    services
+                        .AddEventHubTelemetryEventTransmission(configuration)
+                        .AddInProcessTelemetrySession(configuration);
+                }
             }
 
             return services;
