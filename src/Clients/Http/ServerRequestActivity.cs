@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Thor.Core.Abstractions;
 using static Thor.Extensions.Http.RequestActivityEventSource;
 
@@ -11,9 +10,6 @@ namespace Thor.Extensions.Http
     [Serializable]
     public class ServerRequestActivity
         : IActivity
-#if NETCOREAPP3_0
-        , IAsyncDisposable
-#endif
     {
         private readonly Guid _activityId = Guid.NewGuid();
         private readonly Guid _relatedActivityId;
@@ -89,7 +85,7 @@ namespace Thor.Extensions.Http
         /// <remarks>
         /// This method is more or less for internal use. Use instead the <c>Thor.AspNetCore</c> package.
         /// </remarks>
-        public static async Task<ServerRequestActivity> CreateAsync(
+        public static ServerRequestActivity Create(
             HttpRequest request,
             Guid? relatedActivityId)
         {
@@ -108,12 +104,12 @@ namespace Thor.Extensions.Http
             if (relatedActivityId != null && relatedActivityId != Guid.Empty)
             {
                 Log.BeginTransfer(relatedActivityId.Value);
-                await Log.StartAsync(context._activityId, request);
+                Log.Start(context._activityId, request);
                 Log.EndTransfer(context._activityId, relatedActivityId.Value);
             }
             else
             {
-                await Log.StartAsync(context._activityId, request);
+                Log.Start(context._activityId, request);
             }
 
             return context;
@@ -153,7 +149,6 @@ namespace Thor.Extensions.Http
             _httpResponse = response ?? throw new ArgumentNullException(nameof(response));
         }
 
-
         /// <inheritdoc />
         public void Dispose()
         {
@@ -167,32 +162,6 @@ namespace Thor.Extensions.Http
         /// <param name="disposing">A value indicating whether managed resources should be released.</param>
         protected virtual void Dispose(bool disposing)
         {
-            DisposeAsyncCore(disposing).GetAwaiter().GetResult();
-        }
-
-#if NETCOREAPP3_0
-        /// <inheritdoc />
-        public ValueTask DisposeAsync()
-        {
-            ValueTask result = DisposeAsync(true);
-            GC.SuppressFinalize(this);
-            return result;
-        }
-
-        /// <summary>
-        /// Releases resources held by the object.
-        /// </summary>
-        /// <param name="disposing">A value indicating whether managed resources should be released.</param>
-        protected virtual ValueTask DisposeAsync(bool disposing)
-        {
-            return new ValueTask(DisposeAsyncCore(disposing));
-        }
-#endif
-
-        private Task DisposeAsyncCore(bool disposing)
-        {
-            Task task = Task.CompletedTask;
-
             if (!_disposed)
             {
                 if (disposing)
@@ -203,7 +172,7 @@ namespace Thor.Extensions.Http
                     }
                     else
                     {
-                        task = Log.StopAsync(_activityId, _httpResponse);
+                        Log.Stop(_activityId, _httpResponse);
                     }
 
                     _popWhenDispose?.Dispose();
@@ -212,8 +181,6 @@ namespace Thor.Extensions.Http
 
                 _disposed = true;
             }
-
-            return task;
         }
     }
 }

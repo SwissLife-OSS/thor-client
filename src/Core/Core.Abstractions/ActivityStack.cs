@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Thor.Core.Abstractions
@@ -15,11 +17,14 @@ namespace Thor.Core.Abstractions
             get
             {
                 ActivityState state = _callContext.Value;
-
-                return (state == null) ? ImmutableStack<Guid>.Empty : state.ActivityIds;
+                
+                var result = (state == null) ? ImmutableStack<Guid>.Empty : state.ActivityIds;
+                Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId} Get current state {result}");
+                return result;
             }
             set
             {
+                Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId} Set current state {value}");
                 _callContext.Value = new ActivityState { ActivityIds = value };
             }
         }

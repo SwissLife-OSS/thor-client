@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Thor.Core;
 using Thor.Core.Session.Abstractions;
 using Xunit;
@@ -146,22 +145,22 @@ namespace Thor.Extensions.Http.Tests
         #region Create(request)
 
         [Fact(DisplayName = "Create(request): Should throw an argument null exception for request")]
-        public async Task Create_HttpRequest_RequestNull()
+        public void Create_HttpRequest_RequestNull()
         {
             // arrange
             HttpRequest request = null;
 
             // act
-            Func<Task> verify = () => ServerRequestActivity.CreateAsync(request, null);
+            Action verify = () => ServerRequestActivity.Create(request, null);
 
             // assert
-            await Assert.ThrowsAsync<ArgumentNullException>("request", verify);
+            Assert.Throws<ArgumentNullException>("request", verify);
         }
 
         [Fact(DisplayName = "Create(request): Should create a server activity")]
-        public async Task Create_HttpRequest()
+        public void Create_HttpRequest()
         {
-            await RequestActivityEventSource.Log.ListenAsync(async listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 HttpRequest request = new HttpRequest
@@ -171,7 +170,7 @@ namespace Thor.Extensions.Http.Tests
                 };
 
                 // act
-                using (await ServerRequestActivity.CreateAsync(request, null))
+                using (ServerRequestActivity.Create(request, null))
                 {
                     // do nothing here
                 }
@@ -194,9 +193,9 @@ namespace Thor.Extensions.Http.Tests
         }
 
         [Fact(DisplayName = "Create(request): Should create a server activity and throw a warning when trying to link parent activity directly")]
-        public async Task Create_HttpRequest_OuterActivity()
+        public void Create_HttpRequest_OuterActivity()
         {
-            await RequestActivityEventSource.Log.ListenAsync(async listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 HttpRequest request = new HttpRequest
@@ -208,7 +207,7 @@ namespace Thor.Extensions.Http.Tests
                 // act
                 using (Activity.Create("Outer Activity"))
                 {
-                    using (await ServerRequestActivity.CreateAsync(request, null))
+                    using (ServerRequestActivity.Create(request, null))
                     {
                         // do nothing here
                     }
@@ -233,9 +232,9 @@ namespace Thor.Extensions.Http.Tests
         }
 
         [Fact(DisplayName = "Create(request): Should create a server activity and link it to a parent activity")]
-        public async Task Create_HttpRequest_ParentActivity()
+        public void Create_HttpRequest_ParentActivity()
         {
-            await RequestActivityEventSource.Log.ListenAsync(async listener =>
+            RequestActivityEventSource.Log.Listen(listener =>
             {
                 // arrange
                 HttpRequest request = new HttpRequest
@@ -246,7 +245,7 @@ namespace Thor.Extensions.Http.Tests
                 Guid parentId = Guid.NewGuid();
 
                 // act
-                using (await ServerRequestActivity.CreateAsync(request, parentId))
+                using (ServerRequestActivity.Create(request, parentId))
                 {
                     // do nothing here
                 }

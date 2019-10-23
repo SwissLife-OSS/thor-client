@@ -65,7 +65,7 @@ namespace Thor.Core.Abstractions
         /// <param name="payloadName">A payload name.</param>
         /// <param name="payloadValue">A payload value.</param>
         /// <returns>A new attachment instance.</returns>
-        public static async Task<TAttachment> CreateAsync<TAttachment>(
+        public static TAttachment Create<TAttachment>(
             AttachmentId id,
             string payloadName,
             Stream payloadValue)
@@ -77,8 +77,7 @@ namespace Thor.Core.Abstractions
             {
                 using (StreamReader reader = new StreamReader(payloadValue.SetToStart()))
                 {
-                    var value = await reader.ReadToEndAsync();
-                    attachment = Create<TAttachment, string>(id, payloadName, value);
+                    attachment = Create<TAttachment, string>(id, payloadName, reader.ReadToEnd());
                 }
             }
 
