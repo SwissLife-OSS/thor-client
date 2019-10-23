@@ -17,14 +17,11 @@ namespace Thor.Core.Abstractions
             get
             {
                 ActivityState state = _callContext.Value;
-                
-                var result = (state == null) ? ImmutableStack<Guid>.Empty : state.ActivityIds;
-                Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId} Get current state {result}");
-                return result;
+
+                return state == null ? ImmutableStack<Guid>.Empty : state.ActivityIds;
             }
             set
             {
-                Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId} Set current state {value}");
                 _callContext.Value = new ActivityState { ActivityIds = value };
             }
         }
