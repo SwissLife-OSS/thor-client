@@ -32,7 +32,7 @@ namespace Thor.Extensions.Http
                     HttpRequestBodyAttachment requestBody = AttachmentFactory
                         .Create<HttpRequestBodyAttachment>(id, payloadName,
                             payloadValue.Body);
-                
+
                     dispatcher.Dispatch(requestBody);
                 }
             }

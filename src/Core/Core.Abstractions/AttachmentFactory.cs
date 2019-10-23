@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Thor.Core.Abstractions
 {
@@ -64,7 +65,9 @@ namespace Thor.Core.Abstractions
         /// <param name="payloadName">A payload name.</param>
         /// <param name="payloadValue">A payload value.</param>
         /// <returns>A new attachment instance.</returns>
-        public static TAttachment Create<TAttachment>(AttachmentId id, string payloadName,
+        public static TAttachment Create<TAttachment>(
+            AttachmentId id,
+            string payloadName,
             Stream payloadValue)
                 where TAttachment : class, IAttachment, new()
         {

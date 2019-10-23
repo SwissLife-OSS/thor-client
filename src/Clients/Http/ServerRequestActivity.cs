@@ -85,7 +85,9 @@ namespace Thor.Extensions.Http
         /// <remarks>
         /// This method is more or less for internal use. Use instead the <c>Thor.AspNetCore</c> package.
         /// </remarks>
-        public static ServerRequestActivity Create(HttpRequest request, Guid? relatedActivityId)
+        public static ServerRequestActivity Create(
+            HttpRequest request,
+            Guid? relatedActivityId)
         {
             if (request == null)
             {
@@ -147,8 +149,6 @@ namespace Thor.Extensions.Http
             _httpResponse = response ?? throw new ArgumentNullException(nameof(response));
         }
 
-        #region Dispose
-
         /// <inheritdoc />
         public void Dispose()
         {
@@ -182,7 +182,5 @@ namespace Thor.Extensions.Http
                 _disposed = true;
             }
         }
-
-        #endregion
     }
 }
