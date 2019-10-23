@@ -37,15 +37,7 @@ namespace Thor.Hosting.GenericHost
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                Application.UnhandledException(
-                    args.ExceptionObject as Exception);
-                _session?.Dispose();
-            };
-
-            TaskScheduler.UnobservedTaskException += (sender, args) =>
-            {
-                Application.UnhandledException(args.Exception);
-                _session?.Dispose();
+                Application.UnhandledException(args.ExceptionObject as Exception);
             };
         }
 
