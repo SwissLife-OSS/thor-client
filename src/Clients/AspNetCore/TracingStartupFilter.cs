@@ -26,19 +26,6 @@ namespace Thor.Hosting.AspNetCore
         /// <param name="applicationLifetime">A application lifetime object instance.</param>
         /// <param name="configurationAccessor">A configuration accessor instance.</param>
         /// <param name="initializer">An attachment transmission initializer.</param>
-        public TracingStartupFilter(IApplicationLifetime applicationLifetime,
-            IOptions<TracingConfiguration> configurationAccessor,
-            IAttachmentTransmissionInitializer initializer)
-                : this(applicationLifetime, configurationAccessor, initializer,
-                    null)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TracingStartupFilter"/> class.
-        /// </summary>
-        /// <param name="applicationLifetime">A application lifetime object instance.</param>
-        /// <param name="configurationAccessor">A configuration accessor instance.</param>
-        /// <param name="initializer">An attachment transmission initializer.</param>
         /// <param name="session">An optional telemetry event session.</param>
         public TracingStartupFilter(IApplicationLifetime applicationLifetime,
             IOptions<TracingConfiguration> configurationAccessor,
@@ -54,7 +41,8 @@ namespace Thor.Hosting.AspNetCore
                 throw new ArgumentNullException(nameof(configurationAccessor));
             _initializer = initializer ??
                 throw new ArgumentNullException(nameof(initializer));
-            _session = session;
+            _session = session ??
+                throw new ArgumentNullException(nameof(initializer));
 
             Start();
             applicationLifetime.ApplicationStopping.Register(Stop);
@@ -69,7 +57,7 @@ namespace Thor.Hosting.AspNetCore
         private void Stop()
         {
             Application.Stop();
-            _session?.Dispose();
+            _session.Dispose();
         }
 
         /// <inheritdoc />

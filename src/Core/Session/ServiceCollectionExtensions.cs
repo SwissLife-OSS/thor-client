@@ -15,6 +15,31 @@ namespace Thor.Core.Session
     public static class ServiceCollectionExtensions
     {
         /// <summary>
+        /// Adds <c>Empty</c> telemetry session service to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddEmptyTelemetrySession(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            return services
+                .AddTracingCore(configuration)
+                .AddSingleton<ITelemetrySession, EmptyTelemetrySession>();
+        }
+
+        /// <summary>
         /// Adds <c>ETW</c> in-process telemetry session services to the service collection.
         /// </summary>
         /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>

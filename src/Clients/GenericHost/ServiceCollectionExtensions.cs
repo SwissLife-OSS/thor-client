@@ -48,6 +48,7 @@ namespace Thor.Hosting.GenericHost
 
             if (tracingConfiguration.Enabled)
             {
+                // TODO: BlogStorage transmission should also not be active out-of-process
                 services
                     .AddBlobStorageTelemetryAttachmentTransmission(configuration)
                     .AddTracingMinimum(configuration);
@@ -57,6 +58,11 @@ namespace Thor.Hosting.GenericHost
                     services
                         .AddEventHubTelemetryEventTransmission(configuration)
                         .AddInProcessTelemetrySession(configuration);
+                }
+                else
+                {
+                    services
+                        .AddEmptyTelemetrySession(configuration);
                 }
             }
 
