@@ -61,7 +61,7 @@ namespace Thor.Hosting.GenericHost
         private void Stop()
         {
             Application.Stop();
-            _session?.Dispose();
+            _session.Dispose();
         }
     }
 }

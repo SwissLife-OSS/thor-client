@@ -42,6 +42,7 @@ namespace Thor.Hosting.AspNetCore
 
             if (tracingConfiguration.Enabled)
             {
+                // TODO: BlogStorage transmission should also not be active out-of-process
                 services
                     .AddTracingHttpMessageHandler(configuration)
                     .AddBlobStorageTelemetryAttachmentTransmission(configuration)
@@ -52,6 +53,11 @@ namespace Thor.Hosting.AspNetCore
                     services
                         .AddEventHubTelemetryEventTransmission(configuration)
                         .AddInProcessTelemetrySession(configuration);
+                }
+                else
+                {
+                    services
+                        .AddEmptyTelemetrySession(configuration);
                 }
             }
 

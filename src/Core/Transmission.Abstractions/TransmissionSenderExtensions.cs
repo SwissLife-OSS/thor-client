@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace Thor.Core.Transmission.Abstractions
         /// </summary>
         /// <param name="sender">A transmission sender instance.</param>
         /// <param name="batch">A telemetry event batch.</param>
-        public static Task SendAsync<TData>(this ITransmissionSender<TData> sender, TData[] batch)
+        public static Task SendAsync<TData>(this ITransmissionSender<TData> sender, IEnumerable<TData> batch)
                 where TData : class
         {
             if (sender == null)

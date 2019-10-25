@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -78,11 +80,15 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task SendBatchAsync()
         {
-            EventData[] batch = await _buffer.DequeueAsync().ConfigureAwait(false);
+            IEnumerable<EventData> batch = await _buffer
+                .DequeueAsync()
+                .ConfigureAwait(false);
 
-            if (batch.Length > 0)
+            if (batch.Any())
             {
-                await _sender.SendAsync(batch).ConfigureAwait(false);
+                await _sender
+                    .SendAsync(batch)
+                    .ConfigureAwait(false);
             }
         }
 
