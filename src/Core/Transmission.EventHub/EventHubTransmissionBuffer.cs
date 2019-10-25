@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -15,7 +16,7 @@ namespace Thor.Core.Transmission.EventHub
         : ITransmissionBuffer<EventData>
     {
         private readonly ConcurrentQueue<EventData> _input = new ConcurrentQueue<EventData>();
-        private readonly ConcurrentQueue<EventData[]> _output = new ConcurrentQueue<EventData[]>();
+        private readonly ConcurrentQueue<IEnumerable<EventData>> _output = new ConcurrentQueue<IEnumerable<EventData>>();
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly EventHubClient _client;
         private EventData _next;
@@ -38,14 +39,14 @@ namespace Thor.Core.Transmission.EventHub
         public int Count { get { return _output.Count; } }
 
         /// <inheritdoc />
-        public Task<EventData[]> DequeueAsync(CancellationToken cancellationToken)
+        public Task<IEnumerable<EventData>> DequeueAsync(CancellationToken cancellationToken)
         {
-            if (_output.TryDequeue(out EventData[] batch))
+            if (_output.TryDequeue(out IEnumerable<EventData> batch))
             {
                 return Task.FromResult(batch);
             }
 
-            return Task.FromResult(new EventData[0]);
+            return Task.FromResult(Enumerable.Empty<EventData>());
         }
 
         /// <inheritdoc />
@@ -79,43 +80,29 @@ namespace Thor.Core.Transmission.EventHub
 
         private void TransformToBatch()
         {
-            List<EventData> batch = new List<EventData>();
-            // todo: find a better way of checking batch size
-            // explaination: EventDataBatch.ToEnumerable() is internal so we cannot use it for
-            // passing just the pure list to the TransmissionSender thats why we have the second
-            // list. thats bad because we have two list instead of one, but this is just an interim
-            // solution which we will retire as soon as possible.
-            EventDataBatch batchToCheckSize = _client.CreateBatch();
+            EventDataBatch batch = _client.CreateBatch();
             bool stopCollectingEvents = false;
-            EventData data;
 
-            if (_next != null && batchToCheckSize.TryAdd(_next))
+            if (_next != null && batch.TryAdd(_next))
             {
                 _next = null;
             }
 
             while (!stopCollectingEvents)
             {
-                if (_input.TryDequeue(out data))
+                if (_input.TryDequeue(out EventData data))
                 {
-                    if (batchToCheckSize.TryAdd(data))
+                    if (!batch.TryAdd(data))
                     {
-                        batch.Add(data);
-                    }
-                    else
-                    {
-                        batchToCheckSize = _client.CreateBatch();
+                        batch = _client.CreateBatch();
                         _next = data;
                     }
                 }
 
-                stopCollectingEvents = (_next != null || data == null);
+                stopCollectingEvents = _next != null || data == null;
             }
 
-            if (batch.Count > 0)
-            {
-                _output.Enqueue(batch.ToArray());
-            }
+            _output.Enqueue(batch.ToEnumerable());
         }
     }
 }

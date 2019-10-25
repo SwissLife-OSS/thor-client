@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace Thor.Core.Transmission.Abstractions
         /// </summary>
         /// <param name="buffer">A transmission buffer instance.</param>
         /// <returns>A telemetry data batch.</returns>
-        public static Task<TData[]> DequeueAsync<TData>(this ITransmissionBuffer<TData> buffer)
+        public static Task<IEnumerable<TData>> DequeueAsync<TData>(this ITransmissionBuffer<TData> buffer)
             where TData : class
         {
             if (buffer == null)

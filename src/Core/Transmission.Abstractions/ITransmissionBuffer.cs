@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Thor.Core.Transmission.Abstractions
         /// </summary>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>A telemetry data batch.</returns>
-        Task<TData[]> DequeueAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<TData>> DequeueAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Enqueues a single telemetry data object.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -101,10 +102,10 @@ namespace Thor.Core.Transmission.EventHub.Tests
                         count++;
                     }
 
-                    return Task.FromResult(results.ToArray());
+                    return Task.FromResult(results.AsEnumerable());
                 });
             sender
-                .Setup(t => t.SendAsync(It.IsAny<EventData[]>(), It.IsAny<CancellationToken>()))
+                .Setup(t => t.SendAsync(It.IsAny<IEnumerable<EventData>>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
             ITelemetryEventTransmitter transmitter = new EventHubTransmitter(buffer.Object, sender.Object);
@@ -116,9 +117,9 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // arrange
             resetEvent.Wait(TimeSpan.FromSeconds(5));
 
-            sender.Verify((ITransmissionSender<EventData> s) =>
-                s.SendAsync(It.Is((EventData[] d) => d.Length == 1),
-                    It.IsAny<CancellationToken>()), Times.Once);
+            sender.Verify(s => s.SendAsync(
+                It.Is((IEnumerable<EventData> d) => d.Count() == 1),
+                It.IsAny<CancellationToken>()), Times.Once);
         }
 
         #endregion
