@@ -17,7 +17,6 @@ namespace Thor.Core
             Debug = Debugger.IsAttached;
             InProcess = true;
             Enabled = true;
-            SkipRequestFilter = "\0(?<!\0)";
         }
 
         /// <summary>

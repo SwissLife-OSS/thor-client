@@ -14,10 +14,13 @@ namespace Thor.Hosting.AspNetCore
 
         public HostingDiagnosticsListener(string skipRequestFilterPattern)
         {
-            _skipRequestFilter = new Regex(
-                skipRequestFilterPattern,
-                RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-        }   
+            if (skipRequestFilterPattern is { })
+            {
+                _skipRequestFilter = new Regex(
+                    skipRequestFilterPattern,
+                    RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+            }
+        }
 
         [DiagnosticName("Microsoft.AspNetCore.Diagnostics.HandledException")]
         public void OnDiagnosticsHandledException(HttpContext httpContext, Exception exception)
@@ -47,7 +50,8 @@ namespace Thor.Hosting.AspNetCore
         public void OnHttpRequestInStart(HttpContext httpContext)
         {
             Uri requestUri = new Uri(httpContext.Request.GetDisplayUrl());
-            if (_skipRequestFilter.IsMatch(requestUri.AbsoluteUri))
+            if (_skipRequestFilter is { } &&
+                _skipRequestFilter.IsMatch(requestUri.AbsoluteUri))
             {
                 return;
             }
