@@ -16,9 +16,10 @@ namespace Thor.Hosting.AspNetCore
         {
             if (!string.IsNullOrEmpty(skipRequestFilterPattern))
             {
-                _skipRequestFilter = new Regex(
-                    skipRequestFilterPattern,
-                    RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+                _skipRequestFilter = new Regex(skipRequestFilterPattern,
+                    RegexOptions.Compiled |
+                    RegexOptions.CultureInvariant |
+                    RegexOptions.IgnoreCase);
             }
         }
 
