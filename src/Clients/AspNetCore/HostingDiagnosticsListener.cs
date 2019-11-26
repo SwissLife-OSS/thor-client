@@ -14,7 +14,7 @@ namespace Thor.Hosting.AspNetCore
 
         public HostingDiagnosticsListener(string skipRequestFilterPattern)
         {
-            if (skipRequestFilterPattern is { })
+            if (!string.IsNullOrEmpty(skipRequestFilterPattern))
             {
                 _skipRequestFilter = new Regex(
                     skipRequestFilterPattern,
