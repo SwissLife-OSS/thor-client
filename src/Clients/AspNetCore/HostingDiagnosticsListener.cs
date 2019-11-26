@@ -1,13 +1,24 @@
 using System;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.DiagnosticAdapter;
+using Thor.Core;
 using Thor.Extensions.Http;
 
 namespace Thor.Hosting.AspNetCore
 {
     internal class HostingDiagnosticsListener
     {
+        private readonly Regex _skipRequestFilter;
+
+        public HostingDiagnosticsListener(string skipRequestFilterPattern)
+        {
+            _skipRequestFilter = new Regex(
+                skipRequestFilterPattern,
+                RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        }   
+
         [DiagnosticName("Microsoft.AspNetCore.Diagnostics.HandledException")]
         public void OnDiagnosticsHandledException(HttpContext httpContext, Exception exception)
         {
@@ -36,6 +47,11 @@ namespace Thor.Hosting.AspNetCore
         public void OnHttpRequestInStart(HttpContext httpContext)
         {
             Uri requestUri = new Uri(httpContext.Request.GetDisplayUrl());
+            if (_skipRequestFilter.IsMatch(requestUri.AbsoluteUri))
+            {
+                return;
+            }
+
             ServerRequestActivity activity = ServerRequestActivity.Create(httpContext.Request.Method,
                 requestUri, httpContext.Request.GetActivityId());
 
@@ -56,7 +72,15 @@ namespace Thor.Hosting.AspNetCore
 
         private void HandleException(HttpContext httpContext, Exception exception)
         {
-            httpContext?.Features.Get<ServerRequestActivity>()?.HandleException(exception);
+            var activity = httpContext?.Features.Get<ServerRequestActivity>();
+            if (activity != null)
+            {
+                activity.HandleException(exception);
+            }
+            else
+            {
+                Application.UnhandledException(exception);
+            }
         }
     }
 }

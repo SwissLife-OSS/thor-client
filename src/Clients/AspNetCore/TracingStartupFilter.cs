@@ -27,7 +27,8 @@ namespace Thor.Hosting.AspNetCore
         /// <param name="configurationAccessor">A configuration accessor instance.</param>
         /// <param name="initializer">An attachment transmission initializer.</param>
         /// <param name="session">An optional telemetry event session.</param>
-        public TracingStartupFilter(IApplicationLifetime applicationLifetime,
+        public TracingStartupFilter(
+            IApplicationLifetime applicationLifetime,
             IOptions<TracingConfiguration> configurationAccessor,
             IAttachmentTransmissionInitializer initializer,
             ITelemetrySession session)
@@ -68,7 +69,7 @@ namespace Thor.Hosting.AspNetCore
                 builder
                     .ApplicationServices
                     .GetRequiredService<DiagnosticListener>()
-                    .SubscribeWithAdapter(new HostingDiagnosticsListener());
+                    .SubscribeWithAdapter(new HostingDiagnosticsListener(_configurationAccessor.Value.SkipRequestFilter));
 
                 next(builder);
             };
