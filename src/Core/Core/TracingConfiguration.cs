@@ -20,6 +20,12 @@ namespace Thor.Core
         }
 
         /// <summary>
+        /// Gets or sets the request filter (regex which filter server requests).
+        /// The default value will allow all requests.
+        /// </summary>
+        public string SkipRequestFilter { get; set; }
+
+        /// <summary>
         /// Gets or sets the application's identifier.
         /// </summary>
         public int ApplicationId { get; set; }
