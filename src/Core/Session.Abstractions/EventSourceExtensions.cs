@@ -52,6 +52,7 @@ namespace Thor.Core.Session.Abstractions
                     listener.EnableEvents(eventSource, EventLevel.Verbose);
                     await execute(listener);
                 }
+                catch { }
                 finally
                 {
                     listener.DisableEvents(eventSource);

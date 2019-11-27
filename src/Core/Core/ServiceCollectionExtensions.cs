@@ -39,8 +39,7 @@ namespace Thor.Core
             return services
                 .AddSingleton<IProvidersDescriptor, CoreProvidersDescriptor>()
                 .AddOptions()
-                .Configure<TracingConfiguration>(configuration
-                    .GetSection("Tracing"));
+                .Configure<TracingConfiguration>(configuration.GetSection("Tracing"));
         }
     }
 }
