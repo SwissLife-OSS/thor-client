@@ -48,7 +48,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
             IConfigurationBuilder builder = new ConfigurationBuilder();
             Dictionary<string, string> data = new Dictionary<string, string>
             {
-                {"Tracing:EventHub:ConnectionString", Constants.FakeConnectionString}
+                {"Tracing:EventHub:ConnectionString", Constants.FakeConnectionString},
+                {"Tracing:EventHub:TransportType", Constants.TransportType}
             };
 
             builder.AddInMemoryCollection(data);
