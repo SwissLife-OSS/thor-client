@@ -9,5 +9,10 @@
         /// Gets or sets the <c>Azure EventHub</c> connection string.
         /// </summary>
         public string ConnectionString { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <c>Azure EventHub</c> connection type.
+        /// </summary>
+        public string TransportType { get; set; }
     }
 }
