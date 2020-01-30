@@ -38,11 +38,27 @@ namespace Thor.Core.Transmission.EventHub
                 {
                     IOptions<EventHubConfiguration> configAccessor = p.GetRequiredService<IOptions<EventHubConfiguration>>();
 
-                    return EventHubClient.CreateFromConnectionString(configAccessor.Value.ConnectionString);
+                    var connection = CreateEventHubConnection(configAccessor.Value);
+                    return EventHubClient.Create(connection);
                 })
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
                 .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
                 .AddSingleton<ITelemetryEventTransmitter, EventHubTransmitter>();
+        }
+
+        private static EventHubsConnectionStringBuilder CreateEventHubConnection(
+            EventHubConfiguration configuration)
+        {
+            var transportType = TransportType.Amqp;
+            if (!string.IsNullOrEmpty(configuration.TransportType))
+            {
+                Enum.TryParse(configuration.TransportType, out transportType);
+            }
+
+            return new EventHubsConnectionStringBuilder(configuration.ConnectionString)
+            {
+                TransportType = transportType
+            };
         }
     }
 }
