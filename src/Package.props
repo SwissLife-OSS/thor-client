@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <Product>Thor Core</Product>
-    <Authors>ChilliCream authors and contributors</Authors>
-    <Company>ChilliCream</Company>
-    <Copyright>Copyright © 2018 ChilliCream (Michael &amp; Rafael Staib)</Copyright>
-    <PackageLicenseUrl>https://github.com/ChilliCream/thor-client/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/ChilliCream/thor-client</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ChilliCream/thor-client</RepositoryUrl>
+    <Authors>Swiss Life authors and contributors</Authors>
+    <Company>Swiss Life</Company>
+    <Copyright>Copyright © 2019 Swiss Life</Copyright>
+    <PackageLicenseUrl>https://github.com/SwissLife-OSS/thor-client/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/SwissLife-OSS/thor-client</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SwissLife-OSS/thor-client</RepositoryUrl>
     <PackageTags>ETW, EventSource, Logging, Tracing</PackageTags>
-    <PackageReleaseNotes>Release notes: https://github.com/ChilliCream/thor-client/releases/$(PackageVersion)</PackageReleaseNotes>
+    <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/thor-client/releases/$(PackageVersion)</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://cdn.rawgit.com/ChilliCream/thor-logo/master/img/thor-signet-red.png</PackageIconUrl>
+    <PackageIconUrl>https://github.com/SwissLife-OSS/thor-client/raw/master/logo.png</PackageIconUrl>
     <RepositoryType>GitHub</RepositoryType>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IncludeSymbols>true</IncludeSymbols>
@@ -19,6 +19,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <LangVersion>8.0</LangVersion>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
  <ItemGroup>
