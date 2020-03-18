@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>false</IsPackable>
     <AssemblyName>Thor.Extensions.Hosting.Tests</AssemblyName>
     <RootNamespace>Thor.Extensions.Hosting.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

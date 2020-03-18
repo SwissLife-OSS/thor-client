@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>false</IsPackable>
     <AssemblyName>Thor.Extensions.HotChocolate.Tests</AssemblyName>
     <RootNamespace>Thor.Extensions.HotChocolate.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

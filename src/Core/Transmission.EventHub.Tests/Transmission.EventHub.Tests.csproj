@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>false</IsPackable>
+
     <AssemblyName>Thor.Core.Transmission.EventHub.Tests</AssemblyName>
     <RootNamespace>Thor.Core.Transmission.EventHub.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
