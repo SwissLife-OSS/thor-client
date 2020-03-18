@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>false</IsPackable>
     <AssemblyName>Thor.Core.Transmission.BlobStorage.Tests</AssemblyName>
     <RootNamespace>Thor.Core.Transmission.BlobStorage.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

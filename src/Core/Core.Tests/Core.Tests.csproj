@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>false</IsPackable>
     <AssemblyName>Thor.Core.Tests</AssemblyName>
     <RootNamespace>Thor.Core.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
