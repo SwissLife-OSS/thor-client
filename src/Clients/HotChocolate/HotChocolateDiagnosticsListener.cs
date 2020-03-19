@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
@@ -34,7 +34,7 @@ namespace Thor.Extensions.HotChocolate
             context.ContextData[nameof(HotChocolateRequest)] = request;
 
             HttpContext httpContext = context.GetHttpContext();
-            HotChocolateActivity activity = HotChocolateActivity.Create(request);
+            var activity = HotChocolateActivity.Create(request);
             httpContext.Features.Set(activity);
         }
 

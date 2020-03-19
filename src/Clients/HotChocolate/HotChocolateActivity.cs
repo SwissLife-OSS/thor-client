@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
@@ -29,7 +29,7 @@ namespace Thor.Extensions.HotChocolate
 
         public static HotChocolateActivity Create(HotChocolateRequest request)
         {
-            HotChocolateActivity context = new HotChocolateActivity();
+            var context = new HotChocolateActivity();
 
             if (context._relatedActivityId != Guid.Empty)
             {

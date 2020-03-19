@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -34,7 +34,7 @@ namespace Thor.Extensions.HotChocolate
         {
             if (IsEnabled())
             {
-                AttachmentId attachmentId = AttachmentId.NewId();
+                var attachmentId = AttachmentId.NewId();
                 IAttachment attachment = AttachmentFactory
                     .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
                         attachmentId, nameof(request), request);
@@ -127,7 +127,7 @@ namespace Thor.Extensions.HotChocolate
         {
             if (IsEnabled())
             {
-                AttachmentId attachmentId = AttachmentId.NewId();
+                var attachmentId = AttachmentId.NewId();
 
                 IAttachment requestAttachment = AttachmentFactory
                     .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
@@ -165,7 +165,7 @@ namespace Thor.Extensions.HotChocolate
         {
             if (IsEnabled())
             {
-                AttachmentId attachmentId = AttachmentId.NewId();
+                var attachmentId = AttachmentId.NewId();
 
                 ExceptionAttachment attachment = AttachmentFactory
                     .Create(attachmentId, nameof(exception), exception);
@@ -201,7 +201,7 @@ namespace Thor.Extensions.HotChocolate
         {
             if (IsEnabled())
             {
-                AttachmentId attachmentId = AttachmentId.NewId();
+                var attachmentId = AttachmentId.NewId();
 
                 IAttachment requestAttachment = AttachmentFactory
                     .Create<HotChocolateRequestAttachment, HotChocolateRequest>(
