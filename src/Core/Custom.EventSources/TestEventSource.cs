@@ -10,7 +10,10 @@ namespace Custom.EventSources
         : EventSourceBase
         , ITestEventSource
     {
-        private TestEventSource() { }
+        private TestEventSource()
+        {
+
+        }
 
         public static ITestEventSource Log { get; } = new TestEventSource();
 
