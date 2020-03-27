@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Thor.Core.Abstractions
