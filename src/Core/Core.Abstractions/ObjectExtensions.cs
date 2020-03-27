@@ -64,7 +64,7 @@ namespace Thor.Core.Abstractions
                 else
                 {
                     json  = "{ \"message\": \"Thor is unable to serialize the object " +
-                        $"`{source.GetType().FullName}`.\" }"
+                        $"`{source.GetType().FullName}`.\" }}"
                 }
             }
 
