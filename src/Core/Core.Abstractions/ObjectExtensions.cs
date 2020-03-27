@@ -45,7 +45,28 @@ namespace Thor.Core.Abstractions
                 throw new ArgumentNullException(nameof(source));
             }
 
-            string json = JsonConvert.SerializeObject(source, _settings);
+            string json = null;
+
+            // TODO : this is a workaround to ensure that even if we cannot serialize a payload there is no error.
+            try
+            {
+                json = JsonConvert.SerializeObject(source, _settings);
+            }
+            catch
+            {
+                if(source is Exception ex)
+                {
+                    var error = new Dictionary<string, string>();
+                    error["message"] = ex.Message;
+                    error["stackTrace"] = ex.StackTrace;
+                    json = JsonConvert.SerializeObject(error, _settings);
+                }
+                else
+                {
+                    json  = "{ \"message\": \"Thor is unable to serialize the object " +
+                        $"`{source.GetType().FullName}`.\" }"
+                }
+            }
 
             return Encoding.UTF8.GetBytes(json);
         }
