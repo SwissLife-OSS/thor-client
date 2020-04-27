@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
@@ -47,7 +47,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
 
             // act
-            Func<Task> verify = () => storage.DequeueAsync();
+            Func<Task> verify = () => storage.DequeueAsync(default);
 
             // arrange
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));
@@ -66,7 +66,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = null;
 
             // act
-            Func<Task> verify = () => storage.EnqueueAsync(batch);
+            Func<Task> verify = () => storage.EnqueueAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
@@ -81,7 +81,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
 
             // act
-            Func<Task> verify = () => storage.EnqueueAsync(batch);
+            Func<Task> verify = () => storage.EnqueueAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>("batch", verify).ConfigureAwait(false);

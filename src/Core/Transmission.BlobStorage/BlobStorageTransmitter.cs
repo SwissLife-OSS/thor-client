@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
@@ -50,15 +51,17 @@ namespace Thor.Core.Transmission.BlobStorage
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _storage.EnqueueAsync(new[] { data }));
+                Task.Run(() => _storage.EnqueueAsync(new[] { data }, _disposeToken.Token));
             }
         }
 
         private async Task SendBatchAsync()
         {
-            AttachmentDescriptor[] batch = await _storage.DequeueAsync().ConfigureAwait(false);
+            IReadOnlyCollection<AttachmentDescriptor> batch = await _storage
+                .DequeueAsync(_disposeToken.Token)
+                .ConfigureAwait(false);
 
-            if (batch.Length > 0)
+            if (batch.Count > 0)
             {
                 await _sender.SendAsync(batch).ConfigureAwait(false);
             }
@@ -70,11 +73,11 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 _disposeToken.Token.ThrowIfCancellationRequested();
 
-                while (!_disposeToken.IsCancellationRequested || _storage.Count > 0)
+                while (!_disposeToken.IsCancellationRequested || _storage.HasData)
                 {
                     await SendBatchAsync().ConfigureAwait(false);
 
-                    if (!_disposeToken.IsCancellationRequested && _storage.Count == 0)
+                    if (!_disposeToken.IsCancellationRequested && _storage.HasData)
                     {
                         await Task.Delay(_delay).ConfigureAwait(false);
                     }

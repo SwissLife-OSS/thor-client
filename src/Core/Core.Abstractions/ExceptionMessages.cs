@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Abstractions
+namespace Thor.Core.Abstractions
 {
     internal static class ExceptionMessages
     {

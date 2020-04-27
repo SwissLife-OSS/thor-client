@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -116,7 +116,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                         count++;
                     }
 
-                    return Task.FromResult(results.ToArray());
+                    return Task.FromResult<IReadOnlyCollection<AttachmentDescriptor>>(results.AsReadOnly());
                 });
             sender
                 .Setup(t => t.SendAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))

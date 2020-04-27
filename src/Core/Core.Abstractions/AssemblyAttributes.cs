@@ -1,7 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Thor.Core")]
 [assembly: InternalsVisibleTo("Thor.Core.Abstractions.Tests")]
+[assembly: InternalsVisibleTo("Thor.Core.Transmission.Abstractions")]
 [assembly: InternalsVisibleTo("Thor.Core.Transmission.BlobStorage")]
 [assembly: InternalsVisibleTo("Thor.Core.Transmission.EventHub")]
 [assembly: InternalsVisibleTo("Thor.Extensions.Http")]
