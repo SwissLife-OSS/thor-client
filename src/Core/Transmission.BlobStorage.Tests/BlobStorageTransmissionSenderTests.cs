@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -55,7 +55,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = null;
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
@@ -75,7 +75,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>("batch", verify).ConfigureAwait(false);
@@ -95,7 +95,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = new[] { new AttachmentDescriptor() };
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // arrange
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));

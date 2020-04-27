@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Transmission.Abstractions;
@@ -49,7 +49,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventHubTransmissionBuffer buffer = new EventHubTransmissionBuffer(client);
 
             // act
-            Func<Task> verify = () => buffer.DequeueAsync();
+            Func<Task> verify = () => buffer.DequeueAsync(default);
 
             // arrange
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));
@@ -68,7 +68,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventData data = null;
 
             // act
-            Func<Task> verify = () => buffer.EnqueueAsync(data);
+            Func<Task> verify = () => buffer.EnqueueAsync(data, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("data", verify).ConfigureAwait(false);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,18 +38,24 @@ namespace Thor.Core.Transmission.EventHub
                 {
                     IOptions<EventHubConfiguration> configAccessor = p.GetRequiredService<IOptions<EventHubConfiguration>>();
 
-                    var connection = CreateEventHubConnection(configAccessor.Value);
+                    EventHubsConnectionStringBuilder connection = CreateEventHubConnection(configAccessor.Value);
                     return EventHubClient.Create(connection);
                 })
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
                 .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
+                .AddSingleton<ITransmissionStorage<EventData>>(p =>
+                {
+                    TracingConfiguration config = p.GetRequiredService<IOptions<TracingConfiguration>>()?.Value;
+
+                    return new EventHubTransmissionStorage(config?.GetEventsStoragePath());
+                })
                 .AddSingleton<ITelemetryEventTransmitter, EventHubTransmitter>();
         }
 
         private static EventHubsConnectionStringBuilder CreateEventHubConnection(
             EventHubConfiguration configuration)
         {
-            var transportType = TransportType.Amqp;
+            TransportType transportType = TransportType.Amqp;
             if (!string.IsNullOrEmpty(configuration.TransportType))
             {
                 Enum.TryParse(configuration.TransportType, out transportType);

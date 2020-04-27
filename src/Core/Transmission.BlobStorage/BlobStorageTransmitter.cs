@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
@@ -32,7 +31,8 @@ namespace Thor.Core.Transmission.BlobStorage
         /// <exception cref="ArgumentNullException">
         /// <paramref name="sender"/> must not be <c>null</c>.
         /// </exception>
-        public BlobStorageTransmitter(ITransmissionStorage<AttachmentDescriptor> storage,
+        public BlobStorageTransmitter(
+            ITransmissionStorage<AttachmentDescriptor> storage,
             ITransmissionSender<AttachmentDescriptor> sender)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
@@ -58,11 +58,14 @@ namespace Thor.Core.Transmission.BlobStorage
         private async Task SendBatchAsync()
         {
             AttachmentDescriptor[] batch = await _storage
-                .DequeueAsync(_disposeToken.Token).ConfigureAwait(false);
+                .DequeueAsync(_disposeToken.Token)
+                .ConfigureAwait(false);
 
             if (batch.Length > 0)
             {
-                await _sender.SendAsync(batch).ConfigureAwait(false);
+                await _sender
+                    .SendAsync(batch, _disposeToken.Token)
+                    .ConfigureAwait(false);
             }
         }
 
@@ -76,7 +79,7 @@ namespace Thor.Core.Transmission.BlobStorage
                 {
                     await SendBatchAsync().ConfigureAwait(false);
 
-                    if (!_disposeToken.IsCancellationRequested && _storage.HasData)
+                    if (!_disposeToken.IsCancellationRequested && !_storage.HasData)
                     {
                         await Task.Delay(_delay).ConfigureAwait(false);
                     }

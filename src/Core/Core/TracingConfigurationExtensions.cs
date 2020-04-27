@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Thor.Core
@@ -16,21 +16,39 @@ namespace Thor.Core
         public static string GetAttachmentsStoragePath(
             this TracingConfiguration configuration)
         {
+            return configuration.GetStoragePath("Attachments");
+        }
+
+        /// <summary>
+        /// Gets the path for storing attachments temporarily.
+        /// </summary>
+        /// <param name="configuration">A configuration instance.</param>
+        /// <returns>A temp path for attachments.</returns>
+        public static string GetEventsStoragePath(
+            this TracingConfiguration configuration)
+        {
+            return configuration.GetStoragePath("Events");
+        }
+
+        private static string GetStoragePath(
+            this TracingConfiguration configuration,
+            string directoryName)
+        {
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
             return (configuration.Debug || configuration.InProcess)
-                ? configuration.GetInProcessStoragePath()
-                : configuration.GetOutOfProcessStoragePath();
+                ? configuration.GetInProcessStoragePath(directoryName)
+                : configuration.GetOutOfProcessStoragePath(directoryName);
         }
 
         private static string GetInProcessStoragePath(
-            this TracingConfiguration configuration)
+            this TracingConfiguration configuration,
+            string directoryName)
         {
-            string path = Path.Combine(configuration.ApplicationRootPath,
-                "Attachments");
+            var path = Path.Combine(configuration.ApplicationRootPath, directoryName);
 
             if (!Directory.Exists(path))
             {
@@ -41,14 +59,15 @@ namespace Thor.Core
         }
 
         private static string GetOutOfProcessStoragePath(
-            this TracingConfiguration configuration)
+            this TracingConfiguration configuration,
+            string directoryName)
         {
             // note: Considering to have one global path for out-of-process
             // attachments so that just the out-of-process collector is
             // uploading attachments instead of every application is uploading
             // its own attachments.
 
-            return configuration.GetInProcessStoragePath();
+            return configuration.GetInProcessStoragePath(directoryName);
         }
     }
 }

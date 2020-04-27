@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +14,9 @@ namespace Thor.Core.Transmission.EventHub
     public class EventHubTransmissionBuffer
         : ITransmissionBuffer<EventData>
     {
+        private readonly EventData[] _emptyBatch = new EventData[0];
         private readonly ConcurrentQueue<EventData> _input = new ConcurrentQueue<EventData>();
-        private readonly ConcurrentQueue<IEnumerable<EventData>> _output = new ConcurrentQueue<IEnumerable<EventData>>();
+        private readonly ConcurrentQueue<EventData[]> _output = new ConcurrentQueue<EventData[]>();
         private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly EventHubClient _client;
         private EventData _next;
@@ -39,14 +39,14 @@ namespace Thor.Core.Transmission.EventHub
         public int Count { get { return _output.Count; } }
 
         /// <inheritdoc />
-        public Task<IEnumerable<EventData>> DequeueAsync(CancellationToken cancellationToken)
+        public Task<EventData[]> DequeueAsync(CancellationToken cancellationToken)
         {
-            if (_output.TryDequeue(out IEnumerable<EventData> batch))
+            if (_output.TryDequeue(out EventData[] batch))
             {
                 return Task.FromResult(batch);
             }
 
-            return Task.FromResult(Enumerable.Empty<EventData>());
+            return Task.FromResult(_emptyBatch);
         }
 
         /// <inheritdoc />
@@ -102,7 +102,7 @@ namespace Thor.Core.Transmission.EventHub
                 stopCollectingEvents = _next != null || data == null;
             }
 
-            _output.Enqueue(batch.ToEnumerable());
+            _output.Enqueue(batch.ToEnumerable().ToArray());
         }
     }
 }

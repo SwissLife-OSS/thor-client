@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Transmission.Abstractions;
@@ -50,7 +50,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventData[] batch = null;
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
@@ -65,7 +65,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventData[] batch = new EventData[0];
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>("batch", verify).ConfigureAwait(false);
