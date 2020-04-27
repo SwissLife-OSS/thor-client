@@ -119,7 +119,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                     return Task.FromResult(results.ToArray());
                 });
             sender
-                .Setup(t => t.SendAsync(It.IsAny<IReadOnlyCollection<AttachmentDescriptor>>(), It.IsAny<CancellationToken>()))
+                .Setup(t => t.SendAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
             ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(storage.Object, sender.Object);
