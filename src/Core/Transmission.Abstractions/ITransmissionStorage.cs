@@ -22,7 +22,7 @@ namespace Thor.Core.Transmission.Abstractions
         /// </summary>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>A telemetry data batch.</returns>
-        Task<IReadOnlyCollection<TData>> DequeueAsync(CancellationToken cancellationToken);
+        Task<TData[]> DequeueAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Enqueues a telemetry data batch to a <c>short-term</c> storage.

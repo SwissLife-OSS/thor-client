@@ -116,10 +116,10 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                         count++;
                     }
 
-                    return Task.FromResult<IReadOnlyCollection<AttachmentDescriptor>>(results.AsReadOnly());
+                    return Task.FromResult(results.ToArray());
                 });
             sender
-                .Setup(t => t.SendAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))
+                .Setup(t => t.SendAsync(It.IsAny<IReadOnlyCollection<AttachmentDescriptor>>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
             ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(storage.Object, sender.Object);
@@ -131,8 +131,8 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             // arrange
             resetEvent.Wait(TimeSpan.FromSeconds(5));
 
-            sender.Verify((ITransmissionSender<AttachmentDescriptor> s) =>
-                s.SendAsync(It.Is((AttachmentDescriptor[] d) => d.Length == 1),
+            sender.Verify(s =>
+                s.SendAsync(It.Is<AttachmentDescriptor[]>(d => d.Length == 1),
                     It.IsAny<CancellationToken>()), Times.Once);
         }
 

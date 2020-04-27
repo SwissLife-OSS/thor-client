@@ -57,11 +57,10 @@ namespace Thor.Core.Transmission.BlobStorage
 
         private async Task SendBatchAsync()
         {
-            IReadOnlyCollection<AttachmentDescriptor> batch = await _storage
-                .DequeueAsync(_disposeToken.Token)
-                .ConfigureAwait(false);
+            AttachmentDescriptor[] batch = await _storage
+                .DequeueAsync(_disposeToken.Token).ConfigureAwait(false);
 
-            if (batch.Count > 0)
+            if (batch.Length > 0)
             {
                 await _sender.SendAsync(batch).ConfigureAwait(false);
             }
