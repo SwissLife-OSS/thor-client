@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Transmission.Abstractions;
 
@@ -22,13 +22,13 @@ namespace Thor.Core.Transmission.EventHub
         /// <inheritdoc/>
         protected override EventData Deserialize(byte[] payload, string fileName)
         {
-            throw new NotImplementedException();
+            return new EventData(payload);
         }
 
         /// <inheritdoc/>
         protected override byte[] Serialize(EventData data)
         {
-            throw new NotImplementedException();
+            return data.Body.Array;
         }
 
         /// <inheritdoc/>
