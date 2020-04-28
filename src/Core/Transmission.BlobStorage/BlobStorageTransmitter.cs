@@ -12,13 +12,12 @@ namespace Thor.Core.Transmission.BlobStorage
         : ITelemetryAttachmentTransmitter
         , IDisposable
     {
-        private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
         private readonly ITransmissionStorage<AttachmentDescriptor> _storage;
         private readonly ITransmissionSender<AttachmentDescriptor> _sender;
+        private readonly Job _sendJob;
         private bool _disposed;
-        private bool _transmissionStopped;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmitter"/> class.
@@ -38,7 +37,10 @@ namespace Thor.Core.Transmission.BlobStorage
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
 
-            StartAsyncSending();
+            _sendJob = Job.Start(
+                async () => await SendBatchAsync().ConfigureAwait(false),
+                () => !_storage.HasData,
+                _disposeToken.Token);
         }
 
         /// <inheritdoc/>
@@ -69,30 +71,6 @@ namespace Thor.Core.Transmission.BlobStorage
             }
         }
 
-        private void StartAsyncSending()
-        {
-            Task.Run(async () =>
-            {
-                _disposeToken.Token.ThrowIfCancellationRequested();
-
-                while (!_disposeToken.IsCancellationRequested || _storage.HasData)
-                {
-                    await SendBatchAsync().ConfigureAwait(false);
-
-                    if (!_disposeToken.IsCancellationRequested && !_storage.HasData)
-                    {
-                        await Task.Delay(_delay).ConfigureAwait(false);
-                    }
-                }
-
-                _transmissionStopped = true;
-                _resetEvent.Set();
-                _disposeToken.Token.ThrowIfCancellationRequested();
-            }, _disposeToken.Token);
-        }
-
-        #region Dispose
-
         /// <inheritdoc />
         public void Dispose()
         {
@@ -100,9 +78,12 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 _disposeToken.Cancel();
 
-                if (!_transmissionStopped)
+                if (!_sendJob.Stopped)
                 {
-                    _resetEvent.Wait(TimeSpan.FromSeconds(5));
+                    WaitHandle.WaitAll(new[]
+                    {
+                        _sendJob.WaitHandle
+                    }, TimeSpan.FromSeconds(5));
                 }
 
                 _disposeToken?.Dispose();
@@ -111,7 +92,5 @@ namespace Thor.Core.Transmission.BlobStorage
                 _disposed = true;
             }
         }
-
-        #endregion
     }
 }
