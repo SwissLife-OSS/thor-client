@@ -337,3 +337,4 @@ tools/**
 !tools/packages.config
 
 __mismatch__/
+*.Development.json
