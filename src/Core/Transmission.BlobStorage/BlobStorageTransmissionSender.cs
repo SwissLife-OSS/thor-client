@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.BlobStorage
@@ -29,28 +26,28 @@ namespace Thor.Core.Transmission.BlobStorage
         }
 
         /// <inheritdoc/>
-        public async Task SendAsync(IEnumerable<AttachmentDescriptor> batch, CancellationToken cancellationToken)
+        public async Task SendAsync(AttachmentDescriptor[] batch, CancellationToken cancellationToken)
         {
             if (batch == null)
             {
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (!batch.Any())
+            if (batch.Length > 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(batch), ExceptionMessages.CollectionIsEmpty);
-            }
-
-            try
-            {
-                foreach (AttachmentDescriptor descriptor in batch)
+                try
                 {
-                    await _container.UploadAsync(descriptor, cancellationToken).ConfigureAwait(false);
+                    foreach (AttachmentDescriptor descriptor in batch)
+                    {
+                        await _container
+                            .UploadAsync(descriptor, cancellationToken)
+                            .ConfigureAwait(false);
+                    }
                 }
-            }
-            catch (Exception)
-            {
-                // todo: log via event provider
+                catch (Exception)
+                {
+                    // todo: log via event provider
+                }
             }
         }
     }

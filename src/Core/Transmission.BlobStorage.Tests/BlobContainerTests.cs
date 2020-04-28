@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
@@ -50,7 +50,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor descriptor = null;
 
             // act
-            Func<Task> verify = () => container.UploadAsync(descriptor);
+            Func<Task> verify = () => container.UploadAsync(descriptor, default);
 
             // arrange
             await Assert.ThrowsAsync<ArgumentNullException>("descriptor", verify).ConfigureAwait(false);

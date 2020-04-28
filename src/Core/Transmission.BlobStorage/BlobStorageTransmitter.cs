@@ -59,6 +59,7 @@ namespace Thor.Core.Transmission.BlobStorage
 
         private async Task SendBatchAsync()
         {
+            // Add disposable dequeue and delete files after send
             AttachmentDescriptor[] batch = await _storage
                 .DequeueAsync(_disposeToken.Token)
                 .ConfigureAwait(false);

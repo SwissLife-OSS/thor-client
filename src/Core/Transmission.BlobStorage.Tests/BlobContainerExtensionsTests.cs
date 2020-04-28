@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -19,7 +19,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor descriptor = new AttachmentDescriptor();
 
             // act
-            Func<Task> verify = () => container.UploadAsync(descriptor);
+            Func<Task> verify = () => container.UploadAsync(descriptor, default);
 
             // arrange
             await Assert.ThrowsAsync<ArgumentNullException>("container", verify).ConfigureAwait(false);
@@ -38,7 +38,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor descriptor = new AttachmentDescriptor();
 
             // act
-            Func<Task> verify = () => container.Object.UploadAsync(descriptor);
+            Func<Task> verify = () => container.Object.UploadAsync(descriptor, default);
 
             // assert
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));

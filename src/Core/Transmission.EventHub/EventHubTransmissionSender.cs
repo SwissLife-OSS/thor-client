@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
-using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
@@ -30,18 +27,17 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public Task SendAsync(IEnumerable<EventData> batch, CancellationToken cancellationToken)
+        public async Task SendAsync(EventData[] batch, CancellationToken cancellationToken)
         {
             if (batch == null)
             {
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (!batch.Any())
+            if (batch.Length > 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(batch), ExceptionMessages.CollectionIsEmpty);
+                await _client.SendAsync(batch);
             }
-            return _client.SendAsync(batch);
         }
     }
 }

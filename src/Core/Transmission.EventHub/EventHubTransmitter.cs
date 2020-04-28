@@ -65,6 +65,7 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task SendBatchAsync()
         {
+            // Add disposable dequeue and delete files after send
             EventData[] batch = await _storage
                 .DequeueAsync(_disposeToken.Token)
                 .ConfigureAwait(false);

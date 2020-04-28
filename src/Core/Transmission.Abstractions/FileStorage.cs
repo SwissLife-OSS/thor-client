@@ -16,6 +16,7 @@ namespace Thor.Core.Transmission.Abstractions
         where TData : class
     {
         private static readonly int MaxBatchSize = 100;
+        private readonly TData[] _emptyBatch = new TData[0];
         private readonly string _storagePath;
         private readonly IEnumerable<FileInfo> _files;
 
@@ -59,16 +60,22 @@ namespace Thor.Core.Transmission.Abstractions
         public async Task<TData[]> DequeueAsync(
             CancellationToken cancellationToken)
         {
-            var batch = new TData[MaxBatchSize];
-            var position = 0;
-
-            foreach (FileInfo file in _files.Take(MaxBatchSize))
+            if (!HasData)
             {
+                return _emptyBatch;
+            }
+
+            FileInfo[] files = _files.Take(MaxBatchSize).ToArray();
+            var batch = new TData[files.Length];
+
+            for (var index = 0; index < files.Length; index++)
+            {
+                FileInfo file = files[index];
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
                 byte[] bytes = await FileHelper
                     .ReadAllBytesAsync(file.FullName, cancellationToken);
 
-                batch[position++] = Deserialize(bytes, fileNameWithoutExtension);
+                batch[index] = Deserialize(bytes, fileNameWithoutExtension);
 
                 TryDelete(file.FullName);
             }
