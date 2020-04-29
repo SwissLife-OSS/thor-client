@@ -139,7 +139,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
                         count++;
                     }
 
-                    return Task.FromResult(results.ToArray());
+                    return Task.FromResult<IReadOnlyCollection<EventData>>(results);
                 });
             sender
                 .Setup(t => t.SendAsync(It.IsAny<EventData[]>(), It.IsAny<CancellationToken>()))

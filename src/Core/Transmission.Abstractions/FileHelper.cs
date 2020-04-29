@@ -11,7 +11,7 @@ namespace Thor.Core.Transmission.Abstractions
             CancellationToken cancellationToken)
         {
 #if NETSTANDARD2_0
-            return Task.Run(() => File.ReadAllBytes(fileName));
+            return Task.Run(() => File.ReadAllBytes(fileName), cancellationToken);
 #else
             return File.ReadAllBytesAsync(fileName, cancellationToken);
 #endif
@@ -23,7 +23,7 @@ namespace Thor.Core.Transmission.Abstractions
             CancellationToken cancellationToken)
         {
 #if NETSTANDARD2_0
-            return Task.Run(() => File.WriteAllBytes(fileName, bytes));
+            return Task.Run(() => File.WriteAllBytes(fileName, bytes), cancellationToken);
 #else
             return File.WriteAllBytesAsync(fileName, bytes, cancellationToken);
 #endif

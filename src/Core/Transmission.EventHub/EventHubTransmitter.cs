@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace Thor.Core.Transmission.EventHub
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
-                () => _buffer.Count == 0,
+                () => !_storage.HasData,
                 _disposeToken.Token);
         }
 
@@ -66,11 +67,10 @@ namespace Thor.Core.Transmission.EventHub
         private async Task SendBatchAsync()
         {
             // Add disposable dequeue and delete files after send
-            EventData[] batch = await _storage
+            IReadOnlyCollection<EventData> batch = await _storage
                 .DequeueAsync(_disposeToken.Token)
                 .ConfigureAwait(false);
-
-            if (batch.Length > 0)
+            if (batch.Count > 0)
             {
                 await _sender
                     .SendAsync(batch, _disposeToken.Token)

@@ -16,6 +16,7 @@ namespace Thor.Core.Transmission.Abstractions
         where TData : class
     {
         private static readonly int MaxBatchSize = 100;
+        private readonly byte[] _emptyFile = new byte[0];
         private readonly TData[] _emptyBatch = new TData[0];
         private readonly string _storagePath;
         private readonly IEnumerable<FileInfo> _files;
@@ -57,7 +58,7 @@ namespace Thor.Core.Transmission.Abstractions
         public bool HasData => _files.Any();
 
         /// <inheritdoc/>
-        public async Task<TData[]> DequeueAsync(
+        public async Task<IReadOnlyCollection<TData>> DequeueAsync(
             CancellationToken cancellationToken)
         {
             if (!HasData)
@@ -65,17 +66,19 @@ namespace Thor.Core.Transmission.Abstractions
                 return _emptyBatch;
             }
 
-            FileInfo[] files = _files.Take(MaxBatchSize).ToArray();
-            var batch = new TData[files.Length];
+            var batch = new List<TData>();
 
-            for (var index = 0; index < files.Length; index++)
+            foreach(FileInfo file in _files.Take(MaxBatchSize))
             {
-                FileInfo file = files[index];
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
-                byte[] bytes = await FileHelper
-                    .ReadAllBytesAsync(file.FullName, cancellationToken);
+                byte[] bytes = await TryReadAllBytesAsync(file.FullName, cancellationToken);
 
-                batch[index] = Deserialize(bytes, fileNameWithoutExtension);
+                if (bytes.Length < 1)
+                {
+                    continue;
+                }
+
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
+                batch.Add(Deserialize(bytes, fileNameWithoutExtension));
 
                 TryDelete(file.FullName);
             }
@@ -107,6 +110,21 @@ namespace Thor.Core.Transmission.Abstractions
                     fileName,
                     Serialize(data),
                     cancellationToken);
+            }
+        }
+
+        private async Task<byte[]> TryReadAllBytesAsync(
+            string fileFullName,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await FileHelper
+                    .ReadAllBytesAsync(fileFullName, cancellationToken);
+            }
+            catch (IOException)
+            {
+                return _emptyFile;
             }
         }
 

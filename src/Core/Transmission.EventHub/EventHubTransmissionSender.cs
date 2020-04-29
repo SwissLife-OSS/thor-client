@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -27,14 +28,14 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public async Task SendAsync(EventData[] batch, CancellationToken cancellationToken)
+        public async Task SendAsync(IReadOnlyCollection<EventData> batch, CancellationToken cancellationToken)
         {
             if (batch == null)
             {
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (batch.Length > 0)
+            if (batch.Count > 0)
             {
                 await _client.SendAsync(batch);
             }

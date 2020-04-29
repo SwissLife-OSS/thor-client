@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
@@ -26,14 +27,16 @@ namespace Thor.Core.Transmission.BlobStorage
         }
 
         /// <inheritdoc/>
-        public async Task SendAsync(AttachmentDescriptor[] batch, CancellationToken cancellationToken)
+        public async Task SendAsync(
+            IReadOnlyCollection<AttachmentDescriptor> batch,
+            CancellationToken cancellationToken)
         {
             if (batch == null)
             {
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (batch.Length > 0)
+            if (batch.Count > 0)
             {
                 try
                 {

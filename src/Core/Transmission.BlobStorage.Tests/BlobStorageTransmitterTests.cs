@@ -116,7 +116,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                         count++;
                     }
 
-                    return Task.FromResult(results.ToArray());
+                    return Task.FromResult<IReadOnlyCollection<AttachmentDescriptor>>(results);
                 });
             sender
                 .Setup(t => t.SendAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))

@@ -1,44 +1,23 @@
-using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using static Thor.Hosting.AspNetCore.FunctionalTest.EventSources.ValuesEventSources;
 
 namespace Thor.Hosting.AspNetCore.FunctionalTest.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ValuesController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("{count}")]
+        public string Get(int count)
         {
-            return new string[] { "value1", "value2" };
-        }
+            var timer = Stopwatch.StartNew();
+            var processed = 0;
+            for (processed = 0; processed < count; processed++)
+            {
+                Log.RetrieveObject(processed);
+            }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            throw new InvalidOperationException();
-
-            //return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return $"{processed} {timer.Elapsed}";
         }
     }
 }
