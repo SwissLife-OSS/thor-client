@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
-using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Transmission.EventHub.Tests
@@ -54,21 +53,6 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
-        }
-
-        [Fact(DisplayName = "SendAsync: Should throw an argument out of range exception for batch")]
-        public async Task SendAsync_BatchOutOfRange()
-        {
-            // arrange
-            EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
-            EventHubTransmissionSender sender = new EventHubTransmissionSender(client);
-            EventData[] batch = new EventData[0];
-
-            // act
-            Func<Task> verify = () => sender.SendAsync(batch, default);
-
-            // assert
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>("batch", verify).ConfigureAwait(false);
         }
 
         #endregion
