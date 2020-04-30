@@ -142,7 +142,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
                     return Task.FromResult<IReadOnlyCollection<EventData>>(results);
                 });
             sender
-                .Setup(t => t.SendAsync(It.IsAny<EventData[]>(), It.IsAny<CancellationToken>()))
+                .Setup(t => t.SendAsync(It.IsAny<IReadOnlyCollection<EventData>>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
             ITelemetryEventTransmitter transmitter = new EventHubTransmitter(buffer.Object, sender.Object, storage.Object);
@@ -155,7 +155,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             resetEvent.Wait(TimeSpan.FromSeconds(5));
 
             sender.Verify(s => s.SendAsync(
-                It.Is<EventData[]>(d => d.Count() == 1),
+                It.Is<IReadOnlyCollection<EventData>>(d => d.Count() == 1),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 

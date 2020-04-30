@@ -70,6 +70,7 @@ namespace Thor.Core.Transmission.EventHub
             IReadOnlyCollection<EventData> batch = await _storage
                 .DequeueAsync(_disposeToken.Token)
                 .ConfigureAwait(false);
+
             if (batch.Count > 0)
             {
                 await _sender

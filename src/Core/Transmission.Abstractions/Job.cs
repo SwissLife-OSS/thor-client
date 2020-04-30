@@ -12,7 +12,12 @@ namespace Thor.Core.Transmission.Abstractions
             CancellationToken cancellationToken)
         {
             var job = new Job(cancellationToken);
-            job.Start(action, delay);
+
+            Task.Factory.StartNew(
+                () => job.Start(action, delay),
+                cancellationToken,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
 
             return job;
         }
@@ -28,13 +33,12 @@ namespace Thor.Core.Transmission.Abstractions
             _sync = new ManualResetEventSlim();
         }
 
-        private async void Start(Func<Task> action, Func<bool> delay)
-        {
+        private async Task Start(Func<Task> action, Func<bool> delay)
+        {   
             _cancellationToken.ThrowIfCancellationRequested();
 
             while (!_cancellationToken.IsCancellationRequested)
             {
-
                 await action();
 
                 if (!_cancellationToken.IsCancellationRequested && delay())
