@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Abstractions;
 
@@ -25,9 +25,8 @@ namespace Thor.Core.Transmission.EventHub
             }
 
             byte[] data = source.Serialize();
-            EventData destination = new EventData(data);
 
-            return destination;
+            return new EventData(data);
         }
     }
 }

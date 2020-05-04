@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,53 +16,39 @@ namespace Thor.Core.Transmission.EventHub
         : ITelemetryEventTransmitter
         , IDisposable
     {
-        private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly ITransmissionBuffer<EventData> _buffer;
         private readonly ITransmissionSender<EventData> _sender;
+        private readonly ITransmissionStorage<EventData> _storage;
+        private readonly Job _sendJob;
+        private readonly Job _storeJob;
         private bool _disposed;
-        private Task _transmission;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
-        /// </summary>
-        /// <param name="client">A <c>Azure</c> <c>EventHub</c> client instance.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="client"/> must not be <c>null</c>.
-        /// </exception>
-        public EventHubTransmitter(EventHubClient client)
-        {
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-
-            _buffer = new EventHubTransmissionBuffer(client);
-            _sender = new EventHubTransmissionSender(client);
-
-            StartAsyncSending();
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
         /// </summary>
         /// <param name="buffer">A transmission buffer instance.</param>
         /// <param name="sender">A transmission sender instance.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="buffer"/> must not be <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sender"/> must not be <c>null</c>.
-        /// </exception>
-        internal EventHubTransmitter(ITransmissionBuffer<EventData> buffer,
-            ITransmissionSender<EventData> sender)
+        /// <param name="storage">A transmission storage instance.</param>
+        public EventHubTransmitter(
+            ITransmissionBuffer<EventData> buffer,
+            ITransmissionSender<EventData> sender,
+            ITransmissionStorage<EventData> storage)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
 
-            StartAsyncSending();
+            _storeJob = Job.Start(
+                async () => await StoreBatchAsync().ConfigureAwait(false),
+                () => _buffer.Count == 0,
+                _disposeToken.Token);
+
+            _sendJob = Job.Start(
+                async () => await SendBatchAsync().ConfigureAwait(false),
+                () => !_storage.HasData,
+                _disposeToken.Token);
         }
-
 
         /// <inheritdoc />
         public void Enqueue(TelemetryEvent data)
@@ -74,57 +60,61 @@ namespace Thor.Core.Transmission.EventHub
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _buffer.EnqueueAsync(data.Map()));
+                Task.Run(() => _buffer.EnqueueAsync(data.Map(), _disposeToken.Token));
             }
         }
 
         private async Task SendBatchAsync()
         {
-            IEnumerable<EventData> batch = await _buffer
-                .DequeueAsync()
+            // Add disposable dequeue and delete files after send
+            IReadOnlyCollection<EventData> batch = await _storage
+                .DequeueAsync(_disposeToken.Token)
                 .ConfigureAwait(false);
 
-            if (batch.Any())
+            if (batch.Count > 0)
             {
                 await _sender
-                    .SendAsync(batch)
+                    .SendAsync(batch, _disposeToken.Token)
                     .ConfigureAwait(false);
             }
         }
 
-        private void StartAsyncSending()
+        private async Task StoreBatchAsync()
         {
-            _transmission = Task.Run(async () =>
+            EventData[] batch = await _buffer
+                .DequeueAsync(_disposeToken.Token)
+                .ConfigureAwait(false);
+
+            if (batch.Length > 0)
             {
-                while (!_disposeToken.IsCancellationRequested)
-                {
-                    await SendBatchAsync().ConfigureAwait(false);
-
-                    if (!_disposeToken.IsCancellationRequested && _buffer.Count == 0)
-                    {
-                        await Task.Delay(_delay).ConfigureAwait(false);
-                    }
-                }
-            });
+                await _storage
+                    .EnqueueAsync(batch.ToArray(), _disposeToken.Token)
+                    .ConfigureAwait(false);
+            }
         }
-
-        #region Dispose
 
         /// <inheritdoc />
         public void Dispose()
         {
             if (!_disposed)
             {
-                _transmission.GetAwaiter().OnCompleted(() =>
-                {
-                    _disposeToken?.Dispose();
-                });
-
                 _disposeToken.Cancel();
+
+                if (!_sendJob.Stopped && !_storeJob.Stopped)
+                {
+                    WaitHandle.WaitAll(new[]
+                    {
+                        _sendJob.WaitHandle,
+                        _storeJob.WaitHandle
+                    }, TimeSpan.FromSeconds(5));
+                }
+
+                _disposeToken?.Dispose();
+                _sendJob?.Dispose();
+                _storeJob?.Dispose();
+
                 _disposed = true;
             }
         }
-
-        #endregion
     }
 }

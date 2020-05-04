@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -55,13 +55,13 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = null;
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
         }
 
-        [Fact(DisplayName = "SendAsync: Should throw an argument out of range exception for batch")]
+        [Fact(DisplayName = "SendAsync: Should not send when empty batch")]
         public async Task SendAsync_BatchOutOfRange()
         {
             // arrange
@@ -75,10 +75,10 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            await sender.SendAsync(batch, default);
 
             // assert
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>("batch", verify).ConfigureAwait(false);
+            container.Verify(c => c.UploadAsync(It.IsAny<AttachmentDescriptor>(), default), Times.Never);
         }
 
         [Fact(DisplayName = "SendAsync: Should not throw any exception")]
@@ -95,7 +95,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             AttachmentDescriptor[] batch = new[] { new AttachmentDescriptor() };
 
             // act
-            Func<Task> verify = () => sender.SendAsync(batch);
+            Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // arrange
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +23,6 @@ namespace Thor.Core.Transmission.Abstractions
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="batch"/> must contain at least one item.
         /// </exception>
-        Task SendAsync(IEnumerable<TData> batch, CancellationToken cancellationToken);
+        Task SendAsync(IReadOnlyCollection<TData> batch, CancellationToken cancellationToken);
     }
 }

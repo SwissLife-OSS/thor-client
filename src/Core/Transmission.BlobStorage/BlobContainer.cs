@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Storage.Blob;
@@ -37,7 +37,7 @@ namespace Thor.Core.Transmission.BlobStorage
             try
             {
                 await _container.GetBlockBlobReference(descriptor.GetFilepath())
-                    .UploadFromByteArrayAsync(descriptor.Value, 0, descriptor.Value.Length)
+                    .UploadFromByteArrayAsync(descriptor.Value, 0, descriptor.Value.Length, cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Exception)
