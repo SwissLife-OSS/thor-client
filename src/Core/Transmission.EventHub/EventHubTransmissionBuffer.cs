@@ -89,7 +89,7 @@ namespace Thor.Core.Transmission.EventHub
 
             while (!stopCollectingEvents)
             {
-                if (_input.TryTake(out EventData data, TimeSpan.FromMilliseconds(-1)))
+                if (_input.TryTake(out EventData data))
                 {
                     if (!batch.TryAdd(data))
                     {
