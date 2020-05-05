@@ -16,7 +16,6 @@ namespace Thor.Core.Transmission.Abstractions
         where TData : class
     {
         private static readonly int MaxBatchSize = 100;
-        private readonly byte[] _emptyFile = new byte[0];
         private readonly TData[] _emptyBatch = new TData[0];
         private readonly string _storagePath;
         private readonly IEnumerable<FileInfo> _files;
@@ -70,17 +69,18 @@ namespace Thor.Core.Transmission.Abstractions
 
             foreach(FileInfo file in _files.Take(MaxBatchSize))
             {
-                byte[] bytes = await TryReadAllBytesAsync(file.FullName, cancellationToken);
+                var fileName = Path.GetFileNameWithoutExtension(file.FullName);
 
-                if (bytes.Length < 1)
+                var memoryMapFile = new MemoryMap<TData>(fileName, file.FullName);
+
+                TData data = await memoryMapFile
+                    .LoadAsync(Deserialize, cancellationToken);
+
+                if (data != null)
                 {
-                    continue;
+                    batch.Add(data);
+                    TryDelete(file.FullName);
                 }
-
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
-                batch.Add(Deserialize(bytes, fileNameWithoutExtension));
-
-                TryDelete(file.FullName);
             }
 
             return batch;
@@ -104,27 +104,11 @@ namespace Thor.Core.Transmission.Abstractions
 
             foreach (TData data in batch)
             {
-                var fileName = Path.Combine(_storagePath, $"{EncodeFileName(data)}.tmp");
+                var fileName = EncodeFileName(data);
+                var filePath = Path.Combine(_storagePath, $"{fileName}.tmp");
 
-                await FileHelper.WriteAllBytesAsync(
-                    fileName,
-                    Serialize(data),
-                    cancellationToken);
-            }
-        }
-
-        private async Task<byte[]> TryReadAllBytesAsync(
-            string fileFullName,
-            CancellationToken cancellationToken)
-        {
-            try
-            {
-                return await FileHelper
-                    .ReadAllBytesAsync(fileFullName, cancellationToken);
-            }
-            catch (IOException)
-            {
-                return _emptyFile;
+                var memoryMapFile = new MemoryMap<TData>(fileName, filePath);
+                await memoryMapFile.CreateAsync(data, Serialize, cancellationToken);
             }
         }
 

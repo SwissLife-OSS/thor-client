@@ -15,7 +15,7 @@ namespace Thor.Core.Transmission.EventHub
     {
         private static readonly TimeSpan Delay = TimeSpan.FromMilliseconds(50);
         private static readonly int MaxBufferSize = 1000;
-        private readonly EventData[] _emptyBatch = new EventData[0];
+        private static readonly EventData[] EmptyBatch = new EventData[0];
         private readonly BlockingCollection<EventData> _input = new BlockingCollection<EventData>(MaxBufferSize);
         private readonly ConcurrentQueue<EventData[]> _output = new ConcurrentQueue<EventData[]>();
         private readonly EventHubClient _client;
@@ -50,7 +50,7 @@ namespace Thor.Core.Transmission.EventHub
                 return batch;
             }
 
-            return _emptyBatch;
+            return EmptyBatch;
         }
 
         /// <inheritdoc />
