@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -124,7 +125,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             ConcurrentQueue<EventData> bufferQueue = new ConcurrentQueue<EventData>();
 
             buffer
-                .Setup(t => t.EnqueueAsync(It.IsAny<EventData>(), It.IsAny<CancellationToken>()))
+                .Setup(t => t.Enqueue(It.IsAny<EventData>()))
                 .Callback((EventData d, CancellationToken t) => bufferQueue.Enqueue(d));
             storage
                 .Setup(t => t.DequeueAsync(It.IsAny<CancellationToken>()))
@@ -157,6 +158,51 @@ namespace Thor.Core.Transmission.EventHub.Tests
             sender.Verify(s => s.SendAsync(
                 It.Is<IReadOnlyCollection<EventData>>(d => d.Count() == 1),
                 It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public void TestSemaphore()
+        {
+            var collection = new BlockingCollection<string>(5);
+
+            Task.Run(async () =>
+            {
+                int i = 0;
+                while (true)
+                {
+                    if (collection.TryAdd(i.ToString(), TimeSpan.FromMilliseconds(-1)))
+                    {
+                        Debug.WriteLine($"Enqueued {i++}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Fail to enqueue {i}");
+                    }
+
+                    await Task.Delay(TimeSpan.FromMilliseconds(50));
+                }
+            });
+
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    if (collection.TryTake(out var i, TimeSpan.FromMilliseconds(-1)))
+                    {
+                        Debug.WriteLine($"------Dequeued {i}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"------Fail to dequeued.");
+                    }
+
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                }
+            });
+
+            while (true)
+            {
+            }
         }
 
         #endregion

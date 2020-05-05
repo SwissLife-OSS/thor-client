@@ -19,18 +19,16 @@ namespace Thor.Core.Transmission.Abstractions
         /// <summary>
         /// Dequeues a telemetry data batch from the buffer.
         /// </summary>
-        /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>A telemetry data batch.</returns>
-        Task<TData[]> DequeueAsync(CancellationToken cancellationToken);
+        TData[] Dequeue();
 
         /// <summary>
         /// Enqueues a single telemetry data object.
         /// </summary>
         /// <param name="data">A telemetry data object.</param>
-        /// <param name="cancellationToken">A cancellation token.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="data"/> must not be <c>null</c>.
         /// </exception>
-        Task EnqueueAsync(TData data, CancellationToken cancellationToken);
+        void Enqueue(TData data);
     }
 }

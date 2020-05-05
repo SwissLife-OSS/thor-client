@@ -49,10 +49,10 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventHubTransmissionBuffer buffer = new EventHubTransmissionBuffer(client);
 
             // act
-            Func<Task> verify = () => buffer.DequeueAsync(default);
+            Action verify = () => buffer.Dequeue();
 
             // arrange
-            Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));
+            Assert.Null(Record.Exception(verify));
         }
 
         #endregion
@@ -68,10 +68,10 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventData data = null;
 
             // act
-            Func<Task> verify = () => buffer.EnqueueAsync(data, default);
+            Action verify = () => buffer.Enqueue(data);
 
             // assert
-            await Assert.ThrowsAsync<ArgumentNullException>("data", verify).ConfigureAwait(false);
+            Assert.Throws<ArgumentNullException>("data", verify);
         }
 
         #endregion

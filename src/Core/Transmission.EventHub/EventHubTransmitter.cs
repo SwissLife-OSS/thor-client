@@ -60,7 +60,7 @@ namespace Thor.Core.Transmission.EventHub
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _buffer.EnqueueAsync(data.Map(), _disposeToken.Token));
+                _buffer.Enqueue(data.Map());
             }
         }
 
@@ -81,9 +81,7 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task StoreBatchAsync()
         {
-            EventData[] batch = await _buffer
-                .DequeueAsync(_disposeToken.Token)
-                .ConfigureAwait(false);
+            EventData[] batch = _buffer.Dequeue();
 
             if (batch.Length > 0)
             {
