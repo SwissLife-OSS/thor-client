@@ -160,51 +160,6 @@ namespace Thor.Core.Transmission.EventHub.Tests
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
-        [Fact]
-        public void TestSemaphore()
-        {
-            var collection = new BlockingCollection<string>(5);
-
-            Task.Run(async () =>
-            {
-                int i = 0;
-                while (true)
-                {
-                    if (collection.TryAdd(i.ToString(), TimeSpan.FromMilliseconds(-1)))
-                    {
-                        Debug.WriteLine($"Enqueued {i++}");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"Fail to enqueue {i}");
-                    }
-
-                    await Task.Delay(TimeSpan.FromMilliseconds(50));
-                }
-            });
-
-            Task.Run(async () =>
-            {
-                while (true)
-                {
-                    if (collection.TryTake(out var i, TimeSpan.FromMilliseconds(-1)))
-                    {
-                        Debug.WriteLine($"------Dequeued {i}");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"------Fail to dequeued.");
-                    }
-
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
-                }
-            });
-
-            while (true)
-            {
-            }
-        }
-
         #endregion
 
         #region Dispose
