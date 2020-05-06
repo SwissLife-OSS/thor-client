@@ -49,7 +49,7 @@ namespace Thor.Core.Transmission.EventHub
 
             _storeJob = Job.Start(
                 async () => await StoreBatchAsync().ConfigureAwait(false),
-                () => _aggregator.Count == 0,
+                () => _buffer.Count == 0,
                 _disposeToken.Token);
 
             _aggregateJob = Job.Start(
