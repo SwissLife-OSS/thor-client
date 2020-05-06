@@ -126,16 +126,16 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // assert
             ManualResetEventSlim resetEvent = new ManualResetEventSlim();
             Mock<IMemoryBuffer<EventData>> buffer = new Mock<IMemoryBuffer<EventData>>();
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
+            Mock<ITransmissionBuffer<EventData>> aggregator = new Mock<ITransmissionBuffer<EventData>>();
             Mock<ITransmissionSender<EventData>> sender = new Mock<ITransmissionSender<EventData>>();
             Mock<ITransmissionStorage<EventData>> storage = new Mock<ITransmissionStorage<EventData>>();
             ConcurrentQueue<EventData> bufferQueue = new ConcurrentQueue<EventData>();
 
             buffer
                 .Setup(t => t.Enqueue(It.IsAny<EventData>()))
-                .Callback((EventData d, CancellationToken t) => bufferQueue.Enqueue(d));
-            storage
-                .Setup(t => t.DequeueAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Callback((EventData d) => bufferQueue.Enqueue(d));
+            aggregator
+                .Setup(t => t.Dequeue())
                 .Returns(() =>
                 {
                     int count = 0;
@@ -147,13 +147,14 @@ namespace Thor.Core.Transmission.EventHub.Tests
                         count++;
                     }
 
-                    return Task.FromResult<IReadOnlyCollection<EventData>>(results);
+                    return results.ToArray();
                 });
             sender
                 .Setup(t => t.SendAsync(It.IsAny<IReadOnlyCollection<EventData>>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
-            ITelemetryEventTransmitter transmitter = new EventHubTransmitter(buffer.Object, aggregator, sender.Object, storage.Object, new EventsOptions());
+            ITelemetryEventTransmitter transmitter = new EventHubTransmitter(
+                buffer.Object, aggregator.Object, sender.Object, storage.Object, new EventsOptions());
             TelemetryEvent data = new TelemetryEvent();
 
             // act

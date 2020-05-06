@@ -97,11 +97,11 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             ManualResetEventSlim resetEvent = new ManualResetEventSlim();
             Mock<ITransmissionStorage<AttachmentDescriptor>> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>();
             Mock<ITransmissionSender<AttachmentDescriptor>> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>();
-            ConcurrentQueue<AttachmentDescriptor[]> bufferQueue = new ConcurrentQueue<AttachmentDescriptor[]>();
+            ConcurrentQueue<AttachmentDescriptor> bufferQueue = new ConcurrentQueue<AttachmentDescriptor>();
 
             storage
-                .Setup(t => t.EnqueueAsync(It.IsAny<AttachmentDescriptor[]>(), It.IsAny<CancellationToken>()))
-                .Callback((AttachmentDescriptor[] d, CancellationToken t) => bufferQueue.Enqueue(d));
+                .Setup(t => t.EnqueueAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
+                .Callback((AttachmentDescriptor d, CancellationToken t) => bufferQueue.Enqueue(d));
             storage
                 .Setup(t => t.DequeueAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .Returns(() =>
@@ -109,9 +109,9 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                     int count = 0;
                     List<AttachmentDescriptor> results = new List<AttachmentDescriptor>();
 
-                    while (bufferQueue.TryDequeue(out AttachmentDescriptor[] d) && count < 10)
+                    while (bufferQueue.TryDequeue(out AttachmentDescriptor d) && count < 10)
                     {
-                        results.AddRange(d);
+                        results.Add(d);
                         count++;
                     }
 

@@ -42,7 +42,7 @@ namespace Thor.Core.Transmission.BlobStorage
             AttachmentsOptions attachmentsOptions = configuration
                 .GetSection("Tracing")
                 .GetSection("Attachments")
-                .Get<AttachmentsOptions>();
+                .Get<AttachmentsOptions>() ?? new AttachmentsOptions();
 
             return services
                 .AddTracingCore(configuration)

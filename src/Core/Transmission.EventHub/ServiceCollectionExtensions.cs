@@ -40,7 +40,7 @@ namespace Thor.Core.Transmission.EventHub
             EventsOptions eventsOptions = configuration
                 .GetSection("Tracing")
                 .GetSection("Events")
-                .Get<EventsOptions>();
+                .Get<EventsOptions>() ?? new EventsOptions();
 
             return services
                 .AddTracingCore(configuration)
