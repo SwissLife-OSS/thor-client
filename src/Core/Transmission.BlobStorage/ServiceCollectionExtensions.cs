@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Thor.Core.Transmission.Abstractions;
+using Thor.Core.Transmission.EventHub;
 
 namespace Thor.Core.Transmission.BlobStorage
 {
@@ -33,15 +34,25 @@ namespace Thor.Core.Transmission.BlobStorage
                 throw new ArgumentNullException(nameof(configuration));
             }
 
+            BlobStorageConfiguration blobStorageConfiguration = configuration
+                .GetSection("Tracing")
+                .GetSection("BlobStorage")
+                .Get<BlobStorageConfiguration>();
+
+            AttachmentsOptions attachmentsOptions = configuration
+                .GetSection("Tracing")
+                .GetSection("Attachments")
+                .Get<AttachmentsOptions>();
+
             return services
                 .AddTracingCore(configuration)
-                .Configure<BlobStorageConfiguration>(configuration.GetSection("Tracing").GetSection("BlobStorage"))
+                .AddSingleton(blobStorageConfiguration)
+                .AddSingleton(attachmentsOptions)
                 .AddSingleton(p =>
                 {
-                    BlobStorageConfiguration config = p.GetRequiredService<IOptions<BlobStorageConfiguration>>()?.Value;
-                    CloudStorageAccount account = CloudStorageAccount.Parse(config?.ConnectionString);
+                    CloudStorageAccount account = CloudStorageAccount.Parse(blobStorageConfiguration.ConnectionString);
                     CloudBlobClient client = account.CreateCloudBlobClient();
-                    CloudBlobContainer container = client.GetContainerReference(config?.AttachmentContainerName);
+                    CloudBlobContainer container = client.GetContainerReference(blobStorageConfiguration.AttachmentContainerName);
 
                     container.CreateIfNotExistsAsync().GetAwaiter().GetResult();
 
@@ -51,9 +62,8 @@ namespace Thor.Core.Transmission.BlobStorage
                 .AddSingleton<ITransmissionSender<AttachmentDescriptor>, BlobStorageTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<AttachmentDescriptor>>(p =>
                 {
-                    TracingConfiguration config = p.GetRequiredService<IOptions<TracingConfiguration>>()?.Value;
-
-                    return new BlobStorageTransmissionStorage(config?.GetAttachmentsStoragePath());
+                    TracingConfiguration tracingConfiguration = p.GetRequiredService<TracingConfiguration>();
+                    return new BlobStorageTransmissionStorage(tracingConfiguration.GetAttachmentsStoragePath());
                 })
                 .AddSingleton<ITelemetryAttachmentTransmitter, BlobStorageTransmitter>()
                 .AddSingleton<IAttachmentTransmissionInitializer, AttachmentTransmissionInitializer>();

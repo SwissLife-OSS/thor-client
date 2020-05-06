@@ -47,7 +47,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
 
             // act
-            Func<Task> verify = () => storage.DequeueAsync(default);
+            Func<Task> verify = () => storage.DequeueAsync(1, default);
 
             // arrange
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,18 +59,20 @@ namespace Thor.Core.Session
                 throw new ArgumentNullException(nameof(configuration));
             }
 
+            SessionConfiguration sessionConfiguration = configuration
+                .GetSection("Tracing")
+                .Get<SessionConfiguration>();
+
             return services
                 .AddTracingCore(configuration)
-                .Configure<SessionConfiguration>(configuration.GetSection("Tracing"))
+                .AddSingleton(sessionConfiguration)
                 .AddSingleton<IProvidersDescriptor, SessionConfigurationProvidersDescriptor>()
                 .AddSingleton(p =>
                 {
-                    SessionConfiguration config = p
-                        .GetRequiredService<IOptions<SessionConfiguration>>()?.Value;
                     IEnumerable<ITelemetryEventTransmitter> eventTransmitters =
                         p.GetServices<ITelemetryEventTransmitter>();
                     ITelemetrySession session = InProcessTelemetrySession
-                        .Create(config, p.GetServices<IProvidersDescriptor>());
+                        .Create(sessionConfiguration, p.GetServices<IProvidersDescriptor>());
 
                     foreach (ITelemetryEventTransmitter transmitter in eventTransmitters)
                     {

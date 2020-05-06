@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
@@ -26,7 +26,7 @@ namespace Thor.Core.Tests
             // assert
             ServiceProvider provider = services.BuildServiceProvider();
 
-            Assert.IsType<TracingConfiguration>(provider.GetService<IOptions<TracingConfiguration>>()?.Value);
+            Assert.IsType<TracingConfiguration>(provider.GetService<TracingConfiguration>());
         }
 
         #endregion

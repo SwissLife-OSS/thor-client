@@ -13,13 +13,13 @@ namespace Thor.Hosting.GenericHost
         private readonly IApplicationLifetime _applicationLifetime;
         private readonly ITelemetrySession _session;
         private readonly IAttachmentTransmissionInitializer _initializer;
-        private readonly IOptions<TracingConfiguration> _configurationAccessor;
+        private readonly TracingConfiguration _options;
 
         public HostTelemetryInitializer(
             IApplicationLifetime applicationLifetime,
             ITelemetrySession session,
             IAttachmentTransmissionInitializer initializer,
-            IOptions<TracingConfiguration> configurationAccessor)
+            TracingConfiguration options)
         {
             _applicationLifetime = applicationLifetime ??
                 throw new ArgumentNullException(nameof(applicationLifetime));
@@ -27,8 +27,8 @@ namespace Thor.Hosting.GenericHost
                 throw new ArgumentNullException(nameof(session));
             _initializer = initializer
                 ?? throw new ArgumentNullException(nameof(initializer));
-            _configurationAccessor = configurationAccessor ??
-                throw new ArgumentNullException(nameof(configurationAccessor));
+            _options = options ??
+                throw new ArgumentNullException(nameof(options));
 
             RegisterForUnhandledExceptions();
         }
@@ -55,7 +55,7 @@ namespace Thor.Hosting.GenericHost
         private void Start()
         {
             _initializer.Initialize();
-            Application.Start(_configurationAccessor.Value.ApplicationId);
+            Application.Start(_options.ApplicationId);
         }
 
         private void Stop()

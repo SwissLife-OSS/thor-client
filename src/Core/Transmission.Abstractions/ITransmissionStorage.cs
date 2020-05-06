@@ -18,23 +18,25 @@ namespace Thor.Core.Transmission.Abstractions
         bool HasData { get; }
 
         /// <summary>
-        /// Dequeues a telemetry data batch from the storage.
+        /// Dequeue a data batch from the storage.
         /// </summary>
+        /// <param name="count">Number of items to be dequeued.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>A telemetry data batch.</returns>
-        Task<IReadOnlyCollection<TData>> DequeueAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<TData>> DequeueAsync(int count, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Enqueues a telemetry data batch to a <c>short-term</c> storage.
+        /// Enqueue a telemetry data batch to a <c>short-term</c> storage.
         /// </summary>
-        /// <param name="batch">A telemetry data batch.</param>
+        /// <param name="batch">A data batch to be stored.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="batch"/> must not be <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="batch"/> must contain at least one item.
-        /// </exception>
-        Task EnqueueAsync(TData[] batch, CancellationToken cancellationToken);
+        Task EnqueueAsync(IReadOnlyCollection<TData> batch, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Enqueue a telemetry data object to a <c>short-term</c> storage.
+        /// </summary>
+        /// <param name="batch">A data object to be stored.</param>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        Task EnqueueAsync(TData batch, CancellationToken cancellationToken);
     }
 }

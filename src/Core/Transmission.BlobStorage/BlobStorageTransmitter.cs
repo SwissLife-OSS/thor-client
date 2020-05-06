@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
+using Thor.Core.Transmission.EventHub;
 
 namespace Thor.Core.Transmission.BlobStorage
 {
@@ -17,26 +18,21 @@ namespace Thor.Core.Transmission.BlobStorage
         private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
         private readonly ITransmissionStorage<AttachmentDescriptor> _storage;
         private readonly ITransmissionSender<AttachmentDescriptor> _sender;
+        private readonly AttachmentsOptions _options;
         private readonly Job _sendJob;
         private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmitter"/> class.
         /// </summary>
-        /// <param name="storage">A transmission storage instance.</param>
-        /// <param name="sender">A transmission sender instance.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="storage"/> must not be <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sender"/> must not be <c>null</c>.
-        /// </exception>
         public BlobStorageTransmitter(
             ITransmissionStorage<AttachmentDescriptor> storage,
-            ITransmissionSender<AttachmentDescriptor> sender)
+            ITransmissionSender<AttachmentDescriptor> sender,
+            AttachmentsOptions options)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
@@ -54,7 +50,7 @@ namespace Thor.Core.Transmission.BlobStorage
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _storage.EnqueueAsync(new[] { data }, _disposeToken.Token));
+                Task.Run(() => _storage.EnqueueAsync(data, _disposeToken.Token));
             }
         }
 
@@ -62,7 +58,7 @@ namespace Thor.Core.Transmission.BlobStorage
         {
             // Add disposable dequeue and delete files after send
             IReadOnlyCollection<AttachmentDescriptor> batch = await _storage
-                .DequeueAsync(_disposeToken.Token)
+                .DequeueAsync(_options.StorageDequeueBatchSize, _disposeToken.Token)
                 .ConfigureAwait(false);
 
             if (batch.Count > 0)

@@ -15,8 +15,7 @@ namespace Thor.Core.Transmission.Abstractions
         : ITransmissionStorage<TData>
         where TData : class
     {
-        private static readonly int MaxBatchSize = 100;
-        private readonly TData[] _emptyBatch = new TData[0];
+        private static readonly TData[] EmptyBatch = new TData[0];
         private readonly string _storagePath;
         private readonly IEnumerable<FileInfo> _files;
 
@@ -58,16 +57,17 @@ namespace Thor.Core.Transmission.Abstractions
 
         /// <inheritdoc/>
         public async Task<IReadOnlyCollection<TData>> DequeueAsync(
+            int count,
             CancellationToken cancellationToken)
         {
             if (!HasData)
             {
-                return _emptyBatch;
+                return EmptyBatch;
             }
 
             var batch = new List<TData>();
 
-            foreach(FileInfo file in _files.Take(MaxBatchSize))
+            foreach(FileInfo file in _files.Take(count))
             {
                 var fileName = Path.GetFileNameWithoutExtension(file.FullName);
 
@@ -88,7 +88,7 @@ namespace Thor.Core.Transmission.Abstractions
 
         /// <inheritdoc/>
         public async Task EnqueueAsync(
-            TData[] batch,
+            IReadOnlyCollection<TData> batch,
             CancellationToken cancellationToken)
         {
             if (batch == null)
@@ -96,20 +96,27 @@ namespace Thor.Core.Transmission.Abstractions
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (batch.Length == 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(batch), ExceptionMessages.CollectionIsEmpty);
-            }
-
             foreach (TData data in batch)
             {
-                var fileName = EncodeFileName(data);
-                var filePath = Path.Combine(_storagePath, $"{fileName}.tmp");
-
-                var memoryMapFile = new MemoryMap<TData>(fileName, filePath);
-                await memoryMapFile.CreateAsync(data, Serialize, cancellationToken);
+                await EnqueueAsync(data, cancellationToken);
             }
+        }
+
+        /// <inheritdoc/>
+        public Task EnqueueAsync(
+            TData data,
+            CancellationToken cancellationToken)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            var fileName = EncodeFileName(data);
+            var filePath = Path.Combine(_storagePath, $"{fileName}.tmp");
+
+            var memoryMapFile = new MemoryMap<TData>(fileName, filePath);
+            return memoryMapFile.CreateAsync(data, Serialize, cancellationToken);
         }
 
         private void TryDelete(string fullName)

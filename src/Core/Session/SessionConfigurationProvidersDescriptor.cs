@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Options;
@@ -18,14 +18,14 @@ namespace Thor.Core.Session
         /// Configuration for the telemetry event session.
         /// </param>
         public SessionConfigurationProvidersDescriptor(
-            IOptions<SessionConfiguration> sessionConfiguration)
+            SessionConfiguration sessionConfiguration)
         {
             if (sessionConfiguration == null)
             {
                 throw new ArgumentNullException(nameof(sessionConfiguration));
             }
 
-            Assemblies = sessionConfiguration.Value.AllowedPrefixes ??
+            Assemblies = sessionConfiguration.AllowedPrefixes ??
                 Enumerable.Empty<string>();
         }
 

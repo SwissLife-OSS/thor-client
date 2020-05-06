@@ -18,7 +18,8 @@ namespace Thor.Core.Transmission.EventHub
         /// <param name="services">A <see cref="IServiceCollection"/> instance.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance.</param>
         /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddEventHubTelemetryEventTransmission(this IServiceCollection services,
+        public static IServiceCollection AddEventHubTelemetryEventTransmission(
+            this IServiceCollection services,
             IConfiguration configuration)
         {
             if (services == null)
@@ -31,23 +32,33 @@ namespace Thor.Core.Transmission.EventHub
                 throw new ArgumentNullException(nameof(configuration));
             }
 
+            EventHubConfiguration eventHubConfiguration = configuration
+                .GetSection("Tracing")
+                .GetSection("EventHub")
+                .Get<EventHubConfiguration>();
+
+            EventsOptions eventsOptions = configuration
+                .GetSection("Tracing")
+                .GetSection("Events")
+                .Get<EventsOptions>();
+
             return services
                 .AddTracingCore(configuration)
-                .Configure<EventHubConfiguration>(configuration.GetSection("Tracing").GetSection("EventHub"))
+                .AddSingleton(eventHubConfiguration)
+                .AddSingleton(eventsOptions)
+                .AddSingleton(eventsOptions.Buffer)
                 .AddSingleton(p =>
                 {
-                    IOptions<EventHubConfiguration> configAccessor = p.GetRequiredService<IOptions<EventHubConfiguration>>();
-
-                    EventHubsConnectionStringBuilder connection = CreateEventHubConnection(configAccessor.Value);
+                    EventHubsConnectionStringBuilder connection = CreateEventHubConnection(eventHubConfiguration);
                     return EventHubClient.Create(connection);
                 })
+                .AddSingleton<IMemoryBuffer<EventData>, MemoryBuffer<EventData>>()
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
                 .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<EventData>>(p =>
                 {
-                    TracingConfiguration config = p.GetRequiredService<IOptions<TracingConfiguration>>()?.Value;
-
-                    return new EventHubTransmissionStorage(config?.GetEventsStoragePath());
+                    TracingConfiguration tracingConfiguration = p.GetRequiredService<TracingConfiguration>();
+                    return new EventHubTransmissionStorage(tracingConfiguration.GetEventsStoragePath());
                 })
                 .AddSingleton<ITelemetryEventTransmitter, EventHubTransmitter>();
         }
