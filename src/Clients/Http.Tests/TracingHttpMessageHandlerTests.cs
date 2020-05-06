@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,10 @@ namespace Thor.Extensions.Http.Tests
             IServiceCollection services = new ServiceCollection();
             IConfigurationBuilder builder = new ConfigurationBuilder();
 
-            builder.AddInMemoryCollection();
+            builder.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Tracing:ApplicationId", "999")
+            });
 
             IConfiguration configuration = builder.Build();
 
