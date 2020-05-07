@@ -19,5 +19,10 @@ namespace Thor.Core.Transmission.EventHub
         /// Default 1 second.
         /// </summary>
         public TimeSpan EnqueueTimeout { get; set; } = TimeSpan.FromSeconds(1);
+
+        /// <summary>
+        /// Size of the dequeue batch.
+        /// </summary>
+        public int DequeueBatchSize { get; set; } = 100;
     }
 }

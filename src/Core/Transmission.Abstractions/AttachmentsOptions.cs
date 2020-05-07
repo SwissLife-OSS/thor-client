@@ -11,13 +11,8 @@ namespace Thor.Core.Transmission.EventHub
         public BufferOptions Buffer { get; set; }
 
         /// <summary>
-        /// Size of the dequeue batch from buffer.
+        /// Options for storage throttling.
         /// </summary>
-        public int BufferDequeueBatchSize { get; set; } = 100;
-
-        /// <summary>
-        /// Size of the dequeue batch from storage.
-        /// </summary>
-        public int StorageDequeueBatchSize { get; set; } = 100;
+        public StorageOptions Storage { get; set; }
     }
 }

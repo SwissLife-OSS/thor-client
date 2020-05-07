@@ -92,7 +92,7 @@ namespace Thor.Core.Transmission.EventHub
         private async Task StoreBatchAsync()
         {
             IReadOnlyCollection<EventData> batch = _buffer.Dequeue(
-                _options.BufferDequeueBatchSize);
+                _options.Buffer.DequeueBatchSize);
 
             if (batch.Count > 0)
             {
@@ -105,7 +105,7 @@ namespace Thor.Core.Transmission.EventHub
         private async Task AggregateBatchAsync()
         {
             IReadOnlyCollection<EventData> batch = await _storage
-                .DequeueAsync(_options.StorageDequeueBatchSize, _disposeToken.Token)
+                .DequeueAsync(_options.Storage.DequeueBatchSize, _disposeToken.Token)
                 .ConfigureAwait(false);
 
             foreach (EventData data in batch)

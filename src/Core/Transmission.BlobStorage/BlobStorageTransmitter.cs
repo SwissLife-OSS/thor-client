@@ -66,7 +66,7 @@ namespace Thor.Core.Transmission.BlobStorage
         private async Task StoreBatchAsync()
         {
             IReadOnlyCollection<AttachmentDescriptor> batch = _buffer.Dequeue(
-                _options.BufferDequeueBatchSize);
+                _options.Buffer.DequeueBatchSize);
 
             if (batch.Count > 0)
             {
@@ -80,7 +80,7 @@ namespace Thor.Core.Transmission.BlobStorage
         {
             // Add disposable dequeue and delete files after send
             IReadOnlyCollection<AttachmentDescriptor> batch = await _storage
-                .DequeueAsync(_options.StorageDequeueBatchSize, _disposeToken.Token)
+                .DequeueAsync(_options.Storage.DequeueBatchSize, _disposeToken.Token)
                 .ConfigureAwait(false);
 
             if (batch.Count > 0)
