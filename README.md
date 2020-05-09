@@ -1,6 +1,6 @@
-![Thor](https://cdn.rawgit.com/ChilliCream/thor-logo/master/img/thor-banner-light.svg)
+![Thor](https://cdn.rawgit.com/swisslife-oss/thor-logo/master/img/thor-banner-light.svg)
 
-[![GitHub release](https://img.shields.io/github/release/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/releases) [![NuGet Package](https://img.shields.io/nuget/v/Thor.Core.svg)](https://www.nuget.org/packages/Thor.Core/) [![License](https://img.shields.io/github/license/ChilliCream/thor-core.svg)](https://github.com/ChilliCream/thor-core/releases) [![Build](https://ci.appveyor.com/api/projects/status/u7uk31dyjp399m59/branch/master?svg=true)](https://ci.appveyor.com/project/rstaib/thor-core/branch/master) [![Tests](https://img.shields.io/appveyor/tests/rstaib/thor-core/master.svg)](https://ci.appveyor.com/project/rstaib/thor-core) [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=ThorCore&metric=coverage)](https://sonarcloud.io/dashboard?id=ThorCore) [![Quality](https://sonarcloud.io/api/project_badges/measure?project=ThorCore&metric=alert_status)](https://sonarcloud.io/dashboard?id=ThorCore) [![better code](https://bettercodehub.com/edge/badge/ChilliCream/thor-core)](https://bettercodehub.com/results/ChilliCream/thor-core)
+[![GitHub release](https://img.shields.io/github/release/swisslife-oss/thor-client.svg)](https://github.com/swisslife-oss/thor-core/releases) [![NuGet Package](https://img.shields.io/nuget/v/thor.core.svg)](https://www.nuget.org/packages/Thor.Core/) [![License](https://img.shields.io/github/license/swisslife-oss/thor-client.svg)](https://github.com/swisslife-oss/thor-core/releases) [![Build Status](https://dev.azure.com/swisslife-oss/swisslife-oss/_apis/build/status/Thor/Release%20-%20Thor?branchName=master)](https://dev.azure.com/swisslife-oss/swisslife-oss/_build/latest?definitionId=26&branchName=master)
 
 ---
 
@@ -73,11 +73,11 @@ public class UserRepository
 
 ## Documentation
 
-Click [here](https://github.com/ChilliCream/thor-core-docs) to get to the documentation home of _Thor Core_.
+Click [here](https://github.com/swisslife-oss/thor-core-docs) to get to the documentation home of _Thor Core_.
 
 ## Checkout the Thor Generator
 
 We strongly recommend to use the _Thor Generator_ to generate your own event sources automatically
 and avoid using the `DefaultEventSource`, because _Semantic Tracing_ is much more powerful for you
-in the end. Click [here](https://github.com/ChilliCream/thor-generator) to get more information
+in the end. Click [here](https://github.com/swisslife-oss/thor-generator) to get more information
 about the _Thor Generator_.

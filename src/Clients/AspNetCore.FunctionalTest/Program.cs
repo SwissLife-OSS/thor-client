@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Thor.Hosting.AspNetCore.FunctionalTest
 {
@@ -12,6 +13,7 @@ namespace Thor.Hosting.AspNetCore.FunctionalTest
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging(c => c.ClearProviders())
                 .UseStartup<Startup>()
                 .Build();
     }

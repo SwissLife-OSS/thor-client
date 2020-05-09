@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Abstractions;
@@ -36,10 +36,13 @@ namespace Thor.Core
                 throw new ArgumentNullException(nameof(configuration));
             }
 
+            TracingConfiguration tracingConfiguration = configuration
+                .GetSection("Tracing")
+                .Get<TracingConfiguration>();
+
             return services
                 .AddSingleton<IProvidersDescriptor, CoreProvidersDescriptor>()
-                .AddOptions()
-                .Configure<TracingConfiguration>(configuration.GetSection("Tracing"));
+                .AddSingleton(tracingConfiguration);
         }
     }
 }

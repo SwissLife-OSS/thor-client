@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -17,31 +16,45 @@ namespace Thor.Core.Transmission.EventHub
         , IDisposable
     {
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
-        private readonly ITransmissionBuffer<EventData> _buffer;
+        private readonly IMemoryBuffer<EventData> _buffer;
+        private readonly ITransmissionBuffer<EventData> _aggregator;
         private readonly ITransmissionSender<EventData> _sender;
         private readonly ITransmissionStorage<EventData> _storage;
+        private readonly EventsOptions _options;
         private readonly Job _sendJob;
         private readonly Job _storeJob;
+        private readonly Job _aggregateJob;
         private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
         /// </summary>
         /// <param name="buffer">A transmission buffer instance.</param>
+        /// <param name="aggregator">A transmission aggregator instance.</param>
         /// <param name="sender">A transmission sender instance.</param>
         /// <param name="storage">A transmission storage instance.</param>
+        /// <param name="options">EventHub transmission options.</param>
         public EventHubTransmitter(
-            ITransmissionBuffer<EventData> buffer,
+            IMemoryBuffer<EventData> buffer,
+            ITransmissionBuffer<EventData> aggregator,
             ITransmissionSender<EventData> sender,
-            ITransmissionStorage<EventData> storage)
+            ITransmissionStorage<EventData> storage,
+            EventsOptions options)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
+            _aggregator = aggregator ?? throw new ArgumentNullException(nameof(aggregator));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
 
             _storeJob = Job.Start(
                 async () => await StoreBatchAsync().ConfigureAwait(false),
                 () => _buffer.Count == 0,
+                _disposeToken.Token);
+
+            _aggregateJob = Job.Start(
+                async () => await AggregateBatchAsync().ConfigureAwait(false),
+                () => _aggregator.Count == 0,
                 _disposeToken.Token);
 
             _sendJob = Job.Start(
@@ -60,16 +73,13 @@ namespace Thor.Core.Transmission.EventHub
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                Task.Run(() => _buffer.EnqueueAsync(data.Map(), _disposeToken.Token));
+                _buffer.Enqueue(data.Map());
             }
         }
 
         private async Task SendBatchAsync()
         {
-            // Add disposable dequeue and delete files after send
-            IReadOnlyCollection<EventData> batch = await _storage
-                .DequeueAsync(_disposeToken.Token)
-                .ConfigureAwait(false);
+            IReadOnlyCollection<EventData> batch = _aggregator.Dequeue();
 
             if (batch.Count > 0)
             {
@@ -81,15 +91,26 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task StoreBatchAsync()
         {
-            EventData[] batch = await _buffer
-                .DequeueAsync(_disposeToken.Token)
-                .ConfigureAwait(false);
+            IReadOnlyCollection<EventData> batch = _buffer.Dequeue(
+                _options.Buffer.DequeueBatchSize);
 
-            if (batch.Length > 0)
+            if (batch.Count > 0)
             {
                 await _storage
-                    .EnqueueAsync(batch.ToArray(), _disposeToken.Token)
+                    .EnqueueAsync(batch, _disposeToken.Token)
                     .ConfigureAwait(false);
+            }
+        }
+
+        private async Task AggregateBatchAsync()
+        {
+            IReadOnlyCollection<EventData> batch = await _storage
+                .DequeueAsync(_options.Storage.DequeueBatchSize, _disposeToken.Token)
+                .ConfigureAwait(false);
+
+            foreach (EventData data in batch)
+            {
+                _aggregator.Enqueue(data);
             }
         }
 
@@ -110,6 +131,7 @@ namespace Thor.Core.Transmission.EventHub
                 }
 
                 _disposeToken?.Dispose();
+                _aggregateJob?.Dispose();
                 _sendJob?.Dispose();
                 _storeJob?.Dispose();
 

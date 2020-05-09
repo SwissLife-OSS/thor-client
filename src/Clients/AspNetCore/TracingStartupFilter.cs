@@ -16,7 +16,7 @@ namespace Thor.Hosting.AspNetCore
     public class TracingStartupFilter
         : IStartupFilter
     {
-        private readonly IOptions<TracingConfiguration> _configurationAccessor;
+        private readonly TracingConfiguration _options;
         private readonly IAttachmentTransmissionInitializer _initializer;
         private readonly ITelemetrySession _session;
 
@@ -24,12 +24,12 @@ namespace Thor.Hosting.AspNetCore
         /// Initializes a new instance of the <see cref="TracingStartupFilter"/> class.
         /// </summary>
         /// <param name="applicationLifetime">A application lifetime object instance.</param>
-        /// <param name="configurationAccessor">A configuration accessor instance.</param>
+        /// <param name="options">A configuration accessor instance.</param>
         /// <param name="initializer">An attachment transmission initializer.</param>
         /// <param name="session">An optional telemetry event session.</param>
         public TracingStartupFilter(
             IApplicationLifetime applicationLifetime,
-            IOptions<TracingConfiguration> configurationAccessor,
+            TracingConfiguration options,
             IAttachmentTransmissionInitializer initializer,
             ITelemetrySession session)
         {
@@ -38,8 +38,8 @@ namespace Thor.Hosting.AspNetCore
                 throw new ArgumentNullException(nameof(applicationLifetime));
             }
 
-            _configurationAccessor = configurationAccessor ??
-                throw new ArgumentNullException(nameof(configurationAccessor));
+            _options = options ??
+                throw new ArgumentNullException(nameof(options));
             _initializer = initializer ??
                 throw new ArgumentNullException(nameof(initializer));
             _session = session ??
@@ -52,7 +52,7 @@ namespace Thor.Hosting.AspNetCore
         private void Start()
         {
             _initializer.Initialize();
-            Application.Start(_configurationAccessor.Value.ApplicationId);
+            Application.Start(_options.ApplicationId);
         }
 
         private void Stop()
@@ -69,7 +69,7 @@ namespace Thor.Hosting.AspNetCore
                 builder
                     .ApplicationServices
                     .GetRequiredService<DiagnosticListener>()
-                    .SubscribeWithAdapter(new HostingDiagnosticsListener(_configurationAccessor.Value.SkipRequestFilter));
+                    .SubscribeWithAdapter(new HostingDiagnosticsListener(_options.SkipRequestFilter));
 
                 next(builder);
             };

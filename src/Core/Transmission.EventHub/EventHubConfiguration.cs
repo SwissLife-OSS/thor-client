@@ -1,4 +1,4 @@
-﻿namespace Thor.Core.Transmission.EventHub
+namespace Thor.Core.Transmission.EventHub
 {
     /// <summary>
     /// A concrete configuration for <c>Azure EventHub</c> transmission.

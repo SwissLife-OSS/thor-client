@@ -15,9 +15,7 @@ namespace Thor.Core.Transmission.Abstractions
         : ITransmissionStorage<TData>
         where TData : class
     {
-        private static readonly int MaxBatchSize = 100;
-        private readonly byte[] _emptyFile = new byte[0];
-        private readonly TData[] _emptyBatch = new TData[0];
+        private static readonly TData[] EmptyBatch = new TData[0];
         private readonly string _storagePath;
         private readonly IEnumerable<FileInfo> _files;
 
@@ -59,28 +57,30 @@ namespace Thor.Core.Transmission.Abstractions
 
         /// <inheritdoc/>
         public async Task<IReadOnlyCollection<TData>> DequeueAsync(
+            int count,
             CancellationToken cancellationToken)
         {
             if (!HasData)
             {
-                return _emptyBatch;
+                return EmptyBatch;
             }
 
             var batch = new List<TData>();
 
-            foreach(FileInfo file in _files.Take(MaxBatchSize))
+            foreach(FileInfo file in _files.Take(count))
             {
-                byte[] bytes = await TryReadAllBytesAsync(file.FullName, cancellationToken);
+                var fileName = Path.GetFileNameWithoutExtension(file.FullName);
 
-                if (bytes.Length < 1)
+                var memoryMapFile = new MemoryMap<TData>(fileName, file.FullName);
+
+                TData data = await memoryMapFile
+                    .LoadAsync(Deserialize, cancellationToken);
+
+                if (data != null)
                 {
-                    continue;
+                    batch.Add(data);
+                    TryDelete(file.FullName);
                 }
-
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
-                batch.Add(Deserialize(bytes, fileNameWithoutExtension));
-
-                TryDelete(file.FullName);
             }
 
             return batch;
@@ -88,7 +88,7 @@ namespace Thor.Core.Transmission.Abstractions
 
         /// <inheritdoc/>
         public async Task EnqueueAsync(
-            TData[] batch,
+            IReadOnlyCollection<TData> batch,
             CancellationToken cancellationToken)
         {
             if (batch == null)
@@ -96,36 +96,27 @@ namespace Thor.Core.Transmission.Abstractions
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (batch.Length == 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(batch), ExceptionMessages.CollectionIsEmpty);
-            }
-
             foreach (TData data in batch)
             {
-                var fileName = Path.Combine(_storagePath, $"{EncodeFileName(data)}.tmp");
-
-                await FileHelper.WriteAllBytesAsync(
-                    fileName,
-                    Serialize(data),
-                    cancellationToken);
+                await EnqueueAsync(data, cancellationToken);
             }
         }
 
-        private async Task<byte[]> TryReadAllBytesAsync(
-            string fileFullName,
+        /// <inheritdoc/>
+        public Task EnqueueAsync(
+            TData data,
             CancellationToken cancellationToken)
         {
-            try
+            if (data == null)
             {
-                return await FileHelper
-                    .ReadAllBytesAsync(fileFullName, cancellationToken);
+                throw new ArgumentNullException(nameof(data));
             }
-            catch (IOException)
-            {
-                return _emptyFile;
-            }
+
+            var fileName = EncodeFileName(data);
+            var filePath = Path.Combine(_storagePath, $"{fileName}.tmp");
+
+            var memoryMapFile = new MemoryMap<TData>(fileName, filePath);
+            return memoryMapFile.CreateAsync(data, Serialize, cancellationToken);
         }
 
         private void TryDelete(string fullName)

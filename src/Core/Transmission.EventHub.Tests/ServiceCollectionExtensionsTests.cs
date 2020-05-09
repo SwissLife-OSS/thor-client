@@ -49,7 +49,9 @@ namespace Thor.Core.Transmission.EventHub.Tests
             Dictionary<string, string> data = new Dictionary<string, string>
             {
                 {"Tracing:EventHub:ConnectionString", Constants.FakeConnectionString},
-                {"Tracing:EventHub:TransportType", Constants.TransportType}
+                {"Tracing:EventHub:TransportType", Constants.TransportType},
+                {"Tracing:Events:Buffer:Size", "500"},
+                {"Tracing:Events:BufferDequeueBatchSize", "50"}
             };
 
             builder.AddInMemoryCollection(data);

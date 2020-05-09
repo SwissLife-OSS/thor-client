@@ -47,7 +47,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
 
             // act
-            Func<Task> verify = () => storage.DequeueAsync(default);
+            Func<Task> verify = () => storage.DequeueAsync(1, default);
 
             // arrange
             Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));
@@ -70,21 +70,6 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
 
             // assert
             await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
-        }
-
-        [Fact(DisplayName = "EnqueueAsync: Should throw an argument out of range exception for batch")]
-        public async Task EnqueueAsync_BatchOutOfRange()
-        {
-            // arrange
-            string storagePath = "C:\\EnqueueAsync_BatchOutOfRange_Test";
-            BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
-            AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
-
-            // act
-            Func<Task> verify = () => storage.EnqueueAsync(batch, default);
-
-            // assert
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>("batch", verify).ConfigureAwait(false);
         }
 
         #endregion

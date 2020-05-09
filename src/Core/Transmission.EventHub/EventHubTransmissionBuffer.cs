@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Transmission.Abstractions;
@@ -14,10 +14,11 @@ namespace Thor.Core.Transmission.EventHub
     public class EventHubTransmissionBuffer
         : ITransmissionBuffer<EventData>
     {
-        private readonly EventData[] _emptyBatch = new EventData[0];
-        private readonly ConcurrentQueue<EventData> _input = new ConcurrentQueue<EventData>();
+        private static readonly TimeSpan Delay = TimeSpan.FromMilliseconds(50);
+        private static readonly int MaxBufferSize = 1000;
+        private static readonly EventData[] EmptyBatch = new EventData[0];
+        private readonly BlockingCollection<EventData> _input = new BlockingCollection<EventData>(MaxBufferSize);
         private readonly ConcurrentQueue<EventData[]> _output = new ConcurrentQueue<EventData[]>();
-        private static readonly TimeSpan _delay = TimeSpan.FromMilliseconds(50);
         private readonly EventHubClient _client;
         private EventData _next;
 
@@ -32,50 +33,49 @@ namespace Thor.Core.Transmission.EventHub
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
-            StartAsyncProcessing();
+            Task.Factory.StartNew(
+                StartAsyncProcessing,
+                default,
+                TaskCreationOptions.LongRunning,
+                TaskScheduler.Default);
         }
 
         /// <inheritdoc />
         public int Count { get { return _output.Count; } }
 
         /// <inheritdoc />
-        public Task<EventData[]> DequeueAsync(CancellationToken cancellationToken)
+        public EventData[] Dequeue()
         {
             if (_output.TryDequeue(out EventData[] batch))
             {
-                return Task.FromResult(batch);
+                return batch;
             }
 
-            return Task.FromResult(_emptyBatch);
+            return EmptyBatch;
         }
 
         /// <inheritdoc />
-        public Task EnqueueAsync(EventData data, CancellationToken cancellationToken)
+        public void Enqueue(EventData data)
         {
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
-            _input.Enqueue(data);
-
-            return Task.FromResult(0);
+            _input.TryAdd(data, TimeSpan.FromMilliseconds(-1));
         }
 
-        private void StartAsyncProcessing()
+        private async Task StartAsyncProcessing()
         {
-            Task.Run(async () =>
+            while (true)
             {
-                while (true)
+                if (_input.Count < 50)
                 {
-                    if (_input.Count < 50)
-                    {
-                        await Task.Delay(_delay).ConfigureAwait(false);
-                    }
-
-                    TransformToBatch();
+                    await Task.Delay(Delay).ConfigureAwait(false);
                 }
-            });
+
+                TransformToBatch();
+            }
         }
 
         private void TransformToBatch()
@@ -90,11 +90,10 @@ namespace Thor.Core.Transmission.EventHub
 
             while (!stopCollectingEvents)
             {
-                if (_input.TryDequeue(out EventData data))
+                if (_input.TryTake(out EventData data))
                 {
                     if (!batch.TryAdd(data))
                     {
-                        batch = _client.CreateBatch();
                         _next = data;
                     }
                 }

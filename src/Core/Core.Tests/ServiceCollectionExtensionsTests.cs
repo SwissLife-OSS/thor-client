@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
@@ -16,7 +17,10 @@ namespace Thor.Core.Tests
             IServiceCollection services = new ServiceCollection();
             IConfigurationBuilder builder = new ConfigurationBuilder();
 
-            builder.AddInMemoryCollection();
+            builder.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Tracing:ApplicationId", "999")
+            });
 
             IConfiguration configuration = builder.Build();
 
@@ -26,7 +30,7 @@ namespace Thor.Core.Tests
             // assert
             ServiceProvider provider = services.BuildServiceProvider();
 
-            Assert.IsType<TracingConfiguration>(provider.GetService<IOptions<TracingConfiguration>>()?.Value);
+            Assert.IsType<TracingConfiguration>(provider.GetService<TracingConfiguration>());
         }
 
         #endregion
