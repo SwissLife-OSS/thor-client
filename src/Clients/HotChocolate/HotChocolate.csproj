@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotChocolate" Version="11.0.0-preview.124" />
+    <PackageReference Include="HotChocolate" Version="11.0.0-preview.129" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp3.0'">
