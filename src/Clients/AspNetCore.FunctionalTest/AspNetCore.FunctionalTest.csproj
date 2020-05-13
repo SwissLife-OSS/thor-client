@@ -5,6 +5,9 @@
     <AssemblyName>Thor.Hosting.AspNetCore.FunctionalTest</AssemblyName>
     <RootNamespace>Thor.Hosting.AspNetCore.FunctionalTest</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UserSecretsId>3508b118-9e38-485b-b117-a3dca27b8a28</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +16,10 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
   <ItemGroup>

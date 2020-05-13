@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,13 +33,8 @@ namespace Thor.Core.Transmission.Abstractions
             {
                 byte[] dataBytes = serialize(data);
 
-                using var file = MemoryMappedFile
-                    .CreateFromFile(_filePath, FileMode.CreateNew, _name, dataBytes.Length);
-
-                using MemoryMappedViewStream viewStream = file.CreateViewStream();
-
-                return viewStream
-                    .WriteAsync(dataBytes, 0, dataBytes.Length, cancellationToken);
+                return FileHelper
+                    .WriteAllBytesAsync(_filePath, dataBytes, cancellationToken);
             }
             catch
             {
@@ -62,12 +55,10 @@ namespace Thor.Core.Transmission.Abstractions
 
             try
             {
-                using var file = MemoryMappedFile
-                    .CreateFromFile(_filePath, FileMode.Open, _name);
+                byte[] dataBytes = await FileHelper
+                    .ReadAllBytesAsync(_filePath, cancellationToken);
 
-                using MemoryMappedViewStream viewStream = file.CreateViewStream();
-
-                return deserialize(await ReadAsync(viewStream, cancellationToken), _name);
+                return deserialize(dataBytes, _name);
             }
             catch
             {
@@ -96,26 +87,6 @@ namespace Thor.Core.Transmission.Abstractions
             }
 
             return mutex;
-        }
-
-        private async Task<byte[]> ReadAsync(
-            MemoryMappedViewStream viewStream,
-            CancellationToken cancellationToken)
-        {
-            const int bufferSize = 4096;
-
-            using var memoryStream = new MemoryStream();
-            var buffer = new byte[bufferSize];
-            int count;
-
-            while ((count = await viewStream
-                .ReadAsync(buffer, 0, buffer.Length, cancellationToken)) != 0)
-            {
-                await memoryStream
-                    .WriteAsync(buffer, 0, count, cancellationToken);
-            }
-
-            return memoryStream.ToArray();
         }
     }
 }
