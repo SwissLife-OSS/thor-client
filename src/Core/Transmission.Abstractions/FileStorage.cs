@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Thor.Core.Abstractions;
 
 namespace Thor.Core.Transmission.Abstractions
 {
@@ -71,15 +70,18 @@ namespace Thor.Core.Transmission.Abstractions
             {
                 var fileName = Path.GetFileNameWithoutExtension(file.FullName);
 
-                var memoryMapFile = new MemoryMap<TData>(fileName, file.FullName);
-
-                TData data = await memoryMapFile
-                    .LoadAsync(Deserialize, cancellationToken);
-
-                if (data != null)
+                using (await FilesLock.ReadLockAsync(fileName, cancellationToken))
                 {
-                    batch.Add(data);
-                    TryDelete(file.FullName);
+                    byte[] dataBytes = await FileHelper
+                        .ReadAllBytesAsync(file.FullName, cancellationToken);
+
+                    TData data = Deserialize(dataBytes, fileName);
+
+                    if (data != null)
+                    {
+                        batch.Add(data);
+                        TryDelete(file.FullName);
+                    }
                 }
             }
 
@@ -103,7 +105,7 @@ namespace Thor.Core.Transmission.Abstractions
         }
 
         /// <inheritdoc/>
-        public Task EnqueueAsync(
+        public async Task EnqueueAsync(
             TData data,
             CancellationToken cancellationToken)
         {
@@ -115,8 +117,11 @@ namespace Thor.Core.Transmission.Abstractions
             var fileName = EncodeFileName(data);
             var filePath = Path.Combine(_storagePath, $"{fileName}.tmp");
 
-            var memoryMapFile = new MemoryMap<TData>(fileName, filePath);
-            return memoryMapFile.CreateAsync(data, Serialize, cancellationToken);
+            using (await FilesLock.WriteLockAsync(fileName, cancellationToken))
+            {
+                await FileHelper
+                    .WriteAllBytesAsync(filePath, Serialize(data), cancellationToken);
+            }
         }
 
         private void TryDelete(string fullName)
@@ -125,9 +130,9 @@ namespace Thor.Core.Transmission.Abstractions
             {
                 File.Delete(fullName);
             }
-            catch (FileNotFoundException)
+            catch (Exception)
             {
-                // Don't crash if file doesn't exists.
+                // Don't crash could not be deleted.
             }
         }
     }
