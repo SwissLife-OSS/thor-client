@@ -28,13 +28,11 @@ namespace Thor.Core.Transmission.Abstractions
 
             public void Dispose()
             {
-                if (_isDisposed)
+                if (!_isDisposed)
                 {
-                    return;
+                    _asyncLock?._semaphore.Release();
+                    _isDisposed = true;
                 }
-
-                _asyncLock?._semaphore.Release();
-                _isDisposed = true;
             }
         }
     }
