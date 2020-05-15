@@ -17,6 +17,8 @@ namespace Thor.Core.Transmission.Abstractions
 
         internal struct Releaser : IDisposable
         {
+            internal static Releaser Empty = new Releaser(new AsyncLock());
+
             private readonly AsyncLock _asyncLock;
             private bool _isDisposed;
 
