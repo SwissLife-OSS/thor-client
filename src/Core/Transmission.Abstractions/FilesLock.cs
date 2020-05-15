@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,13 +34,20 @@ namespace Thor.Core.Transmission.Abstractions
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            Files.TryRemove(fileName, out AsyncLock asyncLock);
-            Debug.WriteLine(Files.Count);
-            return new Releaser(await asyncLock.LockAsync(cancellationToken));
+            if (Files.ContainsKey(fileName))
+            {
+                Files.TryRemove(fileName, out AsyncLock asyncLock);
+
+                return new Releaser(await asyncLock.LockAsync(cancellationToken));
+            }
+
+            return Releaser.Empty;
         }
 
         internal struct Releaser : IDisposable
         {
+            internal static Releaser Empty = new Releaser(AsyncLock.Releaser.Empty);
+
             private AsyncLock.Releaser _releaser;
 
             internal Releaser(AsyncLock.Releaser releaser)
