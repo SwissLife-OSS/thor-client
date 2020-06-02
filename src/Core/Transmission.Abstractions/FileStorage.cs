@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Thor.Core.Transmission.Abstractions
@@ -14,9 +14,9 @@ namespace Thor.Core.Transmission.Abstractions
         : ITransmissionStorage<TData>
         where TData : class
     {
-        private static readonly TData[] EmptyBatch = new TData[0];
         private readonly string _storagePath;
-        private readonly IEnumerable<FileInfo> _files;
+        private readonly ChannelReader<string> _filesReader;
+        private readonly ChannelWriter<string> _filesWriter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileStorage{TData}"/> class.
@@ -31,9 +31,18 @@ namespace Thor.Core.Transmission.Abstractions
 
             _storagePath = storagePath;
 
-            _files = Directory
+            var files = Channel.CreateUnbounded<string>();
+            _filesReader = files.Reader;
+            _filesWriter = files.Writer;
+
+            IEnumerable<FileInfo> unprocessedFiles = Directory
                 .CreateDirectory(_storagePath)
                 .EnumerateFiles("*.tmp", SearchOption.TopDirectoryOnly);
+
+            foreach (FileInfo fileInfo in unprocessedFiles)
+            {
+                _filesWriter.TryWrite(fileInfo.FullName);
+            }
         }
 
         /// <summary>
@@ -52,35 +61,28 @@ namespace Thor.Core.Transmission.Abstractions
         protected abstract string EncodeFileName(TData data);
 
         /// <inheritdoc/>
-        public bool HasData => _files.Any();
-
-        /// <inheritdoc/>
         public async Task<IReadOnlyCollection<TData>> DequeueAsync(
             int count,
             CancellationToken cancellationToken)
         {
-            if (!HasData)
-            {
-                return EmptyBatch;
-            }
-
             var batch = new List<TData>();
 
-            foreach(FileInfo file in _files.Take(count))
+            for (var i = 0; i < count; i++)
             {
-                var fileName = Path.GetFileNameWithoutExtension(file.FullName);
+                var file = await _filesReader.ReadAsync(cancellationToken);
+                var fileName = Path.GetFileNameWithoutExtension(file);
 
                 using (await FilesLock.ReadLockAsync(fileName, cancellationToken))
                 {
                     byte[] dataBytes = await FileHelper
-                        .ReadAllBytesAsync(file.FullName, cancellationToken);
+                        .ReadAllBytesAsync(file, cancellationToken);
 
                     TData data = Deserialize(dataBytes, fileName);
 
                     if (data != null)
                     {
                         batch.Add(data);
-                        TryDelete(file.FullName);
+                        TryDelete(file);
                     }
                 }
             }
@@ -104,8 +106,7 @@ namespace Thor.Core.Transmission.Abstractions
             }
         }
 
-        /// <inheritdoc/>
-        public async Task EnqueueAsync(
+        private async Task EnqueueAsync(
             TData data,
             CancellationToken cancellationToken)
         {
@@ -115,13 +116,15 @@ namespace Thor.Core.Transmission.Abstractions
             }
 
             var fileName = EncodeFileName(data);
-            var filePath = Path.Combine(_storagePath, $"{fileName}.tmp");
+            var fileFullName = Path.Combine(_storagePath, $"{fileName}.tmp");
 
             using (await FilesLock.WriteLockAsync(fileName, cancellationToken))
             {
                 await FileHelper
-                    .WriteAllBytesAsync(filePath, Serialize(data), cancellationToken);
+                    .WriteAllBytesAsync(fileFullName, Serialize(data), cancellationToken);
             }
+
+            await _filesWriter.WriteAsync(fileFullName, cancellationToken);
         }
 
         private void TryDelete(string fullName)

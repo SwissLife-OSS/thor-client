@@ -6,7 +6,17 @@ namespace Thor.Core.Transmission.Abstractions
 {
     internal class AsyncLock
     {
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphore;
+
+        internal AsyncLock()
+            : this(false)
+        {
+        }
+
+        private AsyncLock(bool empty)
+        {
+            _semaphore = new SemaphoreSlim(empty ? 0 : 1, 1);
+        }
 
         internal async ValueTask<Releaser> LockAsync(CancellationToken cancellationToken)
         {
@@ -17,7 +27,7 @@ namespace Thor.Core.Transmission.Abstractions
 
         internal struct Releaser : IDisposable
         {
-            internal static Releaser Empty = new Releaser(new AsyncLock());
+            internal static Releaser Empty = new Releaser(new AsyncLock(true));
 
             private readonly AsyncLock _asyncLock;
             private bool _isDisposed;

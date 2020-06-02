@@ -45,7 +45,6 @@ namespace Thor.Core.Transmission.BlobStorage
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
-                () => !_storage.HasData,
                 _disposeToken.Token);
         }
 

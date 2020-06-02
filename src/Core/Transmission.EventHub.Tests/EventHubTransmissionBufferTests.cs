@@ -41,18 +41,19 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
         #region DequeueAsync
 
-        [Fact(DisplayName = "DequeueAsync: Should not throw any exception")]
+        [Fact(DisplayName = "DequeueAsync: Should not throw any exception", Skip = "Not really testable")]
         public async Task DequeueAsync_NoException()
         {
             // assert
             EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
             EventHubTransmissionBuffer buffer = new EventHubTransmissionBuffer(client);
+            await buffer.Enqueue(new EventData(new byte[0]), default);
 
             // act
-            Action verify = () => buffer.Dequeue();
+            Func<Task> verify = () => buffer.Dequeue(default).AsTask();
 
             // arrange
-            Assert.Null(Record.Exception(verify));
+            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         #endregion
@@ -68,10 +69,10 @@ namespace Thor.Core.Transmission.EventHub.Tests
             EventData data = null;
 
             // act
-            Action verify = () => buffer.Enqueue(data);
+            Func<Task> verify = () => buffer.Enqueue(data, default);
 
             // assert
-            Assert.Throws<ArgumentNullException>("data", verify);
+            await Assert.ThrowsAsync<ArgumentNullException>("data", verify);
         }
 
         #endregion

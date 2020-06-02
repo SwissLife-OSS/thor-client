@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
@@ -43,7 +44,9 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public async Task DequeueAsync_NoException()
         {
             // assert
-            string storagePath = "C:\\DequeueAsync_NoException_Test";
+            string storagePath = "DequeueAsync_NoException_Test";
+            Directory.CreateDirectory(storagePath);
+            await File.WriteAllTextAsync(Path.Combine(storagePath, "20200602-1a67cab4539a43ee9416b82657609236_info_Object.tmp"), "test");
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
 
             // act
