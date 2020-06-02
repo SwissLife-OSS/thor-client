@@ -45,6 +45,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         {
             // assert
             string storagePath = "DequeueAsync_NoException_Test";
+            Directory.CreateDirectory(storagePath);
             await File.WriteAllTextAsync(Path.Combine(storagePath, "20200602-1a67cab4539a43ee9416b82657609236_info_Object.tmp"), "test");
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
 
