@@ -135,7 +135,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
                 .Setup(t => t.Enqueue(It.IsAny<EventData>()))
                 .Callback((EventData d) => bufferQueue.Enqueue(d));
             aggregator
-                .Setup(t => t.Dequeue(default))
+                .Setup(t => t.Dequeue(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() =>
                 {
                     int count = 0;
