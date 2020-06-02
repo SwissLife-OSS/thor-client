@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Thor.Core.Transmission.Abstractions;
@@ -14,11 +14,9 @@ namespace Thor.Core.Transmission.EventHub
     public class EventHubTransmissionBuffer
         : ITransmissionBuffer<EventData>
     {
-        private static readonly TimeSpan Delay = TimeSpan.FromMilliseconds(50);
         private static readonly int MaxBufferSize = 1000;
-        private static readonly EventData[] EmptyBatch = new EventData[0];
-        private readonly BlockingCollection<EventData> _input = new BlockingCollection<EventData>(MaxBufferSize);
-        private readonly ConcurrentQueue<EventData[]> _output = new ConcurrentQueue<EventData[]>();
+        private readonly Channel<EventData> _input = Channel.CreateBounded<EventData>(MaxBufferSize);
+        private readonly Channel<EventData[]> _output = Channel.CreateUnbounded<EventData[]>();
         private readonly EventHubClient _client;
         private EventData _next;
 
@@ -41,67 +39,48 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public int Count { get { return _output.Count; } }
-
-        /// <inheritdoc />
-        public EventData[] Dequeue()
+        public ValueTask<EventData[]> Dequeue(CancellationToken cancellationToken)
         {
-            if (_output.TryDequeue(out EventData[] batch))
-            {
-                return batch;
-            }
-
-            return EmptyBatch;
+            return _output.Reader.ReadAsync(cancellationToken);
         }
 
         /// <inheritdoc />
-        public void Enqueue(EventData data)
+        public async Task Enqueue(EventData data, CancellationToken cancellationToken)
         {
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
-            _input.TryAdd(data, TimeSpan.FromMilliseconds(-1));
+            await _input.Writer.WaitToWriteAsync(cancellationToken);
+            await _input.Writer.WriteAsync(data, cancellationToken);
         }
 
         private async Task StartAsyncProcessing()
         {
             while (true)
             {
-                if (_input.Count < 50)
+                EventDataBatch batch = _client.CreateBatch();
+                bool stopCollectingEvents = false;
+
+                if (_next != null && batch.TryAdd(_next))
                 {
-                    await Task.Delay(Delay).ConfigureAwait(false);
+                    _next = null;
                 }
 
-                TransformToBatch();
-            }
-        }
-
-        private void TransformToBatch()
-        {
-            EventDataBatch batch = _client.CreateBatch();
-            bool stopCollectingEvents = false;
-
-            if (_next != null && batch.TryAdd(_next))
-            {
-                _next = null;
-            }
-
-            while (!stopCollectingEvents)
-            {
-                if (_input.TryTake(out EventData data))
+                while (!stopCollectingEvents)
                 {
+                    EventData data = await _input.Reader.ReadAsync();
                     if (!batch.TryAdd(data))
                     {
                         _next = data;
                     }
+
+                    stopCollectingEvents = _next != null || data == null;
                 }
 
-                stopCollectingEvents = _next != null || data == null;
+                await _output.Writer.WriteAsync(batch.ToEnumerable().ToArray());
             }
-
-            _output.Enqueue(batch.ToEnumerable().ToArray());
         }
     }
 }

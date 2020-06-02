@@ -54,7 +54,6 @@ namespace Thor.Core.Transmission.EventHub
 
             _aggregateJob = Job.Start(
                 async () => await AggregateBatchAsync().ConfigureAwait(false),
-                () => _aggregator.Count == 0,
                 _disposeToken.Token);
 
             _sendJob = Job.Start(
@@ -78,7 +77,8 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task SendBatchAsync()
         {
-            IReadOnlyCollection<EventData> batch = _aggregator.Dequeue();
+            IReadOnlyCollection<EventData> batch = await _aggregator
+                .Dequeue(_disposeToken.Token);
 
             if (batch.Count > 0)
             {
@@ -109,7 +109,7 @@ namespace Thor.Core.Transmission.EventHub
 
             foreach (EventData data in batch)
             {
-                _aggregator.Enqueue(data);
+                await _aggregator.Enqueue(data, _disposeToken.Token);
             }
         }
 
