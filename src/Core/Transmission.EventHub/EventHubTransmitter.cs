@@ -59,7 +59,6 @@ namespace Thor.Core.Transmission.EventHub
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
-                () => !_storage.HasData,
                 _disposeToken.Token);
         }
 

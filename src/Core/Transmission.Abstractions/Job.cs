@@ -8,13 +8,20 @@ namespace Thor.Core.Transmission.Abstractions
     {
         internal static Job Start(
             Func<Task> action,
-            Func<bool> delay,
+            CancellationToken cancellationToken)
+        {
+            return Start(action, () => false, cancellationToken);
+        }
+
+        internal static Job Start(
+            Func<Task> action,
+            Func<bool> spinWhen,
             CancellationToken cancellationToken)
         {
             var job = new Job(cancellationToken);
 
             Task.Factory.StartNew(
-                () => job.Start(action, delay),
+                () => job.Start(action, spinWhen),
                 cancellationToken,
                 TaskCreationOptions.LongRunning,
                 TaskScheduler.Default);
@@ -33,7 +40,7 @@ namespace Thor.Core.Transmission.Abstractions
             _sync = new ManualResetEventSlim();
         }
 
-        private async Task Start(Func<Task> action, Func<bool> delay)
+        private async Task Start(Func<Task> action, Func<bool> spinWhen)
         {   
             _cancellationToken.ThrowIfCancellationRequested();
 
@@ -41,7 +48,7 @@ namespace Thor.Core.Transmission.Abstractions
             {
                 await action();
 
-                if (!_cancellationToken.IsCancellationRequested && delay())
+                if (!_cancellationToken.IsCancellationRequested && spinWhen())
                 {
                     await Task
                         .Delay(Delay, _cancellationToken)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +12,6 @@ namespace Thor.Core.Transmission.Abstractions
         where TData : class
     {
         /// <summary>
-        /// Gets information if storage has any data.
-        /// </summary>
-        bool HasData { get; }
-
-        /// <summary>
         /// Dequeue a data batch from the storage.
         /// </summary>
         /// <param name="count">Number of items to be dequeued.</param>
@@ -31,12 +25,5 @@ namespace Thor.Core.Transmission.Abstractions
         /// <param name="batch">A data batch to be stored.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
         Task EnqueueAsync(IReadOnlyCollection<TData> batch, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Enqueue a telemetry data object to a <c>short-term</c> storage.
-        /// </summary>
-        /// <param name="batch">A data object to be stored.</param>
-        /// <param name="cancellationToken">A cancellation token.</param>
-        Task EnqueueAsync(TData batch, CancellationToken cancellationToken);
     }
 }
