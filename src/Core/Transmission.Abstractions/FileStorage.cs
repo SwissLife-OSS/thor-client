@@ -15,8 +15,8 @@ namespace Thor.Core.Transmission.Abstractions
         where TData : class
     {
         private readonly string _storagePath;
-        private readonly ChannelReader<string> _filesReader;
-        private readonly ChannelWriter<string> _filesWriter;
+        private readonly ChannelReader<string> _dequeueFiles;
+        private readonly ChannelWriter<string> _enqueueFiles;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileStorage{TData}"/> class.
@@ -32,8 +32,8 @@ namespace Thor.Core.Transmission.Abstractions
             _storagePath = storagePath;
 
             var files = Channel.CreateUnbounded<string>();
-            _filesReader = files.Reader;
-            _filesWriter = files.Writer;
+            _dequeueFiles = files.Reader;
+            _enqueueFiles = files.Writer;
 
             IEnumerable<FileInfo> unprocessedFiles = Directory
                 .CreateDirectory(_storagePath)
@@ -41,7 +41,7 @@ namespace Thor.Core.Transmission.Abstractions
 
             foreach (FileInfo fileInfo in unprocessedFiles)
             {
-                _filesWriter.TryWrite(fileInfo.FullName);
+                _enqueueFiles.TryWrite(fileInfo.FullName);
             }
         }
 
@@ -69,21 +69,18 @@ namespace Thor.Core.Transmission.Abstractions
 
             for (var i = 0; i < count; i++)
             {
-                var file = await _filesReader.ReadAsync(cancellationToken);
-                var fileName = Path.GetFileNameWithoutExtension(file);
+                var fileFullName = await _dequeueFiles.ReadAsync(cancellationToken);
+                var fileName = Path.GetFileNameWithoutExtension(fileFullName);
 
-                using (await FilesLock.ReadLockAsync(fileName, cancellationToken))
+                byte[] dataBytes = await FileHelper
+                    .ReadAllBytesAsync(fileFullName, cancellationToken);
+
+                TData data = Deserialize(dataBytes, fileName);
+
+                if (data != null)
                 {
-                    byte[] dataBytes = await FileHelper
-                        .ReadAllBytesAsync(file, cancellationToken);
-
-                    TData data = Deserialize(dataBytes, fileName);
-
-                    if (data != null)
-                    {
-                        batch.Add(data);
-                        TryDelete(file);
-                    }
+                    batch.Add(data);
+                    TryDelete(fileFullName);
                 }
             }
 
@@ -118,13 +115,10 @@ namespace Thor.Core.Transmission.Abstractions
             var fileName = EncodeFileName(data);
             var fileFullName = Path.Combine(_storagePath, $"{fileName}.tmp");
 
-            using (await FilesLock.WriteLockAsync(fileName, cancellationToken))
-            {
-                await FileHelper
-                    .WriteAllBytesAsync(fileFullName, Serialize(data), cancellationToken);
-            }
+            await FileHelper
+                .WriteAllBytesAsync(fileFullName, Serialize(data), cancellationToken);
 
-            await _filesWriter.WriteAsync(fileFullName, cancellationToken);
+            await _enqueueFiles.WriteAsync(fileFullName, cancellationToken);
         }
 
         private void TryDelete(string fullName)
