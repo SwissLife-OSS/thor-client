@@ -55,7 +55,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             await attachmentsEnumerable.MoveNextAsync();
 
             // arrange
-            Assert.Null(attachmentsEnumerable.Current);
+            Assert.NotNull(attachmentsEnumerable.Current);
         }
 
         #endregion

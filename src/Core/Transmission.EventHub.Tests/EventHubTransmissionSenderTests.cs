@@ -53,7 +53,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
-            await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
+            await Assert.ThrowsAsync<ArgumentNullException>("batches", verify).ConfigureAwait(false);
         }
 
         #endregion
