@@ -23,6 +23,6 @@ namespace Thor.Core.Transmission.Abstractions
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="batch"/> must contain at least one item.
         /// </exception>
-        Task SendAsync(IReadOnlyCollection<TData> batch, CancellationToken cancellationToken);
+        Task SendAsync(IAsyncEnumerable<TData> batch, CancellationToken cancellationToken);
     }
 }

@@ -18,7 +18,7 @@ namespace Thor.Core.Transmission.EventHub
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly IMemoryBuffer<EventData> _buffer;
         private readonly ITransmissionBuffer<EventData> _aggregator;
-        private readonly ITransmissionSender<EventData> _sender;
+        private readonly ITransmissionSender<EventData[]> _sender;
         private readonly ITransmissionStorage<EventData> _storage;
         private readonly EventsOptions _options;
         private readonly Job _sendJob;
@@ -37,7 +37,7 @@ namespace Thor.Core.Transmission.EventHub
         public EventHubTransmitter(
             IMemoryBuffer<EventData> buffer,
             ITransmissionBuffer<EventData> aggregator,
-            ITransmissionSender<EventData> sender,
+            ITransmissionSender<EventData[]> sender,
             ITransmissionStorage<EventData> storage,
             EventsOptions options)
         {
@@ -77,15 +77,9 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task SendBatchAsync()
         {
-            IReadOnlyCollection<EventData> batch = await _aggregator
-                .Dequeue(_disposeToken.Token);
-
-            if (batch.Count > 0)
-            {
-                await _sender
-                    .SendAsync(batch, _disposeToken.Token)
-                    .ConfigureAwait(false);
-            }
+            await _sender
+                .SendAsync(_aggregator.Dequeue(_disposeToken.Token), _disposeToken.Token)
+                .ConfigureAwait(false);
         }
 
         private async Task StoreBatchAsync()
@@ -103,11 +97,7 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task AggregateBatchAsync()
         {
-            IReadOnlyCollection<EventData> batch = await _storage
-                .DequeueAsync(_options.Storage.DequeueBatchSize, _disposeToken.Token)
-                .ConfigureAwait(false);
-
-            foreach (EventData data in batch)
+            await foreach (EventData data in _storage.DequeueAsync(_disposeToken.Token))
             {
                 await _aggregator.Enqueue(data, _disposeToken.Token);
             }

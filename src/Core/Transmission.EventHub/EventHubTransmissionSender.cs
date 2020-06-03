@@ -11,7 +11,7 @@ namespace Thor.Core.Transmission.EventHub
     /// A transmission sender for <c>Azure</c> <c>EventHub</c>.
     /// </summary>
     public class EventHubTransmissionSender
-        : ITransmissionSender<EventData>
+        : ITransmissionSender<EventData[]>
     {
         private readonly EventHubClient _client;
 
@@ -28,14 +28,14 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public async Task SendAsync(IReadOnlyCollection<EventData> batch, CancellationToken cancellationToken)
+        public async Task SendAsync(IAsyncEnumerable<EventData[]> batches, CancellationToken cancellationToken)
         {
-            if (batch == null)
+            if (batches == null)
             {
-                throw new ArgumentNullException(nameof(batch));
+                throw new ArgumentNullException(nameof(batches));
             }
 
-            if (batch.Count > 0)
+            await foreach(EventData[] batch in batches.WithCancellation(cancellationToken))
             {
                 await _client.SendAsync(batch);
             }

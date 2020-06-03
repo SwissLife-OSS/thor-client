@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -61,13 +62,10 @@ namespace Thor.Core.Transmission.Abstractions
         protected abstract string EncodeFileName(TData data);
 
         /// <inheritdoc/>
-        public async Task<IReadOnlyCollection<TData>> DequeueAsync(
-            int count,
-            CancellationToken cancellationToken)
+        public async IAsyncEnumerable<TData> DequeueAsync(
+            [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var batch = new List<TData>();
-
-            for (var i = 0; i < count; i++)
+            while (await _dequeueFiles.WaitToReadAsync(cancellationToken))
             {
                 var fileFullName = await _dequeueFiles.ReadAsync(cancellationToken);
                 var fileName = Path.GetFileNameWithoutExtension(fileFullName);
@@ -79,12 +77,10 @@ namespace Thor.Core.Transmission.Abstractions
 
                 if (data != null)
                 {
-                    batch.Add(data);
+                    yield return data;
                     TryDelete(fileFullName);
                 }
             }
-
-            return batch;
         }
 
         /// <inheritdoc/>

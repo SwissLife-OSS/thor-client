@@ -15,7 +15,7 @@ namespace Thor.Core.Transmission.Abstractions
         /// Dequeue a telemetry data batch from the buffer.
         /// </summary>
         /// <returns>A telemetry data batch.</returns>
-        ValueTask<TData[]> Dequeue(CancellationToken cancellationToken);
+        IAsyncEnumerable<TData[]> Dequeue(CancellationToken cancellationToken);
 
         /// <summary>
         /// Enqueue a telemetry data object.

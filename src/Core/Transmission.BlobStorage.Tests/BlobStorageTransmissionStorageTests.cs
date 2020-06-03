@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
@@ -50,10 +51,11 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
 
             // act
-            Func<Task> verify = () => storage.DequeueAsync(1, default);
+            IAsyncEnumerator<AttachmentDescriptor> attachmentsEnumerable = storage.DequeueAsync(default).GetAsyncEnumerator();
+            await attachmentsEnumerable.MoveNextAsync();
 
             // arrange
-            Assert.Null(await Record.ExceptionAsync(verify).ConfigureAwait(false));
+            Assert.Null(attachmentsEnumerable.Current);
         }
 
         #endregion

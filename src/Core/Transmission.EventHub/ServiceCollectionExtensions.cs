@@ -54,7 +54,7 @@ namespace Thor.Core.Transmission.EventHub
                 })
                 .AddSingleton<IMemoryBuffer<EventData>, MemoryBuffer<EventData>>()
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
-                .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
+                .AddSingleton<ITransmissionSender<EventData[]>, EventHubTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<EventData>>(p =>
                 {
                     TracingConfiguration tracingConfiguration = p.GetRequiredService<TracingConfiguration>();

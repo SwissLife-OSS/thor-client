@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>Thor.Core.Transmission.Abstractions</PackageId>
     <AssemblyName>Thor.Core.Transmission.Abstractions</AssemblyName>
     <RootNamespace>Thor.Core.Transmission.Abstractions</RootNamespace>
@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
     <PackageReference Include="System.Threading.Channels" Version="4.7.1" />
   </ItemGroup>
 

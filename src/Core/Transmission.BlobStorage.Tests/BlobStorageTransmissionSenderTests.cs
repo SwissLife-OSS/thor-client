@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -52,7 +54,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Returns(Task.FromResult(0));
 
             BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
-            AttachmentDescriptor[] batch = null;
+            IAsyncEnumerable<AttachmentDescriptor> batch = null;
 
             // act
             Func<Task> verify = () => sender.SendAsync(batch, default);
@@ -72,7 +74,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Returns(Task.FromResult(0));
 
             BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
-            AttachmentDescriptor[] batch = new AttachmentDescriptor[0];
+            IAsyncEnumerable<AttachmentDescriptor> batch = new AttachmentDescriptor[0].ToAsyncEnumerable();
 
             // act
             await sender.SendAsync(batch, default);
@@ -92,7 +94,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Returns(Task.FromResult(0));
 
             BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
-            AttachmentDescriptor[] batch = new[] { new AttachmentDescriptor() };
+            IAsyncEnumerable<AttachmentDescriptor> batch = new[] { new AttachmentDescriptor() }.ToAsyncEnumerable();
 
             // act
             Func<Task> verify = () => sender.SendAsync(batch, default);
