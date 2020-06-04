@@ -46,7 +46,10 @@ namespace Thor.Core.Transmission.EventHub
         {
             while (await _output.Reader.WaitToReadAsync(cancellationToken))
             {
-                yield return await _output.Reader.ReadAsync(cancellationToken);
+                while (_output.Reader.TryRead(out EventData[] eventsBatch))
+                {
+                    yield return eventsBatch;
+                }
             }
         }
 
@@ -75,7 +78,6 @@ namespace Thor.Core.Transmission.EventHub
                 throw new ArgumentNullException(nameof(data));
             }
 
-            await _input.Writer.WaitToWriteAsync(cancellationToken);
             await _input.Writer.WriteAsync(data, cancellationToken);
         }
 

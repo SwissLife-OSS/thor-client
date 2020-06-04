@@ -67,18 +67,20 @@ namespace Thor.Core.Transmission.Abstractions
         {
             while (await _dequeueFiles.WaitToReadAsync(cancellationToken))
             {
-                var fileFullName = await _dequeueFiles.ReadAsync(cancellationToken);
-                var fileName = Path.GetFileNameWithoutExtension(fileFullName);
-
-                byte[] dataBytes = await FileHelper
-                    .ReadAllBytesAsync(fileFullName, cancellationToken);
-
-                TData data = Deserialize(dataBytes, fileName);
-
-                if (data != null)
+                while (_dequeueFiles.TryRead(out var fileFullName))
                 {
-                    yield return data;
-                    TryDelete(fileFullName);
+                    var fileName = Path.GetFileNameWithoutExtension(fileFullName);
+
+                    byte[] dataBytes = await FileHelper
+                        .ReadAllBytesAsync(fileFullName, cancellationToken);
+
+                    TData data = Deserialize(dataBytes, fileName);
+
+                    if (data != null)
+                    {
+                        yield return data;
+                        TryDelete(fileFullName);
+                    }
                 }
             }
         }
