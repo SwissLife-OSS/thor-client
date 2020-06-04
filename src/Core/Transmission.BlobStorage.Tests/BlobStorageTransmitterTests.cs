@@ -20,13 +20,12 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_BufferNull()
         {
             // assert
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             IMemoryBuffer<AttachmentDescriptor> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>().Object;
             ITransmissionStorage<AttachmentDescriptor> storage = null;
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, storage, sender, jobHealthCheck, new AttachmentsOptions());
+            Action verify = () => new BlobStorageTransmitter(buffer, storage, sender, new AttachmentsOptions());
 
             // arrange
             Assert.Throws<ArgumentNullException>("storage", verify);
@@ -36,13 +35,12 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_SenderNull()
         {
             // assert
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             IMemoryBuffer<AttachmentDescriptor> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>().Object;
             ITransmissionStorage<AttachmentDescriptor> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>().Object;
             ITransmissionSender<AttachmentDescriptor> sender = null;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, storage, sender, jobHealthCheck, new AttachmentsOptions());
+            Action verify = () => new BlobStorageTransmitter(buffer, storage, sender, new AttachmentsOptions());
 
             // arrange
             Assert.Throws<ArgumentNullException>("sender", verify);
@@ -52,13 +50,12 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Constructor_NoException()
         {
             // assert
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             IMemoryBuffer<AttachmentDescriptor> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>().Object;
             Mock<ITransmissionStorage<AttachmentDescriptor>> storage = CreateEmptyStorage();
             var sender = new Mock<ITransmissionSender<AttachmentDescriptor>>();
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, storage.Object, sender.Object, jobHealthCheck, new AttachmentsOptions());
+            Action verify = () => new BlobStorageTransmitter(buffer, storage.Object, sender.Object, new AttachmentsOptions());
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -72,11 +69,10 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Enqueue_DataNull()
         {
             // arrange
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             IMemoryBuffer<AttachmentDescriptor> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>().Object;
             Mock<ITransmissionStorage<AttachmentDescriptor>> storage = CreateEmptyStorage();
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
-            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(buffer, storage.Object, sender, jobHealthCheck, new AttachmentsOptions());
+            ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(buffer, storage.Object, sender, new AttachmentsOptions());
             AttachmentDescriptor data = null;
 
             // act
@@ -90,13 +86,12 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Enqueue_NoException()
         {
             // assert
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             IMemoryBuffer<AttachmentDescriptor> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>().Object;
             Mock<ITransmissionStorage<AttachmentDescriptor>> storage = CreateEmptyStorage();
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
 
             // act
-            Action verify = () => new BlobStorageTransmitter(buffer, storage.Object, sender, jobHealthCheck, new AttachmentsOptions());
+            Action verify = () => new BlobStorageTransmitter(buffer, storage.Object, sender, new AttachmentsOptions());
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -106,7 +101,6 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Enqueue_TransmissionFlow()
         {
             // assert
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             ManualResetEventSlim resetEvent = new ManualResetEventSlim();
             Mock<IMemoryBuffer<AttachmentDescriptor>> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>();
             Mock<ITransmissionStorage<AttachmentDescriptor>> storage = new Mock<ITransmissionStorage<AttachmentDescriptor>>();
@@ -136,7 +130,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Callback(() => resetEvent.Set());
 
             ITelemetryAttachmentTransmitter transmitter = new BlobStorageTransmitter(
-                buffer.Object, storage.Object, sender.Object, jobHealthCheck, new AttachmentsOptions());
+                buffer.Object, storage.Object, sender.Object, new AttachmentsOptions());
             AttachmentDescriptor data = new Mock<AttachmentDescriptor>().Object;
 
             // act
@@ -158,12 +152,11 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
         public void Dispose()
         {
             // arrange
-            IJobHealthCheck jobHealthCheck = Mock.Of<IJobHealthCheck>();
             Mock<IMemoryBuffer<AttachmentDescriptor>> buffer = new Mock<IMemoryBuffer<AttachmentDescriptor>>();
             Mock<ITransmissionStorage<AttachmentDescriptor>> storage = CreateEmptyStorage();
             ITransmissionSender<AttachmentDescriptor> sender = new Mock<ITransmissionSender<AttachmentDescriptor>>().Object;
             BlobStorageTransmitter transmitter = new BlobStorageTransmitter(
-                buffer.Object, storage.Object, sender, jobHealthCheck, new AttachmentsOptions());
+                buffer.Object, storage.Object, sender, new AttachmentsOptions());
 
             // act
             Action verify = () => transmitter.Dispose();

@@ -32,7 +32,6 @@ namespace Thor.Core.Transmission.BlobStorage
             IMemoryBuffer<AttachmentDescriptor> buffer,
             ITransmissionStorage<AttachmentDescriptor> storage,
             ITransmissionSender<AttachmentDescriptor> sender,
-            IJobHealthCheck jobHealthCheck,
             AttachmentsOptions options)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
@@ -43,14 +42,10 @@ namespace Thor.Core.Transmission.BlobStorage
             _storeJob = Job.Start(
                 async () => await StoreBatchAsync().ConfigureAwait(false),
                 () => _buffer.Count == 0,
-                JobType.AttachmentsStorage,
-                jobHealthCheck,
                 _disposeToken.Token);
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
-                JobType.AttachmentsSender,
-                jobHealthCheck,
                 _disposeToken.Token);
         }
 

@@ -34,7 +34,6 @@ namespace Thor.Core.Transmission.EventHub
             ITransmissionBuffer<EventData> aggregator,
             ITransmissionSender<EventData[]> sender,
             ITransmissionStorage<EventData> storage,
-            IJobHealthCheck jobHealthCheck,
             EventsOptions options)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
@@ -46,20 +45,14 @@ namespace Thor.Core.Transmission.EventHub
             _storeJob = Job.Start(
                 async () => await StoreBatchAsync().ConfigureAwait(false),
                 () => _buffer.Count == 0,
-                JobType.EventsStorage,
-                jobHealthCheck,
                 _disposeToken.Token);
 
             _aggregateJob = Job.Start(
                 async () => await AggregateBatchAsync().ConfigureAwait(false),
-                JobType.EventsAggregator,
-                jobHealthCheck,
                 _disposeToken.Token);
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
-                JobType.EventsSender,
-                jobHealthCheck,
                 _disposeToken.Token);
         }
 

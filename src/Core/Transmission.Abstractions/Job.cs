@@ -8,21 +8,17 @@ namespace Thor.Core.Abstractions
     {
         internal static Job Start(
             Func<Task> action,
-            JobType jobType,
-            IJobHealthCheck jobHealthCheck,
             CancellationToken cancellationToken)
         {
-            return Start(action, () => false, jobType, jobHealthCheck, cancellationToken);
+            return Start(action, () => false, cancellationToken);
         }
 
         internal static Job Start(
             Func<Task> action,
             Func<bool> spinWhen,
-            JobType jobType,
-            IJobHealthCheck jobHealthCheck,
             CancellationToken cancellationToken)
         {
-            var job = new Job(jobType, jobHealthCheck, cancellationToken);
+            var job = new Job(cancellationToken);
 
             Task.Factory.StartNew(
                 () => job.Start(action, spinWhen),
@@ -34,15 +30,11 @@ namespace Thor.Core.Abstractions
         }
 
         private static readonly TimeSpan Delay = TimeSpan.FromMilliseconds(50);
-        private readonly JobType _jobType;
-        private readonly IJobHealthCheck _jobHealthCheck;
         private readonly CancellationToken _cancellationToken;
         private readonly ManualResetEventSlim _sync;
 
-        private Job(JobType jobType, IJobHealthCheck jobHealthCheck, CancellationToken cancellationToken)
+        private Job(CancellationToken cancellationToken)
         {
-            _jobType = jobType;
-            _jobHealthCheck = jobHealthCheck;
             _cancellationToken = cancellationToken;
             Stopped = false;
             _sync = new ManualResetEventSlim();
@@ -54,7 +46,6 @@ namespace Thor.Core.Abstractions
 
             while (!_cancellationToken.IsCancellationRequested)
             {
-                _jobHealthCheck.ReportAlive(_jobType);
                 await action();
 
                 if (!_cancellationToken.IsCancellationRequested && spinWhen())
