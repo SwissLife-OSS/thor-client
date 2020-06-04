@@ -76,10 +76,9 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task AggregateAsync()
         {
-            await foreach (EventData data in _storage.DequeueAsync(_disposeToken.Token))
-            {
-                await _aggregator.Enqueue(data, _disposeToken.Token);
-            }
+            await _aggregator
+                .Enqueue(_storage.DequeueAsync(_disposeToken.Token), _disposeToken.Token)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />

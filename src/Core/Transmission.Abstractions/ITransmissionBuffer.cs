@@ -19,6 +19,6 @@ namespace Thor.Core.Transmission.Abstractions
         /// <summary>
         /// Enqueue a telemetry data object.
         /// </summary>
-        Task Enqueue(TData data, CancellationToken cancellationToken);
+        Task Enqueue(IAsyncEnumerable<TData> batch, CancellationToken cancellationToken);
     }
 }

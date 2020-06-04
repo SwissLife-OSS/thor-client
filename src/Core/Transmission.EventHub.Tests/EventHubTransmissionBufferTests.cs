@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Xunit;
@@ -46,7 +47,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // arrange
             EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
             EventHubTransmissionBuffer buffer = new EventHubTransmissionBuffer(client);
-            EventData data = null;
+            IAsyncEnumerable<EventData> data = null;
 
             // act
             Func<Task> verify = () => buffer.Enqueue(data, default);
