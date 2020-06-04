@@ -87,22 +87,18 @@ namespace Thor.Core.Transmission.EventHub
             while (await _input.Reader.WaitToReadAsync())
             {
                 EventDataBatch batch = _client.CreateBatch();
-                bool stopCollectingEvents = false;
 
                 if (_next != null && batch.TryAdd(_next))
                 {
                     _next = null;
                 }
 
-                while (!stopCollectingEvents)
+                while (_next == null && _input.Reader.TryRead(out EventData data))
                 {
-                    EventData data = await _input.Reader.ReadAsync();
                     if (!batch.TryAdd(data))
                     {
                         _next = data;
                     }
-
-                    stopCollectingEvents = _next != null || data == null;
                 }
 
                 await _output.Writer.WriteAsync(batch.ToEnumerable().ToArray());
