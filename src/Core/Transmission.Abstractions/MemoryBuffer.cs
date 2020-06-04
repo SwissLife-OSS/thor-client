@@ -13,7 +13,6 @@ namespace Thor.Core.Transmission.Abstractions
         : IMemoryBuffer<TData>
         where TData : class
     {
-        private readonly BufferOptions _options;
         private readonly ChannelWriter<TData> _itemsWrite;
         private readonly ChannelReader<TData> _itemsRead;
 
@@ -23,9 +22,7 @@ namespace Thor.Core.Transmission.Abstractions
         /// <param name="options"></param>
         public MemoryBuffer(BufferOptions options)
         {
-            _options = options;
-
-            var items = Channel.CreateBounded<TData>(_options.Size);
+            var items = Channel.CreateBounded<TData>(options.Size);
             _itemsWrite = items.Writer;
             _itemsRead = items.Reader;
         }
@@ -38,12 +35,7 @@ namespace Thor.Core.Transmission.Abstractions
                 throw new ArgumentNullException(nameof(data));
             }
 
-            if(!_itemsWrite.TryWrite(data))
-            {
-                SpinWait.SpinUntil(() =>
-                        _itemsWrite.TryWrite(data),
-                    _options.EnqueueTimeout);
-            }
+            _itemsWrite.TryWrite(data);
         }
 
         /// <inheritdoc />
