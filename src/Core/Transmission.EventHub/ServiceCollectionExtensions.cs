@@ -51,7 +51,7 @@ namespace Thor.Core.Transmission.EventHub
                     EventHubsConnectionStringBuilder connection = CreateEventHubConnection(eventHubConfiguration);
                     return EventHubClient.Create(connection);
                 })
-                .AddSingleton<IMemoryBuffer<EventData>, MemoryBuffer<EventData>>()
+                .AddSingleton<IMemoryBuffer<EventData>>(sp => new MemoryBuffer<EventData>(eventsOptions.Buffer))
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
                 .AddSingleton<ITransmissionSender<EventData[]>, EventHubTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<EventData>>(p =>
