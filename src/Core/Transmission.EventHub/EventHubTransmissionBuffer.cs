@@ -15,12 +15,16 @@ namespace Thor.Core.Transmission.EventHub
     /// </summary>
     public class EventHubTransmissionBuffer
         : ITransmissionBuffer<EventData>
+        , IDisposable
     {
         private static readonly int MaxBufferSize = 1000;
+        private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly Channel<EventData> _input = Channel.CreateBounded<EventData>(MaxBufferSize);
         private readonly Channel<EventData[]> _output = Channel.CreateUnbounded<EventData[]>();
         private readonly EventHubClient _client;
+        private readonly Task _processingTask;
         private EventData _next;
+        private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmissionBuffer"/> class.
@@ -33,7 +37,8 @@ namespace Thor.Core.Transmission.EventHub
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
-            TaskHelper.StartLongRunning(StartProcessing, default);
+            _processingTask = TaskHelper
+                .StartLongRunning(StartProcessing, _disposeToken.Token);
         }
 
         /// <inheritdoc />
@@ -79,7 +84,7 @@ namespace Thor.Core.Transmission.EventHub
 
         private async Task StartProcessing()
         {
-            while (true)
+            while (await _input.Reader.WaitToReadAsync())
             {
                 EventDataBatch batch = _client.CreateBatch();
                 bool stopCollectingEvents = false;
@@ -101,6 +106,24 @@ namespace Thor.Core.Transmission.EventHub
                 }
 
                 await _output.Writer.WriteAsync(batch.ToEnumerable().ToArray());
+            }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _disposeToken.Cancel();
+
+                Task.WaitAll(new[]
+                {
+                    _processingTask
+                }, TimeSpan.FromSeconds(5));
+
+                _client?.Close();
+                _disposeToken?.Dispose();
+                _disposed = true;
             }
         }
     }
