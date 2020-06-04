@@ -73,10 +73,10 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 _disposeToken.Cancel();
 
-                SpinWait.SpinUntil(() =>
-                        _sendTask.Status != TaskStatus.Running &&
-                        _storeTask.Status != TaskStatus.Running,
-                    TimeSpan.FromSeconds(5));
+                Task.WaitAll(new[]
+                {
+                    _sendTask, _storeTask
+                }, TimeSpan.FromSeconds(5));
 
                 _disposeToken?.Dispose();
                 _disposed = true;
