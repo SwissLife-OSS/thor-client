@@ -42,6 +42,7 @@ namespace Thor.Core
 
             return services
                 .AddSingleton<IProvidersDescriptor, CoreProvidersDescriptor>()
+                .AddSingleton<IJobHealthCheck, JobHealthCheck>()
                 .AddSingleton(tracingConfiguration);
         }
     }

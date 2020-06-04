@@ -29,16 +29,12 @@ namespace Thor.Core.Transmission.EventHub
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
         /// </summary>
-        /// <param name="buffer">A transmission buffer instance.</param>
-        /// <param name="aggregator">A transmission aggregator instance.</param>
-        /// <param name="sender">A transmission sender instance.</param>
-        /// <param name="storage">A transmission storage instance.</param>
-        /// <param name="options">EventHub transmission options.</param>
         public EventHubTransmitter(
             IMemoryBuffer<EventData> buffer,
             ITransmissionBuffer<EventData> aggregator,
             ITransmissionSender<EventData[]> sender,
             ITransmissionStorage<EventData> storage,
+            IJobHealthCheck jobHealthCheck,
             EventsOptions options)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
@@ -50,14 +46,20 @@ namespace Thor.Core.Transmission.EventHub
             _storeJob = Job.Start(
                 async () => await StoreBatchAsync().ConfigureAwait(false),
                 () => _buffer.Count == 0,
+                JobType.EventsStorage,
+                jobHealthCheck,
                 _disposeToken.Token);
 
             _aggregateJob = Job.Start(
                 async () => await AggregateBatchAsync().ConfigureAwait(false),
+                JobType.EventsAggregator,
+                jobHealthCheck,
                 _disposeToken.Token);
 
             _sendJob = Job.Start(
                 async () => await SendBatchAsync().ConfigureAwait(false),
+                JobType.EventsSender,
+                jobHealthCheck,
                 _disposeToken.Token);
         }
 
