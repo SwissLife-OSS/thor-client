@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 using Thor.Core.Transmission.EventHub;
 
@@ -16,13 +14,12 @@ namespace Thor.Core.Transmission.BlobStorage
         , IDisposable
     {
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
-        private readonly ManualResetEventSlim _resetEvent = new ManualResetEventSlim();
         private readonly IMemoryBuffer<AttachmentDescriptor> _buffer;
         private readonly ITransmissionStorage<AttachmentDescriptor> _storage;
         private readonly ITransmissionSender<AttachmentDescriptor> _sender;
         private readonly AttachmentsOptions _options;
-        private readonly Job _sendJob;
-        private readonly Job _storeJob;
+        private readonly Task _storeTask;
+        private readonly Task _sendTask;
         private bool _disposed;
 
         /// <summary>
@@ -39,14 +36,10 @@ namespace Thor.Core.Transmission.BlobStorage
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _options = options ?? throw new ArgumentNullException(nameof(options));
 
-            _storeJob = Job.Start(
-                async () => await StoreBatchAsync().ConfigureAwait(false),
-                () => _buffer.Count == 0,
-                _disposeToken.Token);
-
-            _sendJob = Job.Start(
-                async () => await SendBatchAsync().ConfigureAwait(false),
-                _disposeToken.Token);
+            _storeTask = TaskHelper
+                .StartLongRunning(StoreAsync, _disposeToken.Token);
+            _sendTask = TaskHelper
+                .StartLongRunning(SendAsync, _disposeToken.Token);
         }
 
         /// <inheritdoc/>
@@ -63,20 +56,14 @@ namespace Thor.Core.Transmission.BlobStorage
             }
         }
 
-        private async Task StoreBatchAsync()
+        private async Task StoreAsync()
         {
-            IReadOnlyCollection<AttachmentDescriptor> batch = _buffer.Dequeue(
-                _options.Buffer.DequeueBatchSize);
-
-            if (batch.Count > 0)
-            {
-                await _storage
-                    .EnqueueAsync(batch, _disposeToken.Token)
-                    .ConfigureAwait(false);
-            }
+            await _storage
+                .EnqueueAsync(_buffer.Dequeue(_disposeToken.Token), _disposeToken.Token)
+                .ConfigureAwait(false);
         }
 
-        private async Task SendBatchAsync()
+        private async Task SendAsync()
         {
             await _sender
                 .SendAsync(_storage.DequeueAsync(_disposeToken.Token), _disposeToken.Token)
@@ -90,20 +77,12 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 _disposeToken.Cancel();
 
-                if (!_sendJob.Stopped && !_storeJob.Stopped)
-                {
-                    WaitHandle.WaitAll(new[]
-                    {
-                        _sendJob.WaitHandle,
-                        _storeJob.WaitHandle
-                    }, TimeSpan.FromSeconds(5));
-                }
+                SpinWait.SpinUntil(() =>
+                        _sendTask.Status != TaskStatus.Running &&
+                        _storeTask.Status != TaskStatus.Running,
+                    TimeSpan.FromSeconds(5));
 
                 _disposeToken?.Dispose();
-                _resetEvent?.Dispose();
-                _sendJob?.Dispose();
-                _storeJob?.Dispose();
-
                 _disposed = true;
             }
         }

@@ -85,7 +85,7 @@ namespace Thor.Core.Transmission.Abstractions
 
         /// <inheritdoc/>
         public async Task EnqueueAsync(
-            IReadOnlyCollection<TData> batch,
+            IAsyncEnumerable<TData> batch,
             CancellationToken cancellationToken)
         {
             if (batch == null)
@@ -93,7 +93,7 @@ namespace Thor.Core.Transmission.Abstractions
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            foreach (TData data in batch)
+            await foreach (TData data in batch.WithCancellation(cancellationToken))
             {
                 await EnqueueAsync(data, cancellationToken);
             }

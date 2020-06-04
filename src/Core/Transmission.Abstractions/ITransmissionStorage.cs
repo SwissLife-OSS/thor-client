@@ -23,6 +23,6 @@ namespace Thor.Core.Transmission.Abstractions
         /// </summary>
         /// <param name="batch">A data batch to be stored.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
-        Task EnqueueAsync(IReadOnlyCollection<TData> batch, CancellationToken cancellationToken);
+        Task EnqueueAsync(IAsyncEnumerable<TData> batch, CancellationToken cancellationToken);
     }
 }

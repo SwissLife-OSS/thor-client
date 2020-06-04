@@ -68,7 +68,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             // arrange
             string storagePath = "C:\\EnqueueAsync_BatchNull_Test";
             BlobStorageTransmissionStorage storage = new BlobStorageTransmissionStorage(storagePath);
-            AttachmentDescriptor[] batch = null;
+            IAsyncEnumerable<AttachmentDescriptor> batch = null;
 
             // act
             Func<Task> verify = () => storage.EnqueueAsync(batch, default);

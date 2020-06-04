@@ -21,9 +21,9 @@ namespace Thor.Core.Transmission.EventHub
         private readonly ITransmissionSender<EventData[]> _sender;
         private readonly ITransmissionStorage<EventData> _storage;
         private readonly EventsOptions _options;
-        private readonly Job _sendJob;
-        private readonly Job _storeJob;
-        private readonly Job _aggregateJob;
+        private readonly Task _storeTask;
+        private readonly Task _aggregateTask;
+        private readonly Task _sendTask;
         private bool _disposed;
 
         /// <summary>
@@ -42,18 +42,12 @@ namespace Thor.Core.Transmission.EventHub
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _options = options ?? throw new ArgumentNullException(nameof(options));
 
-            _storeJob = Job.Start(
-                async () => await StoreBatchAsync().ConfigureAwait(false),
-                () => _buffer.Count == 0,
-                _disposeToken.Token);
-
-            _aggregateJob = Job.Start(
-                async () => await AggregateBatchAsync().ConfigureAwait(false),
-                _disposeToken.Token);
-
-            _sendJob = Job.Start(
-                async () => await SendBatchAsync().ConfigureAwait(false),
-                _disposeToken.Token);
+            _storeTask = TaskHelper
+                .StartLongRunning(StoreAsync, _disposeToken.Token);
+            _aggregateTask = TaskHelper
+                .StartLongRunning(AggregateAsync, _disposeToken.Token);
+            _sendTask = TaskHelper
+                .StartLongRunning(SendAsync, _disposeToken.Token);
         }
 
         /// <inheritdoc />
@@ -70,27 +64,21 @@ namespace Thor.Core.Transmission.EventHub
             }
         }
 
-        private async Task SendBatchAsync()
+        private async Task SendAsync()
         {
             await _sender
                 .SendAsync(_aggregator.Dequeue(_disposeToken.Token), _disposeToken.Token)
                 .ConfigureAwait(false);
         }
 
-        private async Task StoreBatchAsync()
+        private async Task StoreAsync()
         {
-            IReadOnlyCollection<EventData> batch = _buffer.Dequeue(
-                _options.Buffer.DequeueBatchSize);
-
-            if (batch.Count > 0)
-            {
-                await _storage
-                    .EnqueueAsync(batch, _disposeToken.Token)
-                    .ConfigureAwait(false);
-            }
+            await _storage
+                .EnqueueAsync(_buffer.Dequeue(_disposeToken.Token), _disposeToken.Token)
+                .ConfigureAwait(false);
         }
 
-        private async Task AggregateBatchAsync()
+        private async Task AggregateAsync()
         {
             await foreach (EventData data in _storage.DequeueAsync(_disposeToken.Token))
             {
@@ -105,20 +93,13 @@ namespace Thor.Core.Transmission.EventHub
             {
                 _disposeToken.Cancel();
 
-                if (!_sendJob.Stopped && !_storeJob.Stopped)
-                {
-                    WaitHandle.WaitAll(new[]
-                    {
-                        _sendJob.WaitHandle,
-                        _storeJob.WaitHandle
-                    }, TimeSpan.FromSeconds(5));
-                }
+                SpinWait.SpinUntil(() =>
+                        _sendTask.Status != TaskStatus.Running &&
+                        _aggregateTask.Status != TaskStatus.Running &&
+                        _storeTask.Status != TaskStatus.Running,
+                    TimeSpan.FromSeconds(5));
 
                 _disposeToken?.Dispose();
-                _aggregateJob?.Dispose();
-                _sendJob?.Dispose();
-                _storeJob?.Dispose();
-
                 _disposed = true;
             }
         }
