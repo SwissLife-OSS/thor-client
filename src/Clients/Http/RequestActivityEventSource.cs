@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Diagnostics.Tracing;
-using System.Threading.Tasks;
 using Thor.Core;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;

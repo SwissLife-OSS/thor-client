@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Xunit;
@@ -46,13 +47,13 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // arrange
             EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
             EventHubTransmissionSender sender = new EventHubTransmissionSender(client);
-            EventData[] batch = null;
+            IAsyncEnumerable<EventData[]> batch = null;
 
             // act
             Func<Task> verify = () => sender.SendAsync(batch, default);
 
             // assert
-            await Assert.ThrowsAsync<ArgumentNullException>("batch", verify).ConfigureAwait(false);
+            await Assert.ThrowsAsync<ArgumentNullException>("batches", verify).ConfigureAwait(false);
         }
 
         #endregion

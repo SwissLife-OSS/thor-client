@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Options;
 using Thor.Core.Abstractions;
 
 namespace Thor.Core.Session

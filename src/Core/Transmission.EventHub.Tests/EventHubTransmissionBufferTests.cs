@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
-using Thor.Core.Transmission.Abstractions;
 using Xunit;
 
 namespace Thor.Core.Transmission.EventHub.Tests
@@ -35,25 +34,6 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // arrange
             Exception exception = Record.Exception(verify);
             Assert.Null(exception);
-        }
-
-        #endregion
-
-        #region DequeueAsync
-
-        [Fact(DisplayName = "DequeueAsync: Should not throw any exception", Skip = "Not really testable")]
-        public async Task DequeueAsync_NoException()
-        {
-            // assert
-            EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
-            EventHubTransmissionBuffer buffer = new EventHubTransmissionBuffer(client);
-            await buffer.Enqueue(new EventData(new byte[0]), default);
-
-            // act
-            Func<Task> verify = () => buffer.Dequeue(default).AsTask();
-
-            // arrange
-            Assert.Null(await Record.ExceptionAsync(verify));
         }
 
         #endregion

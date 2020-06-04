@@ -1,7 +1,6 @@
-﻿using HotChocolate.Execution;
+using HotChocolate.Execution;
 using HotChocolate.Resolvers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Thor.Extensions.HotChocolate
 {

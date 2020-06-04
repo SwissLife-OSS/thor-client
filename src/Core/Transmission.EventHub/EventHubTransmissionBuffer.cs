@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -39,9 +41,13 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public ValueTask<EventData[]> Dequeue(CancellationToken cancellationToken)
+        public async IAsyncEnumerable<EventData[]> Dequeue(
+            [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            return _output.Reader.ReadAsync(cancellationToken);
+            while (await _output.Reader.WaitToReadAsync(cancellationToken))
+            {
+                yield return await _output.Reader.ReadAsync(cancellationToken);
+            }
         }
 
         /// <inheritdoc />

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 using Thor.Core.Transmission.EventHub;
 
@@ -77,17 +78,9 @@ namespace Thor.Core.Transmission.BlobStorage
 
         private async Task SendBatchAsync()
         {
-            // Add disposable dequeue and delete files after send
-            IReadOnlyCollection<AttachmentDescriptor> batch = await _storage
-                .DequeueAsync(_options.Storage.DequeueBatchSize, _disposeToken.Token)
+            await _sender
+                .SendAsync(_storage.DequeueAsync(_disposeToken.Token), _disposeToken.Token)
                 .ConfigureAwait(false);
-
-            if (batch.Count > 0)
-            {
-                await _sender
-                    .SendAsync(batch, _disposeToken.Token)
-                    .ConfigureAwait(false);
-            }
         }
 
         /// <inheritdoc />

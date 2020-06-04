@@ -2,7 +2,6 @@ using System;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
@@ -54,7 +53,7 @@ namespace Thor.Core.Transmission.EventHub
                 })
                 .AddSingleton<IMemoryBuffer<EventData>, MemoryBuffer<EventData>>()
                 .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
-                .AddSingleton<ITransmissionSender<EventData>, EventHubTransmissionSender>()
+                .AddSingleton<ITransmissionSender<EventData[]>, EventHubTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<EventData>>(p =>
                 {
                     TracingConfiguration tracingConfiguration = p.GetRequiredService<TracingConfiguration>();

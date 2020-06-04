@@ -28,7 +28,7 @@ namespace Thor.Core.Transmission.BlobStorage
 
         /// <inheritdoc/>
         public async Task SendAsync(
-            IReadOnlyCollection<AttachmentDescriptor> batch,
+            IAsyncEnumerable<AttachmentDescriptor> batch,
             CancellationToken cancellationToken)
         {
             if (batch == null)
@@ -36,16 +36,13 @@ namespace Thor.Core.Transmission.BlobStorage
                 throw new ArgumentNullException(nameof(batch));
             }
 
-            if (batch.Count > 0)
+            await foreach (AttachmentDescriptor attachment in batch
+                .WithCancellation(cancellationToken))
             {
                 try
                 {
-                    foreach (AttachmentDescriptor descriptor in batch)
-                    {
-                        await _container
-                            .UploadAsync(descriptor, cancellationToken)
-                            .ConfigureAwait(false);
-                    }
+                    await _container
+                        .UploadAsync(attachment, cancellationToken);
                 }
                 catch (Exception)
                 {

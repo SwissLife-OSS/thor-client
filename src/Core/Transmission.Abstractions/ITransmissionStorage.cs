@@ -14,10 +14,9 @@ namespace Thor.Core.Transmission.Abstractions
         /// <summary>
         /// Dequeue a data batch from the storage.
         /// </summary>
-        /// <param name="count">Number of items to be dequeued.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>A telemetry data batch.</returns>
-        Task<IReadOnlyCollection<TData>> DequeueAsync(int count, CancellationToken cancellationToken);
+        IAsyncEnumerable<TData> DequeueAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Enqueue a telemetry data batch to a <c>short-term</c> storage.
