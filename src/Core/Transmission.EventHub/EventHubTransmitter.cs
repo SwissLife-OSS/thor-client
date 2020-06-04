@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -20,7 +19,6 @@ namespace Thor.Core.Transmission.EventHub
         private readonly ITransmissionBuffer<EventData> _aggregator;
         private readonly ITransmissionSender<EventData[]> _sender;
         private readonly ITransmissionStorage<EventData> _storage;
-        private readonly EventsOptions _options;
         private readonly Task _storeTask;
         private readonly Task _aggregateTask;
         private readonly Task _sendTask;
@@ -33,14 +31,12 @@ namespace Thor.Core.Transmission.EventHub
             IMemoryBuffer<EventData> buffer,
             ITransmissionBuffer<EventData> aggregator,
             ITransmissionSender<EventData[]> sender,
-            ITransmissionStorage<EventData> storage,
-            EventsOptions options)
+            ITransmissionStorage<EventData> storage)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             _aggregator = aggregator ?? throw new ArgumentNullException(nameof(aggregator));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
 
             _storeTask = TaskHelper
                 .StartLongRunning(StoreAsync, _disposeToken.Token);

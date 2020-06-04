@@ -1,6 +1,6 @@
 using System;
 
-namespace Thor.Core.Transmission.EventHub
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// Options for buffering used for both Events and Attachments

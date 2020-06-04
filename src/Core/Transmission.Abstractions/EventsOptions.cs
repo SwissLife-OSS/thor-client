@@ -1,4 +1,4 @@
-namespace Thor.Core.Transmission.EventHub
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// Options for events processing

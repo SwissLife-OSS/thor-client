@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
-using Thor.Core.Transmission.Abstractions;
 
-namespace Thor.Core.Transmission.EventHub
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A memory transmission buffer

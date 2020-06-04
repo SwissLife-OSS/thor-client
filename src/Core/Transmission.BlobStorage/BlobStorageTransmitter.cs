@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Thor.Core.Transmission.Abstractions;
-using Thor.Core.Transmission.EventHub;
 
 namespace Thor.Core.Transmission.BlobStorage
 {
@@ -17,7 +16,6 @@ namespace Thor.Core.Transmission.BlobStorage
         private readonly IMemoryBuffer<AttachmentDescriptor> _buffer;
         private readonly ITransmissionStorage<AttachmentDescriptor> _storage;
         private readonly ITransmissionSender<AttachmentDescriptor> _sender;
-        private readonly AttachmentsOptions _options;
         private readonly Task _storeTask;
         private readonly Task _sendTask;
         private bool _disposed;
@@ -28,13 +26,11 @@ namespace Thor.Core.Transmission.BlobStorage
         public BlobStorageTransmitter(
             IMemoryBuffer<AttachmentDescriptor> buffer,
             ITransmissionStorage<AttachmentDescriptor> storage,
-            ITransmissionSender<AttachmentDescriptor> sender,
-            AttachmentsOptions options)
+            ITransmissionSender<AttachmentDescriptor> sender)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
 
             _storeTask = TaskHelper
                 .StartLongRunning(StoreAsync, _disposeToken.Token);
