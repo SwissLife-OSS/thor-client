@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Thor.Core.Abstractions;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;

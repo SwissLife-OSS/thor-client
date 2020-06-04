@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Thor.Core;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;

@@ -1,8 +1,6 @@
-using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
-using HotChocolate;
 using Thor.Core;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;

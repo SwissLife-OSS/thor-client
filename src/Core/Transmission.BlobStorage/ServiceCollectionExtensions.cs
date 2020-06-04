@@ -3,7 +3,6 @@ using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Thor.Core.Transmission.Abstractions;
 using Thor.Core.Transmission.EventHub;
 

@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Thor.Core.Abstractions;
 using Thor.Hosting.AspNetCore.FunctionalTest.EventSources;
 using static Thor.Hosting.AspNetCore.FunctionalTest.EventSources.ValuesEventSources;
 

@@ -1,7 +1,5 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Thor.Core;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;
