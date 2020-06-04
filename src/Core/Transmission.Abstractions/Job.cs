@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Thor.Core.Abstractions
+namespace Thor.Core.Transmission.Abstractions
 {
     internal class Job : IDisposable
     {
