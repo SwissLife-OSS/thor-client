@@ -33,11 +33,7 @@ namespace Thor.Core.Transmission.EventHub
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
-            Task.Factory.StartNew(
-                StartAsyncProcessing,
-                default,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
+            TaskHelper.StartLongRunning(StartProcessing, default);
         }
 
         /// <inheritdoc />
@@ -81,7 +77,7 @@ namespace Thor.Core.Transmission.EventHub
             await _input.Writer.WriteAsync(data, cancellationToken);
         }
 
-        private async Task StartAsyncProcessing()
+        private async Task StartProcessing()
         {
             while (true)
             {
