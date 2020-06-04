@@ -26,7 +26,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
             // act
             Action verify = () => new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
 
             // arrange
             Assert.Throws<ArgumentNullException>("buffer", verify);
@@ -43,7 +43,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
             // act
             Action verify = () => new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
 
             // arrange
             Assert.Throws<ArgumentNullException>("sender", verify);
@@ -60,7 +60,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
             // act
             Action verify = () => new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
 
             // arrange
             Assert.Throws<ArgumentNullException>("storage", verify);
@@ -77,7 +77,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
             // act
             Action verify = () => new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -96,7 +96,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             ITransmissionSender<EventData[]> sender = new Mock<ITransmissionSender<EventData[]>>().Object;
             ITransmissionStorage<EventData> storage = new Mock<ITransmissionStorage<EventData>>().Object;
             ITelemetryEventTransmitter transmitter = new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
             TelemetryEvent data = null;
 
             // act
@@ -118,7 +118,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
             // act
             Action verify = () => new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -158,7 +158,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
                 .Callback(() => resetEvent.Set());
 
             ITelemetryEventTransmitter transmitter = new EventHubTransmitter(
-                buffer.Object, aggregator.Object, sender.Object, storage.Object, new EventsOptions());
+                buffer.Object, aggregator.Object, sender.Object, storage.Object);
             TelemetryEvent data = new TelemetryEvent();
 
             // act
@@ -185,7 +185,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             ITransmissionSender<EventData[]> sender = new Mock<ITransmissionSender<EventData[]>>().Object;
             ITransmissionStorage<EventData> storage = new Mock<ITransmissionStorage<EventData>>().Object;
             EventHubTransmitter transmitter = new EventHubTransmitter(
-                buffer, aggregator, sender, storage, new EventsOptions());
+                buffer, aggregator, sender, storage);
 
             // act
             Action verify = () => transmitter.Dispose();

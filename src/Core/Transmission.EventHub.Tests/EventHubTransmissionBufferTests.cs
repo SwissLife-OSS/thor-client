@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Xunit;
@@ -40,19 +41,19 @@ namespace Thor.Core.Transmission.EventHub.Tests
 
         #region EnqueueAsync
 
-        [Fact(DisplayName = "EnqueueAsync: Should throw an argument null exception for data")]
-        public async Task EnqueueAsync_DataNull()
+        [Fact(DisplayName = "EnqueueAsync: Should throw an argument null exception for batch")]
+        public async Task EnqueueAsync_BatchNull()
         {
             // arrange
             EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
             EventHubTransmissionBuffer buffer = new EventHubTransmissionBuffer(client);
-            EventData data = null;
+            IAsyncEnumerable<EventData> batch = null;
 
             // act
-            Func<Task> verify = () => buffer.Enqueue(data, default);
+            Func<Task> verify = () => buffer.Enqueue(batch, default);
 
             // assert
-            await Assert.ThrowsAsync<ArgumentNullException>("data", verify);
+            await Assert.ThrowsAsync<ArgumentNullException>("batch", verify);
         }
 
         #endregion

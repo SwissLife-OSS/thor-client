@@ -1,9 +1,10 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Thor.Core.Transmission.Abstractions;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Channels;
 
-namespace Thor.Core.Transmission.EventHub
+namespace Thor.Core.Transmission.Abstractions
 {
     /// <summary>
     /// A memory transmission buffer
@@ -12,8 +13,8 @@ namespace Thor.Core.Transmission.EventHub
         : IMemoryBuffer<TData>
         where TData : class
     {
-        private readonly BufferOptions _options;
-        private readonly BlockingCollection<TData> _buffer;
+        private readonly ChannelWriter<TData> _itemsWrite;
+        private readonly ChannelReader<TData> _itemsRead;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryBuffer{TData}"/> class.
@@ -21,12 +22,10 @@ namespace Thor.Core.Transmission.EventHub
         /// <param name="options"></param>
         public MemoryBuffer(BufferOptions options)
         {
-            _options = options;
-            _buffer = new BlockingCollection<TData>(_options.Size);
+            var items = Channel.CreateBounded<TData>(options.Size);
+            _itemsWrite = items.Writer;
+            _itemsRead = items.Reader;
         }
-
-        /// <inheritdoc />
-        public int Count => _buffer.Count;
 
         /// <inheritdoc />
         public void Enqueue(TData data)
@@ -36,23 +35,17 @@ namespace Thor.Core.Transmission.EventHub
                 throw new ArgumentNullException(nameof(data));
             }
 
-            _buffer.TryAdd(data, _options.EnqueueTimeout);
+            _itemsWrite.TryWrite(data);
         }
 
         /// <inheritdoc />
-        public IReadOnlyCollection<TData> Dequeue(int count)
+        public async IAsyncEnumerable<TData> Dequeue(
+            [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var batch = new List<TData>(count);
-
-            for (var i = 0; i < count; i++)
+            while (await _itemsRead.WaitToReadAsync(cancellationToken))
             {
-                if (_buffer.TryTake(out TData data))
-                {
-                    batch.Add(data);
-                }
+                yield return await _itemsRead.ReadAsync(cancellationToken);
             }
-
-            return batch;
         }
     }
 }

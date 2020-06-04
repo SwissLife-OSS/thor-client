@@ -51,7 +51,24 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public async Task Enqueue(EventData data, CancellationToken cancellationToken)
+        public async Task Enqueue(
+            IAsyncEnumerable<EventData> batch,
+            CancellationToken cancellationToken)
+        {
+            if (batch == null)
+            {
+                throw new ArgumentNullException(nameof(batch));
+            }
+
+            await foreach (EventData data in batch.WithCancellation(cancellationToken))
+            {
+                await Enqueue(data, cancellationToken);
+            }
+        }
+
+        private async Task Enqueue(
+            EventData data,
+            CancellationToken cancellationToken)
         {
             if (data == null)
             {

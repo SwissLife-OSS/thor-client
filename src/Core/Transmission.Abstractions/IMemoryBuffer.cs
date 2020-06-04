@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Thor.Core.Transmission.Abstractions
 {
@@ -9,14 +10,9 @@ namespace Thor.Core.Transmission.Abstractions
         where TData : class
     {
         /// <summary>
-        /// Gets the count of items in buffer.
-        /// </summary>
-        int Count { get; }
-
-        /// <summary>
         /// Dequeue data batch from the buffer.
         /// </summary>
-        IReadOnlyCollection<TData> Dequeue(int count);
+        IAsyncEnumerable<TData> Dequeue(CancellationToken cancellationToken);
 
         /// <summary>
         /// Enqueue data object.
