@@ -44,7 +44,10 @@ namespace Thor.Core.Transmission.Abstractions
         {
             while (await _itemsRead.WaitToReadAsync(cancellationToken))
             {
-                yield return await _itemsRead.ReadAsync(cancellationToken);
+                while (_itemsRead.TryRead(out TData item))
+                {
+                    yield return item;
+                }
             }
         }
     }
