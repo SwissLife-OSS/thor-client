@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore\AspNetCore.csproj" />
+    <ProjectReference Include="..\Hosting\Hosting.csproj" />
   </ItemGroup>
 
 </Project>

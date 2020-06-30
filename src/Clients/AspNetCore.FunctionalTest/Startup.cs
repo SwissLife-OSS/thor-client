@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Thor.Hosting.AspNetCore.FunctionalTest.Controllers;
 
 namespace Thor.Hosting.AspNetCore.FunctionalTest
 {
@@ -19,6 +20,8 @@ namespace Thor.Hosting.AspNetCore.FunctionalTest
         {
             services
                 .AddTracing(Configuration)
+                .AddSingleton<EventsGenerator>()
+                .AddHostedService<EventsGeneratorService>()
                 .AddMvc(o => o.EnableEndpointRouting = false);
         }
 
