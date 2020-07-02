@@ -1,13 +1,5 @@
 <Project>
 
-  <PropertyGroup Condition="'$(TargetFramework)'!='netcoreapp3.0'">
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
-    <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>Full</DebugType>
     <DebugSymbols>true</DebugSymbols>

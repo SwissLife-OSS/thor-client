@@ -1,26 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageId>Thor.AspNetCore</PackageId>
     <AssemblyName>Thor.Hosting.AspNetCore</AssemblyName>
     <RootNamespace>Thor.Hosting.AspNetCore</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Description>Provides tracing capabilities for AspNet core 2.0 and higher.</Description>
+    <Description>Provides tracing capabilities for ASP.NET Core.</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp3.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
