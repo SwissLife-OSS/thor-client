@@ -19,7 +19,7 @@ namespace Thor.Hosting.GenericHost
                     builder.AddTracing(context.Configuration))
                 .Build();
 
-            var hostTelemetryInitializer = host.Services
+            HostTelemetryInitializer hostTelemetryInitializer = host.Services
                 .GetService<HostTelemetryInitializer>();
             
             hostTelemetryInitializer?.Initialize();

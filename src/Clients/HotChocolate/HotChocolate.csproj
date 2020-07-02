@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageId>Thor.HotChocolate</PackageId>
     <AssemblyName>Thor.Extensions.HotChocolate</AssemblyName>
     <RootNamespace>Thor.Extensions.HotChocolate</RootNamespace>
@@ -12,15 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotChocolate" Version="11.0.0-preview.129" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp3.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="HotChocolate" Version="11.0.0-preview.129" />
   </ItemGroup>
 
   <ItemGroup>

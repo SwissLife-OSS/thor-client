@@ -1,10 +1,10 @@
 <Project>
 
-  <PropertyGroup Condition="'$(TargetFramework)'!='netcoreapp3.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'!='netcoreapp3.1'">
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 

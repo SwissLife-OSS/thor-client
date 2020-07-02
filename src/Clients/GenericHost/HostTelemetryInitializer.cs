@@ -8,13 +8,13 @@ namespace Thor.Hosting.GenericHost
 {
     internal class HostTelemetryInitializer
     {
-        private readonly IApplicationLifetime _applicationLifetime;
+        private readonly IHostApplicationLifetime _applicationLifetime;
         private readonly ITelemetrySession _session;
         private readonly IAttachmentTransmissionInitializer _initializer;
         private readonly TracingConfiguration _options;
 
         public HostTelemetryInitializer(
-            IApplicationLifetime applicationLifetime,
+            IHostApplicationLifetime applicationLifetime,
             ITelemetrySession session,
             IAttachmentTransmissionInitializer initializer,
             TracingConfiguration options)

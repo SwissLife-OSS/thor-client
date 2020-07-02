@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Thor.Core;
 using Thor.Core.Session.Abstractions;
 using Thor.Core.Transmission.Abstractions;
@@ -27,7 +28,7 @@ namespace Thor.Hosting.AspNetCore
         /// <param name="initializer">An attachment transmission initializer.</param>
         /// <param name="session">An optional telemetry event session.</param>
         public TracingStartupFilter(
-            IApplicationLifetime applicationLifetime,
+            IHostApplicationLifetime applicationLifetime,
             TracingConfiguration options,
             IAttachmentTransmissionInitializer initializer,
             ITelemetrySession session)

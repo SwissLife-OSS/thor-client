@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Moq;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace Thor.Hosting.AspNetCore.Tests
             // arrange
             IServiceCollection services = new ServiceCollection();
             IConfigurationBuilder builder = new ConfigurationBuilder();
-            Mock<IApplicationLifetime> appLifetime = new Mock<IApplicationLifetime>();
+            Mock<IHostApplicationLifetime> appLifetime = new Mock<IHostApplicationLifetime>();
             Dictionary<string, string> data = new Dictionary<string, string>
             {
                 {"Tracing:ApplicationId", "5"},
