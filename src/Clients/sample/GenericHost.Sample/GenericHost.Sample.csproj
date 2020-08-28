@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <AssemblyName>Thor.Hosting.GenericHost.FunctionalTest</AssemblyName>
     <RootNamespace>Thor.Hosting.GenericHost.FunctionalTest</RootNamespace>
   </PropertyGroup>
