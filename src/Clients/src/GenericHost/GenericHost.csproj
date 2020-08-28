@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Thor.GenericHost</PackageId>
+    <AssemblyName>Thor.Hosting.GenericHost</AssemblyName>
+    <RootNamespace>Thor.Hosting.GenericHost</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Provides tracing capabilities for GenericHost.</Description>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\src\Session\Session.csproj" />
+    <ProjectReference Include="..\..\..\Core\src\Transmission.BlobStorage\Transmission.BlobStorage.csproj" />
+    <ProjectReference Include="..\..\..\Core\src\Transmission.EventHub\Transmission.EventHub.csproj" />
+  </ItemGroup>
+
+</Project>

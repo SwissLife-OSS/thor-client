@@ -1,12 +1,50 @@
 <Project>
-  <PropertyGroup>
-    <CCSourceDirectory>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</CCSourceDirectory>
-    <CCSettingsProps>$([System.IO.Path]::Combine($(CCSourceDirectory), 'Settings.props'))</CCSettingsProps>
-    <CCVersionProps>$([System.IO.Path]::Combine($(CCSourceDirectory), 'Version.props'))</CCVersionProps>
-    <CCPackageProps>$([System.IO.Path]::Combine($(CCSourceDirectory), 'Package.props'))</CCPackageProps>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>Full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
-  <Import Project="$(CCSettingsProps)" Condition="Exists('$(CCSettingsProps)')"/>
-  <Import Project="$(CCVersionProps)" Condition="Exists('$(CCVersionProps)')"/>
-  <Import Project="$(CCPackageProps)" Condition="Exists('$(CCPackageProps)')"/>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version Condition="$(Version) == ''">0.0.0</Version>
+    <Product>Thor Core</Product>
+    <Authors>Swiss Life authors and contributors</Authors>
+    <Company>Swiss Life</Company>
+    <Copyright>Copyright © 2019 Swiss Life</Copyright>
+    <PackageLicenseUrl>https://github.com/SwissLife-OSS/thor-client/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/SwissLife-OSS/thor-client</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SwissLife-OSS/thor-client</RepositoryUrl>
+    <PackageTags>ETW, EventSource, Logging, Tracing</PackageTags>
+    <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/thor-client/releases/$(PackageVersion)</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIconUrl>https://github.com/SwissLife-OSS/thor-client/raw/master/logo.png</PackageIconUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSymbols>true</IncludeSymbols>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>8.0</LangVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
+  </ItemGroup>
+
 </Project>

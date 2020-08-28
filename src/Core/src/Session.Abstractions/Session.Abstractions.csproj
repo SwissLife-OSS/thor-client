@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Thor.Core.Session.Abstractions</PackageId>
+    <AssemblyName>Thor.Core.Session.Abstractions</AssemblyName>
+    <RootNamespace>Thor.Core.Session.Abstractions</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Provides abstractions for the session.</Description>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Transmission.Abstractions\Transmission.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
