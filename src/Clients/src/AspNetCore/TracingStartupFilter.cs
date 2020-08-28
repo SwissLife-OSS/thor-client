@@ -30,10 +30,10 @@ namespace Thor.Hosting.AspNetCore
         /// <param name="initializer">An attachment transmission initializer.</param>
         /// <param name="session">An optional telemetry event session.</param>
         public TracingStartupFilter(
-#if !NETCOREAPP3_1
-            IApplicationLifetime applicationLifetime,
-#else
+#if NETCOREAPP3_1
             IHostApplicationLifetime applicationLifetime,
+#else
+            IApplicationLifetime applicationLifetime,
 #endif
             TracingConfiguration options,
             IAttachmentTransmissionInitializer initializer,
