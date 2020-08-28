@@ -5,67 +5,67 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{E20D6600-51E0-4184-8AA6-82A332BC76E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore", "Clients\AspNetCore\AspNetCore.csproj", "{85B4E6FC-785A-4B6D-99CE-23D49C02EFF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore", "Clients\src\AspNetCore\AspNetCore.csproj", "{85B4E6FC-785A-4B6D-99CE-23D49C02EFF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.FunctionalTest", "Clients\AspNetCore.FunctionalTest\AspNetCore.FunctionalTest.csproj", "{79940ED0-0A84-4F99-9CE4-B588E2AC89C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.FunctionalTest", "Clients\test\AspNetCore.FunctionalTest\AspNetCore.FunctionalTest.csproj", "{79940ED0-0A84-4F99-9CE4-B588E2AC89C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Tests", "Clients\AspNetCore.Tests\AspNetCore.Tests.csproj", "{930CD5AD-0399-42A0-85E8-6BDAEA0A85BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Tests", "Clients\test\AspNetCore.Tests\AspNetCore.Tests.csproj", "{930CD5AD-0399-42A0-85E8-6BDAEA0A85BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost", "Clients\GenericHost\GenericHost.csproj", "{4F01FC08-6578-459B-B94E-7D7D2309806D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost", "Clients\src\GenericHost\GenericHost.csproj", "{4F01FC08-6578-459B-B94E-7D7D2309806D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost.Sample", "Clients\GenericHost.Sample\GenericHost.Sample.csproj", "{DEAEFA12-033C-47EA-BC40-0357291B5DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost.Sample", "Clients\sample\GenericHost.Sample\GenericHost.Sample.csproj", "{DEAEFA12-033C-47EA-BC40-0357291B5DEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost.Tests", "Clients\GenericHost.Tests\GenericHost.Tests.csproj", "{3F21AD74-16B4-4FEC-9DBE-E5963AEF8B05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost.Tests", "Clients\test\GenericHost.Tests\GenericHost.Tests.csproj", "{3F21AD74-16B4-4FEC-9DBE-E5963AEF8B05}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{42B19D75-DA99-4EB3-A3E1-9788DA1BC468}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{F20220A4-2BC8-492F-B530-87D0D47C5F0A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosting", "Clients\Hosting\Hosting.csproj", "{34828340-B7BD-4901-88A4-DCF5F9FA503A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosting", "Clients\src\Hosting\Hosting.csproj", "{34828340-B7BD-4901-88A4-DCF5F9FA503A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosting.Tests", "Clients\Hosting.Tests\Hosting.Tests.csproj", "{656FF914-1890-472B-B673-E30F8A824C46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosting.Tests", "Clients\test\Hosting.Tests\Hosting.Tests.csproj", "{656FF914-1890-472B-B673-E30F8A824C46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotChocolate", "Clients\HotChocolate\HotChocolate.csproj", "{6F90B6DE-512A-4304-AF98-DFF87122DF68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotChocolate", "Clients\src\HotChocolate\HotChocolate.csproj", "{6F90B6DE-512A-4304-AF98-DFF87122DF68}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotChocolate.Tests", "Clients\HotChocolate.Tests\HotChocolate.Tests.csproj", "{FEAA282A-D117-4A66-A621-CBF0BAF717F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotChocolate.Tests", "Clients\test\HotChocolate.Tests\HotChocolate.Tests.csproj", "{FEAA282A-D117-4A66-A621-CBF0BAF717F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http", "Clients\Http\Http.csproj", "{E820486C-13F6-4077-9EF5-429D718530DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http", "Clients\src\Http\Http.csproj", "{E820486C-13F6-4077-9EF5-429D718530DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.FunctionalTest", "Clients\Http.FunctionalTest\Http.FunctionalTest.csproj", "{0ACAF00B-3715-4D86-80DB-D2E2CD977E55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.FunctionalTest", "Clients\test\Http.FunctionalTest\Http.FunctionalTest.csproj", "{0ACAF00B-3715-4D86-80DB-D2E2CD977E55}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.Tests", "Clients\Http.Tests\Http.Tests.csproj", "{1236B1BB-FAEE-4FFF-B436-57EE2AF3F8BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.Tests", "Clients\test\Http.Tests\Http.Tests.csproj", "{1236B1BB-FAEE-4FFF-B436-57EE2AF3F8BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core\Core.csproj", "{7F258118-9927-4B80-9D71-559E6A4028F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\src\Core\Core.csproj", "{7F258118-9927-4B80-9D71-559E6A4028F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions", "Core\Core.Abstractions\Core.Abstractions.csproj", "{B56EC903-DC59-45C4-8B83-1411B9C7C534}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions", "Core\src\Core.Abstractions\Core.Abstractions.csproj", "{B56EC903-DC59-45C4-8B83-1411B9C7C534}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions.Tests", "Core\Core.Abstractions.Tests\Core.Abstractions.Tests.csproj", "{DC1FFDDB-FC21-4DD3-97BE-EADEE738C5D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions.Tests", "Core\test\Core.Abstractions.Tests\Core.Abstractions.Tests.csproj", "{DC1FFDDB-FC21-4DD3-97BE-EADEE738C5D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "Core\Core.Tests\Core.Tests.csproj", "{27E3AAC9-CF3B-4375-9108-CEA698D52084}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "Core\test\Core.Tests\Core.Tests.csproj", "{27E3AAC9-CF3B-4375-9108-CEA698D52084}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources", "Core\Custom.EventSources\Custom.EventSources.csproj", "{E8532577-4DE2-4CED-8117-E7E417C82061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources", "Core\src\Custom.EventSources\Custom.EventSources.csproj", "{E8532577-4DE2-4CED-8117-E7E417C82061}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources.Tests", "Core\Custom.EventSources.Tests\Custom.EventSources.Tests.csproj", "{BCBFEDE6-555F-472C-BF47-7315BCA42B8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources.Tests", "Core\test\Custom.EventSources.Tests\Custom.EventSources.Tests.csproj", "{BCBFEDE6-555F-472C-BF47-7315BCA42B8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "Core\Session\Session.csproj", "{923B1D32-068F-4ADA-8E8B-F1C1BA4DC339}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "Core\src\Session\Session.csproj", "{923B1D32-068F-4ADA-8E8B-F1C1BA4DC339}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions", "Core\Session.Abstractions\Session.Abstractions.csproj", "{721C955F-CAB8-48A0-BBA9-CB9AA68D1E12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions", "Core\src\Session.Abstractions\Session.Abstractions.csproj", "{721C955F-CAB8-48A0-BBA9-CB9AA68D1E12}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions.Tests", "Core\Session.Abstractions.Tests\Session.Abstractions.Tests.csproj", "{66B63BD3-540D-470A-8004-018A973A7908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions.Tests", "Core\test\Session.Abstractions.Tests\Session.Abstractions.Tests.csproj", "{66B63BD3-540D-470A-8004-018A973A7908}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Tests", "Core\Session.Tests\Session.Tests.csproj", "{B81482DA-A65E-4DBB-8481-1ACB301FA82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Tests", "Core\test\Session.Tests\Session.Tests.csproj", "{B81482DA-A65E-4DBB-8481-1ACB301FA82A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions", "Core\Transmission.Abstractions\Transmission.Abstractions.csproj", "{8B011E98-5303-454E-87D7-CFC12ED53D82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions", "Core\src\Transmission.Abstractions\Transmission.Abstractions.csproj", "{8B011E98-5303-454E-87D7-CFC12ED53D82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions.Tests", "Core\Transmission.Abstractions.Tests\Transmission.Abstractions.Tests.csproj", "{530BFD01-2A6F-4E1F-A4D9-9D93C8922379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions.Tests", "Core\test\Transmission.Abstractions.Tests\Transmission.Abstractions.Tests.csproj", "{530BFD01-2A6F-4E1F-A4D9-9D93C8922379}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage", "Core\Transmission.BlobStorage\Transmission.BlobStorage.csproj", "{D7B583A7-C398-4023-9098-0CF29FE56841}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage", "Core\src\Transmission.BlobStorage\Transmission.BlobStorage.csproj", "{D7B583A7-C398-4023-9098-0CF29FE56841}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage.Tests", "Core\Transmission.BlobStorage.Tests\Transmission.BlobStorage.Tests.csproj", "{341BB57D-C3E6-4359-B076-82C576B4CC41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage.Tests", "Core\test\Transmission.BlobStorage.Tests\Transmission.BlobStorage.Tests.csproj", "{341BB57D-C3E6-4359-B076-82C576B4CC41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub", "Core\Transmission.EventHub\Transmission.EventHub.csproj", "{E96F8AD6-8EEA-41B4-8E36-97B4B11CDDD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub", "Core\src\Transmission.EventHub\Transmission.EventHub.csproj", "{E96F8AD6-8EEA-41B4-8E36-97B4B11CDDD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub.Tests", "Core\Transmission.EventHub.Tests\Transmission.EventHub.Tests.csproj", "{F0642C0F-F5AB-47DF-973D-FD0998BB81B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub.Tests", "Core\test\Transmission.EventHub.Tests\Transmission.EventHub.Tests.csproj", "{F0642C0F-F5AB-47DF-973D-FD0998BB81B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

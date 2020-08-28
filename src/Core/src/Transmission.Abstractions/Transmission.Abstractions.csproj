@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Thor.Core.Transmission.Abstractions</PackageId>
+    <AssemblyName>Thor.Core.Transmission.Abstractions</AssemblyName>
+    <RootNamespace>Thor.Core.Transmission.Abstractions</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Description>Provides abstractions for the transmission pipeline.</Description>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
+    <PackageReference Include="System.Threading.Channels" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Abstractions\Core.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

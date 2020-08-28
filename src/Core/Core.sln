@@ -2,43 +2,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{1CF5BA4B-887E-4070-AD26-90908FC31F38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "test\Core.Tests\Core.Tests.csproj", "{1CF5BA4B-887E-4070-AD26-90908FC31F38}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{24B3EC36-05E2-4988-923D-CF15915C7813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Core\Core.csproj", "{24B3EC36-05E2-4988-923D-CF15915C7813}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9A6EC1A3-0D2A-4466-BD8A-EAFA0F645BF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions.Tests", "Core.Abstractions.Tests\Core.Abstractions.Tests.csproj", "{2F43B250-F7C6-493F-B91F-009CEB489412}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions.Tests", "test\Core.Abstractions.Tests\Core.Abstractions.Tests.csproj", "{2F43B250-F7C6-493F-B91F-009CEB489412}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions", "Core.Abstractions\Core.Abstractions.csproj", "{2D623E60-D769-4BFE-8D90-62D7DCBFD1EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Abstractions", "src\Core.Abstractions\Core.Abstractions.csproj", "{2D623E60-D769-4BFE-8D90-62D7DCBFD1EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transmisson", "Transmisson", "{DC8D4F4A-F0CB-45C1-ABC3-9D6A00EFC002}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Session", "Session", "{9FD1876D-FC34-4A2D-B85C-30A56B38CF4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub", "Transmission.EventHub\Transmission.EventHub.csproj", "{B573231D-703E-41E6-ACCD-7B3E4960CCAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub", "src\Transmission.EventHub\Transmission.EventHub.csproj", "{B573231D-703E-41E6-ACCD-7B3E4960CCAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub.Tests", "Transmission.EventHub.Tests\Transmission.EventHub.Tests.csproj", "{615B3644-E5C6-4538-A2B8-31ACE7FAB4D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.EventHub.Tests", "test\Transmission.EventHub.Tests\Transmission.EventHub.Tests.csproj", "{615B3644-E5C6-4538-A2B8-31ACE7FAB4D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "Session\Session.csproj", "{9BD37C12-B642-4DE4-9B93-5D543090D1CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "src\Session\Session.csproj", "{9BD37C12-B642-4DE4-9B93-5D543090D1CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Tests", "Session.Tests\Session.Tests.csproj", "{5FCBB58A-DDBC-414C-B9E1-0CE2900769E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Tests", "test\Session.Tests\Session.Tests.csproj", "{5FCBB58A-DDBC-414C-B9E1-0CE2900769E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions", "Transmission.Abstractions\Transmission.Abstractions.csproj", "{216D94D7-18C9-4255-8A75-370BA0A29B67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions", "src\Transmission.Abstractions\Transmission.Abstractions.csproj", "{216D94D7-18C9-4255-8A75-370BA0A29B67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions.Tests", "Transmission.Abstractions.Tests\Transmission.Abstractions.Tests.csproj", "{782A938C-1F33-4259-B524-D2D55925D062}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.Abstractions.Tests", "test\Transmission.Abstractions.Tests\Transmission.Abstractions.Tests.csproj", "{782A938C-1F33-4259-B524-D2D55925D062}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions", "Session.Abstractions\Session.Abstractions.csproj", "{1713DF01-C653-4549-A9C7-E23F76DCE546}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions", "src\Session.Abstractions\Session.Abstractions.csproj", "{1713DF01-C653-4549-A9C7-E23F76DCE546}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions.Tests", "Session.Abstractions.Tests\Session.Abstractions.Tests.csproj", "{7D76F6D7-9BF1-45A7-A355-6B7137A38605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Abstractions.Tests", "test\Session.Abstractions.Tests\Session.Abstractions.Tests.csproj", "{7D76F6D7-9BF1-45A7-A355-6B7137A38605}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage", "Transmission.BlobStorage\Transmission.BlobStorage.csproj", "{5B887CEC-00EB-407C-AF87-CEA432ABD551}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage", "src\Transmission.BlobStorage\Transmission.BlobStorage.csproj", "{5B887CEC-00EB-407C-AF87-CEA432ABD551}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage.Tests", "Transmission.BlobStorage.Tests\Transmission.BlobStorage.Tests.csproj", "{5E2383AB-44C1-4450-A252-652AC2ED64D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmission.BlobStorage.Tests", "test\Transmission.BlobStorage.Tests\Transmission.BlobStorage.Tests.csproj", "{5E2383AB-44C1-4450-A252-652AC2ED64D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources", "Custom.EventSources\Custom.EventSources.csproj", "{CDCB5A60-FC23-49B5-A7EA-1FE52C2E5584}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources", "src\Custom.EventSources\Custom.EventSources.csproj", "{CDCB5A60-FC23-49B5-A7EA-1FE52C2E5584}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources.Tests", "Custom.EventSources.Tests\Custom.EventSources.Tests.csproj", "{5E43DAD1-B606-4B55-BBD5-8EA686001A9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Custom.EventSources.Tests", "test\Custom.EventSources.Tests\Custom.EventSources.Tests.csproj", "{5E43DAD1-B606-4B55-BBD5-8EA686001A9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
