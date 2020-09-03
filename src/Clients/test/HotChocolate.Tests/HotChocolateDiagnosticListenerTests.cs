@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HotChocolate.AspNetCore;
+using HotChocolate.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +32,7 @@ namespace Thor.Extensions.HotChocolate.Tests
             // arrange
             HotChocolateActivity hotChocolateActivity = null;
             TestServer server = CreateTestServer(ctx =>
-                hotChocolateActivity = ctx.Features.Get<HotChocolateActivity>());
+                hotChocolateActivity = ctx.GetActivity());
             var request = new
             {
                 query = @"{ customProperty }"
@@ -85,16 +86,13 @@ namespace Thor.Extensions.HotChocolate.Tests
         }
 
         private TestServer CreateTestServer(
-            Action<HttpContext> onRequestFinish = null,
+            Action<IRequestContext> onRequestFinish = null,
             string path = null)
         {
             return TestServerFactory.Create(
-                new QueryMiddlewareOptions
-                {
-                    Path = path ?? "/",
-                },
                 CreateConfiguration(),
-                onRequestFinish);
+                onRequestFinish,
+                path);
         }
 
         private IConfiguration CreateConfiguration()

@@ -1,23 +1,23 @@
 ﻿using System;
-using HotChocolate.Execution;
-using Microsoft.Extensions.DependencyInjection;
+using HotChocolate.Execution.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Thor.Core.Abstractions;
+using Thor.Extensions.HotChocolate;
 
-namespace Thor.Extensions.HotChocolate
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// A bunch of convenient extensions methods for <see cref="IServiceCollection"/>.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static class ThorHotChocolateRequestExecutorBuilderExtensions
     {
         /// <summary>
         /// Adds <c>Thor HotChocolate Tracing</c> services to the service collection
         /// </summary>
-        /// <param name="builder">A <see cref="IQueryExecutionBuilder"/> instance.</param>
-        /// <returns>The provided <see cref="IServiceCollection"/> instance.</returns>
-        public static IServiceCollection AddHotChocolateTracing(
-            this IServiceCollection builder)
+        /// <param name="builder">A <see cref="IRequestExecutorBuilder"/> instance.</param>
+        /// <returns>The provided <see cref="IRequestExecutorBuilder"/> instance.</returns>
+        public static IRequestExecutorBuilder AddThorLogging(
+            this IRequestExecutorBuilder builder)
         {
             if (builder == null)
             {
@@ -25,7 +25,9 @@ namespace Thor.Extensions.HotChocolate
             }
 
             builder
-                .AddDiagnosticObserver<HotChocolateDiagnosticsListener>()
+                .AddDiagnosticEventListener(sp => new HotChocolateDiagnosticsListener(
+                    sp.GetRequiredService<IRequestFormatter>()))
+                .Services
                 .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>()
                 .TryAddSingleton<IRequestFormatter, DefaultRequestFormatter>();
 
