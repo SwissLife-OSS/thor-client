@@ -1,17 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using HotChocolate;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Instrumentation;
 using HotChocolate.Resolvers;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DiagnosticAdapter;
 
 namespace Thor.Extensions.HotChocolate
 {
-    public class HotChocolateDiagnosticsListener
-        : IDiagnosticObserver
+    internal class HotChocolateDiagnosticsListener : DiagnosticEventListener
     {
         private readonly IRequestFormatter _formatter;
 
@@ -20,86 +16,26 @@ namespace Thor.Extensions.HotChocolate
             _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         }
 
-        [DiagnosticName(DiagnosticNames.Query)]
-        public void QueryExecute()
+        public override IActivityScope ExecuteRequest(IRequestContext context)
         {
-            // This method is required to enable recording "Query.Start" and
-            // "Query.Stop" diagnostic events. Do not write code in here.
+            var activity = HotChocolateActivity.Create(_formatter.Serialize(context.Request));
+            context.SetActivity(activity);
+            return activity;
         }
 
-        [DiagnosticName(DiagnosticNames.StartQuery)]
-        public void BeginQueryExecute(IQueryContext context)
+        public override void RequestError(IRequestContext context, Exception exception)
         {
-            HotChocolateRequest request = _formatter.Serialize(context.Request);
-            context.ContextData[nameof(HotChocolateRequest)] = request;
-
-            HttpContext httpContext = context.GetHttpContext();
-            var activity = HotChocolateActivity.Create(request);
-            httpContext.Features.Set(activity);
+            context.GetActivity().HandleQueryError(exception);
         }
 
-        [DiagnosticName(DiagnosticNames.StopQuery)]
-        public void EndQueryExecute(
-            IQueryContext context,
-            IExecutionResult result)
+        public override void ValidationErrors(IRequestContext context, IReadOnlyList<IError> errors)
         {
-            context
-                .GetHttpContext()
-                .Features
-                .Get<HotChocolateActivity>()
-                ?.Dispose();
+            context.GetActivity().HandleValidationErrors(context.GetRequest(), errors);
         }
 
-        [DiagnosticName("HotChocolate.Execution.Query.Error")]
-        public virtual void OnQueryError(
-            IQueryContext context,
-            Exception exception)
+        public override void ResolverError(IMiddlewareContext context, IError error)
         {
-            context
-                .GetHttpContext()
-                .Features
-                .Get<HotChocolateActivity>()
-                ?.HandleQueryError(exception);
-        }
-
-        [DiagnosticName("HotChocolate.Execution.Resolver.Error")]
-        public virtual void OnResolverError(
-            IResolverContext context,
-            IEnumerable<IError> errors)
-        {
-            context
-                .GetHttpContext()
-                .Features
-                .Get<HotChocolateActivity>()
-                ?.HandlesResolverErrors(
-                    TryGetRequest(context.ContextData),
-                    errors.ToList());
-        }
-
-        [DiagnosticName("HotChocolate.Execution.Validation.Error")]
-        public virtual void OnValidationError(
-            IQueryContext context,
-            IReadOnlyCollection<IError> errors)
-        {
-            context
-                .GetHttpContext()
-                .Features
-                .Get<HotChocolateActivity>()
-                ?.HandleValidationError(
-                    TryGetRequest(context.ContextData),
-                    errors.ToList());
-        }
-
-        private static HotChocolateRequest TryGetRequest(
-            IDictionary<string, object> contextData)
-        {
-            if (contextData.TryGetValue(nameof(HotChocolateRequest),
-                out object request)
-                && request is HotChocolateRequest r)
-            {
-                return r;
-            }
-            return null;
+            context.GetActivity().HandlesResolverError(context.GetRequest(), error);
         }
     }
 }

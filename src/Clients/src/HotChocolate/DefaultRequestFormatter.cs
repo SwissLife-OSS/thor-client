@@ -9,7 +9,7 @@ namespace Thor.Extensions.HotChocolate
         {
             return new HotChocolateRequest
             (
-                request.QueryName,
+                request.QueryId,
                 request.Query?.ToString(),
                 request.OperationName,
                 request.VariableValues

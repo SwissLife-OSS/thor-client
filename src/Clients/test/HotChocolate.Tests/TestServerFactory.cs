@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
 using HotChocolate.AspNetCore;
+using HotChocolate.Execution;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,31 +25,42 @@ namespace Thor.Extensions.HotChocolate.Tests
         private readonly List<TestServer> _instances = new List<TestServer>();
 
         internal TestServer Create(
-            QueryMiddlewareOptions options,
             IConfiguration configuration,
-            Action<HttpContext> onRequestFinish)
+            Action<IRequestContext> onRequestFinish = null,
+            string path = null)
         {
             IWebHostBuilder builder = new WebHostBuilder()
-                .Configure(app => app
-                    .Use(async (context , next) =>
+                .Configure(app =>
+                {
+                    app.UseRouting();
+
+                    app.UseEndpoints(endpoints =>
                     {
-                        await next.Invoke();
-                        onRequestFinish?.Invoke(context);
-                    })
-                    .UseGraphQL(options))
+                        endpoints.MapGraphQL(path ?? "/");
+                    });
+                })
                 .ConfigureServices(services =>
                 {
                     services
                         .AddSingleton<IStartupFilter, TestStartupFilter>()
-                        .AddGraphQL(c => c.RegisterQueryType<QueryType>())
+                        .AddRouting()
+                        .AddGraphQLServer()
+                        .AddQueryType<QueryType>()
+                        .AddThorLogging()
+                        .UseRequest(next => async context =>
+                        {
+                            await next(context);
+                            onRequestFinish?.Invoke(context);
+                        })
+                        .UseDefaultPipeline()
+                        .Services
                         .AddSingleton<IAttachmentTransmissionInitializer>(
                             provider =>
                                 new AttachmentTransmissionInitializer(
                                     Enumerable.Empty<ITelemetryAttachmentTransmitter>()))
                         .AddTracingHttpMessageHandler(configuration)
                         .AddInProcessTelemetrySession(configuration)
-                        .AddTracingMinimum(configuration)
-                        .AddHotChocolateTracing();
+                        .AddTracingMinimum(configuration);
                 });
 
             var server = new TestServer(builder);

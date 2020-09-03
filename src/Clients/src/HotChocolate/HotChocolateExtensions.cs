@@ -1,23 +1,26 @@
-using HotChocolate.Execution;
-using HotChocolate.Resolvers;
-using Microsoft.AspNetCore.Http;
+using System;
+using HotChocolate;
 
 namespace Thor.Extensions.HotChocolate
 {
     internal static class HotChocolateExtensions
     {
-        internal static HttpContext GetHttpContext(
-            this IQueryContext queryContext)
+        public static void SetActivity(this IHasContextData context, HotChocolateActivity activity)
         {
-            return (HttpContext)queryContext
-                .ContextData[nameof(HttpContext)];
+            context.ContextData[nameof(HotChocolateActivity)] = activity;
         }
 
-        internal static HttpContext GetHttpContext(
-            this IResolverContext resolverContext)
+        public static HotChocolateActivity GetActivity(this IHasContextData context)
         {
-            return (HttpContext)resolverContext
-                .ContextData[nameof(HttpContext)];
+            if (context.ContextData.TryGetValue(nameof(HotChocolateActivity), out object value) &&
+                value is HotChocolateActivity activity)
+            {
+                return activity;
+            }
+            throw new InvalidOperationException();
         }
+
+        public static HotChocolateRequest GetRequest(this IHasContextData context) =>
+            context.GetActivity().Request;
     }
 }
