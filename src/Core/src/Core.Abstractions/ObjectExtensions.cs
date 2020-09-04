@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Thor.Core.Abstractions
 {
@@ -13,7 +14,8 @@ namespace Thor.Core.Abstractions
         private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings
         {
             MissingMemberHandling = MissingMemberHandling.Ignore,
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            Converters = new JsonConverter[] {new StringEnumConverter()}
         };
 
         /// <summary>
