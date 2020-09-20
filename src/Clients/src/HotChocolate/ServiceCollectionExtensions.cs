@@ -25,8 +25,9 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             builder
-                .AddDiagnosticEventListener(sp => new HotChocolateDiagnosticsListener(
-                    sp.GetRequiredService<IRequestFormatter>()))
+                .AddDiagnosticEventListener(sp =>
+                    new HotChocolateDiagnosticsListener(
+                        sp.GetApplicationService<IRequestFormatter>()))
                 .Services
                 .AddSingleton<IProvidersDescriptor, HotChocolateProvidersDescriptor>()
                 .TryAddSingleton<IRequestFormatter, DefaultRequestFormatter>();

@@ -31,16 +31,14 @@ namespace Thor.Extensions.HotChocolate.Tests
         {
             // arrange
             HotChocolateActivity hotChocolateActivity = null;
-            TestServer server = CreateTestServer(ctx =>
-                hotChocolateActivity = ctx.GetActivity());
+            TestServer server = CreateTestServer(ctx => hotChocolateActivity = ctx.GetActivity());
             var request = new
             {
                 query = @"{ customProperty }"
             };
 
             // act
-            HttpResponseMessage message =
-                await server.SendRequestAsync(request);
+            HttpResponseMessage message = await server.SendRequestAsync(request);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, message.StatusCode);
@@ -58,13 +56,12 @@ namespace Thor.Extensions.HotChocolate.Tests
             };
 
             // act
-            HttpResponseMessage message =
-                await server.SendRequestAsync(request);
+            HttpResponseMessage message = await server.SendRequestAsync(request);
             await Task.Delay(100);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, message.StatusCode);
-            var transmitter = ProbeTransmitter.Instance;
+            ProbeTransmitter transmitter = ProbeTransmitter.Instance;
             Assert.True(transmitter.Contains(CoreEventSources.RequestActivity, "Start"));
             Assert.True(transmitter.Contains(EventSourceNames.HotChocolate, "Start"));
             Assert.True(transmitter.Contains(EventSourceNames.HotChocolate, "Stop"));
@@ -97,7 +94,7 @@ namespace Thor.Extensions.HotChocolate.Tests
 
         private IConfiguration CreateConfiguration()
         {
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var data = new Dictionary<string, string>
             {
                 {"Tracing:ApplicationId", "5"},
             };
