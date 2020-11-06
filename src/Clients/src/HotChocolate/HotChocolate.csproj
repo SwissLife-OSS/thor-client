@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotChocolate.Execution" Version="11.0.0-preview.141" />
+    <PackageReference Include="HotChocolate" Version="11.0.0-rc.0" />
   </ItemGroup>
 
   <ItemGroup>
