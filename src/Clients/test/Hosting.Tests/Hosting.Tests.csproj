@@ -4,6 +4,7 @@
     <AssemblyName>Thor.Extensions.Hosting.Tests</AssemblyName>
     <RootNamespace>Thor.Extensions.Hosting.Tests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
