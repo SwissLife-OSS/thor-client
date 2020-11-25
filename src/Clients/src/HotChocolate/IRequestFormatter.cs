@@ -4,6 +4,6 @@ namespace Thor.Extensions.HotChocolate
 {
     public interface IRequestFormatter
     {
-        HotChocolateRequest Serialize(IReadOnlyQueryRequest request);
+        HotChocolateRequest Serialize(IQueryRequest request);
     }
 }

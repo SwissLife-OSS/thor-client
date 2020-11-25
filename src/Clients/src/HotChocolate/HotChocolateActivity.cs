@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
+using HotChocolate.Execution.Instrumentation;
 using Thor.Core.Abstractions;
 using static Thor.Extensions.HotChocolate.HotChocolateActivityEventSource;
 
@@ -13,23 +14,27 @@ namespace Thor.Extensions.HotChocolate
     [Serializable]
     internal class HotChocolateActivity
         : IActivity
+        , IActivityScope
     {
         private readonly Guid _relatedActivityId;
         private bool _disposed;
         private IDisposable _popWhenDispose;
 
-        private HotChocolateActivity()
+        private HotChocolateActivity(HotChocolateRequest request)
         {
             _relatedActivityId = ActivityStack.Id;
             _popWhenDispose = ActivityStack.Push(Id);
+            Request = request;
         }
 
         /// <inheritdoc />
         public Guid Id { get; } = Guid.NewGuid();
 
+        public HotChocolateRequest Request { get; }
+
         public static HotChocolateActivity Create(HotChocolateRequest request)
         {
-            var context = new HotChocolateActivity();
+            var context = new HotChocolateActivity(request);
 
             if (context._relatedActivityId != Guid.Empty)
             {
@@ -63,41 +68,37 @@ namespace Thor.Extensions.HotChocolate
         /// Handles resolver error tracing.
         /// </summary>
         /// <param name="request">The request details.</param>
-        /// <param name="errors">The error details.</param>
-        public void HandlesResolverErrors(
+        /// <param name="error">The error details.</param>
+        public void HandlesResolverError(
             HotChocolateRequest request,
-            IReadOnlyCollection<IError> errors)
+            IError error)
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (errors == null)
+            if (error == null)
             {
-                throw new ArgumentNullException(nameof(errors));
+                throw new ArgumentNullException(nameof(error));
             }
 
-            if (errors.Count > 0)
+            HotChocolateError[] formattedErrors =
             {
-                List<HotChocolateError> formattedErrors =
-                     errors.Select(e =>
-                        new HotChocolateError
-                        {
-                            Message = e.Message,
-                            Code = e.Code,
-                            Path = e.Path,
-                            Exception = e.Exception
-                        }).ToList();
+                new HotChocolateError
+                {
+                    Message = error.Message,
+                    Code = error.Code,
+                    Path = error.Path?.ToList(),
+                    Exception = error.Exception
+                }
+            };
 
-                HotChocolateError firstError = formattedErrors[0];
+            var message = error.Exception == null
+                ? error.Message
+                : error.Exception.Message;
 
-                string message = firstError.Exception == null
-                    ? firstError.Message
-                    : firstError.Exception.Message;
-
-                Log.OnResolverError(message, request, formattedErrors);
-            }
+            Log.OnResolverError(message, request, formattedErrors);
         }
 
         /// <summary>
@@ -105,9 +106,9 @@ namespace Thor.Extensions.HotChocolate
         /// </summary>
         /// <param name="request">The request details.</param>
         /// <param name="errors">The error details.</param>
-        public void HandleValidationError(
+        public void HandleValidationErrors(
             HotChocolateRequest request,
-            IReadOnlyCollection<IError> errors)
+            IReadOnlyList<IError> errors)
         {
             if (errors == null)
             {
@@ -116,19 +117,19 @@ namespace Thor.Extensions.HotChocolate
 
             if (errors.Count > 0)
             {
-                List<HotChocolateError> formattedErrors =
+                var formattedErrors =
                      errors.Select(e =>
                         new HotChocolateError
                         {
                             Message = e.Message,
                             Code = e.Code,
-                            Path = e.Path,
+                            Path = e.Path?.ToList(),
                             Exception = e.Exception
                         }).ToList();
 
                 HotChocolateError firstError = formattedErrors[0];
 
-                string message = firstError.Exception == null
+                var message = firstError.Exception == null
                     ? firstError.Message
                     : firstError.Exception.Message;
 
