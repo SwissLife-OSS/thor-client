@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using Microsoft.Extensions.Logging;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
@@ -24,6 +25,7 @@ namespace Thor.Core.Transmission.EventHub
         private readonly Task _aggregateTask;
         private readonly Task _sendTask;
         private bool _disposed;
+        private readonly Watcher<EventHubTransmitter> _watcher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmitter"/> class.
@@ -32,12 +34,14 @@ namespace Thor.Core.Transmission.EventHub
             IMemoryBuffer<EventData> buffer,
             ITransmissionBuffer<EventData, EventDataBatch> aggregator,
             ITransmissionSender<EventDataBatch> sender,
-            ITransmissionStorage<EventData> storage)
+            ITransmissionStorage<EventData> storage,
+            ILogger<EventHubTransmitter> logger)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             _aggregator = aggregator ?? throw new ArgumentNullException(nameof(aggregator));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            _watcher = new Watcher<EventHubTransmitter>(logger);
 
             _storeTask = TaskHelper
                 .StartLongRunning(StoreAsync, _disposeToken.Token);
@@ -57,6 +61,7 @@ namespace Thor.Core.Transmission.EventHub
 
             if (!_disposeToken.IsCancellationRequested)
             {
+                _watcher.Checkpoint();
                 _buffer.Enqueue(data.Map());
             }
         }

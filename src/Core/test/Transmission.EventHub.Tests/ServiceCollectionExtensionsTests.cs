@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Thor.Core.Transmission.Abstractions;
 using Xunit;
@@ -59,7 +60,10 @@ namespace Thor.Core.Transmission.EventHub.Tests
             IConfiguration configuration = builder.Build();
 
             // act
-            services.AddEventHubTelemetryEventTransmission(configuration);
+            services
+                .AddSingleton(Mock.Of<ILogger<EventHubTransmitter>>())
+                .AddSingleton(Mock.Of<ILogger<EventHubTransmissionSender>>())
+                .AddEventHubTelemetryEventTransmission(configuration);
 
             // assert
             ServiceProvider provider = services.BuildServiceProvider();

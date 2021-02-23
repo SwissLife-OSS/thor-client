@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs.Producer;
+using Microsoft.Extensions.Logging;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
@@ -14,17 +15,22 @@ namespace Thor.Core.Transmission.EventHub
         : ITransmissionSender<EventDataBatch>
     {
         private readonly EventHubProducerClient _client;
+        private readonly Watcher<EventHubTransmissionSender> _watcher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmissionSender"/> class.
         /// </summary>
         /// <param name="client">A <c>Azure</c> <c>EventHub</c> client instance.</param>
+        /// <param name="logger">A logger instance</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="client"/> must not be <c>null</c>.
         /// </exception>
-        public EventHubTransmissionSender(EventHubProducerClient client)
+        public EventHubTransmissionSender(
+            EventHubProducerClient client,
+            ILogger<EventHubTransmissionSender> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _watcher = new Watcher<EventHubTransmissionSender>(logger);
         }
 
         /// <inheritdoc />
@@ -37,6 +43,7 @@ namespace Thor.Core.Transmission.EventHub
 
             await foreach(EventDataBatch batch in batches.WithCancellation(cancellationToken))
             {
+                _watcher.Checkpoint();
                 await _client.SendAsync(batch, cancellationToken);
             }
         }
