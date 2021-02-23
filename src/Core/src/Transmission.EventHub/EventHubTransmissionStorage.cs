@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
@@ -28,7 +28,7 @@ namespace Thor.Core.Transmission.EventHub
         /// <inheritdoc/>
         protected override byte[] Serialize(EventData data)
         {
-            return data.Body.Array;
+            return data.Body.ToArray();
         }
 
         /// <inheritdoc/>

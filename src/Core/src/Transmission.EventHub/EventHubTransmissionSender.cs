@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
@@ -11,9 +11,9 @@ namespace Thor.Core.Transmission.EventHub
     /// A transmission sender for <c>Azure</c> <c>EventHub</c>.
     /// </summary>
     public class EventHubTransmissionSender
-        : ITransmissionSender<EventData[]>
+        : ITransmissionSender<EventDataBatch>
     {
-        private readonly EventHubClient _client;
+        private readonly EventHubProducerClient _client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmissionSender"/> class.
@@ -22,22 +22,22 @@ namespace Thor.Core.Transmission.EventHub
         /// <exception cref="ArgumentNullException">
         /// <paramref name="client"/> must not be <c>null</c>.
         /// </exception>
-        public EventHubTransmissionSender(EventHubClient client)
+        public EventHubTransmissionSender(EventHubProducerClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         /// <inheritdoc />
-        public async Task SendAsync(IAsyncEnumerable<EventData[]> batches, CancellationToken cancellationToken)
+        public async Task SendAsync(IAsyncEnumerable<EventDataBatch> batches, CancellationToken cancellationToken)
         {
             if (batches == null)
             {
                 throw new ArgumentNullException(nameof(batches));
             }
 
-            await foreach(EventData[] batch in batches.WithCancellation(cancellationToken))
+            await foreach(EventDataBatch batch in batches.WithCancellation(cancellationToken))
             {
-                await _client.SendAsync(batch);
+                await _client.SendAsync(batch, cancellationToken);
             }
         }
     }

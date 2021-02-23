@@ -7,14 +7,14 @@ namespace Thor.Core.Transmission.Abstractions
     /// <summary>
     /// A buffer for telemetry data transmission which enqueue single data objects for batch processing.
     /// </summary>
-    public interface ITransmissionBuffer<TData>
+    public interface ITransmissionBuffer<TData, TBatch>
         where TData : class
     {
         /// <summary>
         /// Dequeue a telemetry data batch from the buffer.
         /// </summary>
         /// <returns>A telemetry data batch.</returns>
-        IAsyncEnumerable<TData[]> Dequeue(CancellationToken cancellationToken);
+        IAsyncEnumerable<TBatch> Dequeue(CancellationToken cancellationToken);
 
         /// <summary>
         /// Enqueue a telemetry data object.

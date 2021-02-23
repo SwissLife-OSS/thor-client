@@ -3,7 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
 using Moq;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
@@ -20,8 +21,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // assert
             IMemoryBuffer<EventData> buffer = null;
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = Mock.Of<ITransmissionSender<EventData[]>>();
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender<EventDataBatch> sender = Mock.Of<ITransmissionSender<EventDataBatch>>();
             ITransmissionStorage<EventData> storage = Mock.Of<ITransmissionStorage<EventData>>();
 
             // act
@@ -37,8 +38,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // assert
             IMemoryBuffer<EventData> buffer = Mock.Of<IMemoryBuffer<EventData>>();
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = null;
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender<EventDataBatch> sender = null;
             ITransmissionStorage<EventData> storage = Mock.Of<ITransmissionStorage<EventData>>();
 
             // act
@@ -54,8 +55,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // assert
             IMemoryBuffer<EventData> buffer = Mock.Of<IMemoryBuffer<EventData>>();
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = Mock.Of<ITransmissionSender<EventData[]>>();
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender<EventDataBatch> sender = Mock.Of<ITransmissionSender<EventDataBatch>>();
             ITransmissionStorage<EventData> storage = null;
 
             // act
@@ -71,8 +72,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // assert
             IMemoryBuffer<EventData> buffer = Mock.Of<IMemoryBuffer<EventData>>();
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = Mock.Of<ITransmissionSender<EventData[]>>();
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender<EventDataBatch> sender = Mock.Of<ITransmissionSender<EventDataBatch>>();
             ITransmissionStorage<EventData> storage = Mock.Of<ITransmissionStorage<EventData>>();
 
             // act
@@ -92,8 +93,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // arrange
             IMemoryBuffer<EventData> buffer = new Mock<IMemoryBuffer<EventData>>().Object;
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = new Mock<ITransmissionSender<EventData[]>>().Object;
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender<EventDataBatch> sender = new Mock<ITransmissionSender<EventDataBatch>>().Object;
             ITransmissionStorage<EventData> storage = new Mock<ITransmissionStorage<EventData>>().Object;
             ITelemetryEventTransmitter transmitter = new EventHubTransmitter(
                 buffer, aggregator, sender, storage);
@@ -111,8 +112,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // assert
             IMemoryBuffer<EventData> buffer = new Mock<IMemoryBuffer<EventData>>().Object;
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = new Mock<ITransmissionSender<EventData[]>>().Object;
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender< EventDataBatch> sender = new Mock<ITransmissionSender<EventDataBatch>>().Object;
             ITransmissionStorage<EventData> storage = new Mock<ITransmissionStorage<EventData>>().Object;
             TelemetryEvent data = new TelemetryEvent();
 
@@ -130,31 +131,31 @@ namespace Thor.Core.Transmission.EventHub.Tests
             // assert
             ManualResetEventSlim resetEvent = new ManualResetEventSlim();
             Mock<IMemoryBuffer<EventData>> buffer = new Mock<IMemoryBuffer<EventData>>();
-            Mock<ITransmissionBuffer<EventData>> aggregator = new Mock<ITransmissionBuffer<EventData>>();
-            Mock<ITransmissionSender<EventData[]>> sender = new Mock<ITransmissionSender<EventData[]>>();
+            Mock<ITransmissionBuffer<EventData, EventDataBatch>> aggregator = new Mock<ITransmissionBuffer<EventData, EventDataBatch>>();
+            Mock<ITransmissionSender<EventDataBatch>> sender = new Mock<ITransmissionSender<EventDataBatch>>();
             Mock<ITransmissionStorage<EventData>> storage = new Mock<ITransmissionStorage<EventData>>();
-            ConcurrentQueue<EventData> bufferQueue = new ConcurrentQueue<EventData>();
+            ConcurrentQueue<EventDataBatch> bufferQueue = new ConcurrentQueue<EventDataBatch>();
 
             buffer
                 .Setup(t => t.Enqueue(It.IsAny<EventData>()))
-                .Callback((EventData d) => bufferQueue.Enqueue(d));
+                .Callback((EventData d) => bufferQueue.Enqueue(EventHubsModelFactory.EventDataBatch(1, new[] {d})));
             aggregator
                 .Setup(t => t.Dequeue(It.IsAny<CancellationToken>()))
                 .Returns(() =>
                 {
                     int count = 0;
-                    List<EventData> results = new List<EventData>();
+                    List<EventDataBatch> results = new List<EventDataBatch>();
 
-                    while (bufferQueue.TryDequeue(out EventData d) && count < 10)
+                    while (bufferQueue.TryDequeue(out EventDataBatch d) && count < 10)
                     {
                         results.Add(d);
                         count++;
                     }
 
-                    return new List<EventData[]> {results.ToArray()}.ToAsyncEnumerable();
+                    return results.ToAsyncEnumerable();
                 });
             sender
-                .Setup(t => t.SendAsync(It.IsAny<IAsyncEnumerable<EventData[]>>(), It.IsAny<CancellationToken>()))
+                .Setup(t => t.SendAsync(It.IsAny<IAsyncEnumerable<EventDataBatch>>(), It.IsAny<CancellationToken>()))
                 .Callback(() => resetEvent.Set());
 
             ITelemetryEventTransmitter transmitter = new EventHubTransmitter(
@@ -168,7 +169,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
             resetEvent.Wait(TimeSpan.FromSeconds(5));
 
             sender.Verify(s => s.SendAsync(
-                It.IsAny<IAsyncEnumerable<EventData[]>>(),
+                It.IsAny<IAsyncEnumerable<EventDataBatch>>(),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -181,8 +182,8 @@ namespace Thor.Core.Transmission.EventHub.Tests
         {
             // arrange
             IMemoryBuffer<EventData> buffer = new Mock<IMemoryBuffer<EventData>>().Object;
-            ITransmissionBuffer<EventData> aggregator = Mock.Of<ITransmissionBuffer<EventData>>();
-            ITransmissionSender<EventData[]> sender = new Mock<ITransmissionSender<EventData[]>>().Object;
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator = Mock.Of<ITransmissionBuffer<EventData, EventDataBatch>>();
+            ITransmissionSender<EventDataBatch> sender = new Mock<ITransmissionSender<EventDataBatch>>().Object;
             ITransmissionStorage<EventData> storage = new Mock<ITransmissionStorage<EventData>>().Object;
             EventHubTransmitter transmitter = new EventHubTransmitter(
                 buffer, aggregator, sender, storage);

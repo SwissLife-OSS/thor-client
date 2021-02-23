@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
 using Xunit;
 
 namespace Thor.Core.Transmission.EventHub.Tests
@@ -14,7 +15,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
         public void Constructor_SourceNull()
         {
             // assert
-            EventHubClient client = null;
+            EventHubProducerClient client = null;
 
             // act
             Action verify = () => new EventHubTransmissionSender(client);
@@ -27,7 +28,7 @@ namespace Thor.Core.Transmission.EventHub.Tests
         public void Constructor_Success()
         {
             // assert
-            EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
+            EventHubProducerClient client = new EventHubProducerClient(Constants.FakeConnectionString);
 
             // act
             Action verify = () => new EventHubTransmissionSender(client);
@@ -45,9 +46,9 @@ namespace Thor.Core.Transmission.EventHub.Tests
         public async Task SendAsync_BatchNull()
         {
             // arrange
-            EventHubClient client = EventHubClient.CreateFromConnectionString(Constants.FakeConnectionString);
+            EventHubProducerClient client = new EventHubProducerClient(Constants.FakeConnectionString);
             EventHubTransmissionSender sender = new EventHubTransmissionSender(client);
-            IAsyncEnumerable<EventData[]> batch = null;
+            IAsyncEnumerable<EventDataBatch> batch = null;
 
             // act
             Func<Task> verify = () => sender.SendAsync(batch, default);
