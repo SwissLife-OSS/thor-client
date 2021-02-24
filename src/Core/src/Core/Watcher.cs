@@ -10,10 +10,15 @@ namespace Thor.Core.Transmission.EventHub
     /// <typeparam name="T"></typeparam>
     internal class Watcher<T>
     {
-        private readonly TimeSpan _interval = TimeSpan.FromHours(1);
         private readonly ILogger<T> _logger;
-        private readonly Stopwatch _watch;
         private readonly string _instance;
+
+        private readonly TimeSpan _interval = TimeSpan.FromHours(60);
+        private readonly Stopwatch _checkpointWatch;
+        private readonly Stopwatch _errorWatch;
+        private int _errorsPerInterval = 1;
+        private int _errorCount;
+        private static object _errorSync = new object();
 
         /// <summary>
         /// The watcher ctor
@@ -21,7 +26,8 @@ namespace Thor.Core.Transmission.EventHub
         public Watcher(ILogger<T> logger)
         {
             _logger = logger;
-            _watch = Stopwatch.StartNew();
+            _checkpointWatch = new Stopwatch();
+            _errorWatch = new Stopwatch();
             _instance = typeof(T).Name;
         }
 
@@ -30,10 +36,37 @@ namespace Thor.Core.Transmission.EventHub
         /// </summary>
         public void Checkpoint()
         {
-            if (_watch.Elapsed > _interval)
+            if (!_checkpointWatch.IsRunning || _checkpointWatch.Elapsed > _interval)
             {
                 _logger.LogInformation("Checkpoint from {_instance}", _instance);
-                _watch.Restart();
+                _checkpointWatch.Restart();
+            }
+        }
+
+        /// <summary>
+        /// Create a error log entry if interval elapsed or number of errors per interval not exceeded
+        /// </summary>
+        /// <param name="exception"></param>
+        public void ReportError(Exception exception)
+        {
+            lock (_errorSync)
+            {
+                if (_errorCount < _errorsPerInterval)
+                {
+                    _logger.LogError(exception, "{_instance} failed", _instance);
+                    _errorCount++;
+                }
+
+                if (!_errorWatch.IsRunning)
+                {
+                    _errorWatch.Restart();
+                }
+
+                if (_errorWatch.Elapsed > _interval)
+                {
+                    _errorCount = 0;
+                    _errorWatch.Restart();
+                }
             }
         }
     }

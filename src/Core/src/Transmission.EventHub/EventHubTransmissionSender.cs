@@ -43,8 +43,15 @@ namespace Thor.Core.Transmission.EventHub
 
             await foreach(EventDataBatch batch in batches.WithCancellation(cancellationToken))
             {
-                _watcher.Checkpoint();
-                await _client.SendAsync(batch, cancellationToken);
+                try
+                {
+                    _watcher.Checkpoint();
+                    await _client.SendAsync(batch, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _watcher.ReportError(ex);
+                }
             }
         }
     }

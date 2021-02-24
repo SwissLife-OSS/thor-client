@@ -6,3 +6,4 @@ using System.Runtime.CompilerServices;
 [assembly:InternalsVisibleTo("Thor.Extensions.Hosting.Tests")]
 [assembly:InternalsVisibleTo("Thor.Hosting.AspNetCore.Tests")]
 [assembly:InternalsVisibleTo("Thor.Core.Transmission.EventHub")]
+[assembly:InternalsVisibleTo("Thor.Core.Transmission.BlobStorage")]
