@@ -13,7 +13,7 @@ namespace Thor.Core.Transmission.EventHub
         private readonly ILogger<T> _logger;
         private readonly string _instance;
 
-        private readonly TimeSpan _interval = TimeSpan.FromHours(60);
+        private readonly TimeSpan _interval = TimeSpan.FromHours(1);
         private readonly Stopwatch _checkpointWatch;
         private readonly Stopwatch _errorWatch;
         private int _errorsPerInterval = 1;
