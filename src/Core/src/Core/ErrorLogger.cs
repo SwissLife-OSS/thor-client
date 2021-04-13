@@ -48,7 +48,7 @@ namespace Thor.Core.Transmission.EventHub
 
             if (_errorWatch.Elapsed > _interval)
             {
-                _errorCount = 0;
+                Interlocked.Exchange(ref _errorCount, 0);
                 _errorWatch.Restart();
             }
         }
