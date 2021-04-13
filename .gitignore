@@ -338,3 +338,4 @@ tools/**
 
 __mismatch__/
 *.Development.json
+appsettings.*.json

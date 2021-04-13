@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Azure.EventHubs;
+using System;
+using Azure.Messaging.EventHubs;
 using Thor.Core.Abstractions;
 using Xunit;
 

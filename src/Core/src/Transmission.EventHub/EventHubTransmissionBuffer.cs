@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
 using Thor.Core.Transmission.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub
@@ -14,14 +14,14 @@ namespace Thor.Core.Transmission.EventHub
     /// A transmission buffer for <c>Azure</c> <c>EventHub</c>.
     /// </summary>
     public class EventHubTransmissionBuffer
-        : ITransmissionBuffer<EventData>
+        : ITransmissionBuffer<EventData, EventDataBatch>
         , IDisposable
     {
         private static readonly int MaxBufferSize = 1000;
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly Channel<EventData> _input = Channel.CreateBounded<EventData>(MaxBufferSize);
-        private readonly Channel<EventData[]> _output = Channel.CreateUnbounded<EventData[]>();
-        private readonly EventHubClient _client;
+        private readonly Channel<EventDataBatch> _output = Channel.CreateUnbounded<EventDataBatch>();
+        private readonly EventHubProducerClient _client;
         private readonly Task _processingTask;
         private EventData _next;
         private bool _disposed;
@@ -33,7 +33,7 @@ namespace Thor.Core.Transmission.EventHub
         /// <exception cref="ArgumentNullException">
         /// <paramref name="client"/> must not be <c>null</c>.
         /// </exception>
-        public EventHubTransmissionBuffer(EventHubClient client)
+        public EventHubTransmissionBuffer(EventHubProducerClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
@@ -42,12 +42,12 @@ namespace Thor.Core.Transmission.EventHub
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<EventData[]> Dequeue(
+        public async IAsyncEnumerable<EventDataBatch> Dequeue(
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             while (await _output.Reader.WaitToReadAsync(cancellationToken))
             {
-                while (_output.Reader.TryRead(out EventData[] eventsBatch))
+                while (_output.Reader.TryRead(out EventDataBatch eventsBatch))
                 {
                     yield return eventsBatch;
                 }
@@ -86,7 +86,7 @@ namespace Thor.Core.Transmission.EventHub
         {
             while (await _input.Reader.WaitToReadAsync())
             {
-                EventDataBatch batch = _client.CreateBatch();
+                EventDataBatch batch = await _client.CreateBatchAsync();
 
                 if (_next != null && batch.TryAdd(_next))
                 {
@@ -101,7 +101,7 @@ namespace Thor.Core.Transmission.EventHub
                     }
                 }
 
-                await _output.Writer.WriteAsync(batch.ToEnumerable().ToArray());
+                await _output.Writer.WriteAsync(batch);
             }
         }
 
@@ -114,10 +114,10 @@ namespace Thor.Core.Transmission.EventHub
 
                 Task.WaitAll(new[]
                 {
-                    _processingTask
+                    _processingTask,
+                    _client.DisposeAsync().AsTask()
                 }, TimeSpan.FromSeconds(5));
-
-                _client?.Close();
+                
                 _disposeToken?.Dispose();
                 _disposed = true;
             }

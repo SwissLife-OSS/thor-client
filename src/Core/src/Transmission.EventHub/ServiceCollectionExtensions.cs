@@ -1,5 +1,6 @@
 using System;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thor.Core.Transmission.Abstractions;
@@ -48,12 +49,13 @@ namespace Thor.Core.Transmission.EventHub
                 .AddSingleton(eventsOptions.Buffer)
                 .AddSingleton(p =>
                 {
-                    EventHubsConnectionStringBuilder connection = CreateEventHubConnection(eventHubConfiguration);
-                    return EventHubClient.Create(connection);
+                    var connection = new EventHubConnection(eventHubConfiguration.ConnectionString);
+                    EventHubProducerClientOptions clientOptions = CreateEventHubClientOptions(eventHubConfiguration);
+                    return new EventHubProducerClient(connection, clientOptions);
                 })
                 .AddSingleton<IMemoryBuffer<EventData>>(sp => new MemoryBuffer<EventData>(eventsOptions.Buffer))
-                .AddSingleton<ITransmissionBuffer<EventData>, EventHubTransmissionBuffer>()
-                .AddSingleton<ITransmissionSender<EventData[]>, EventHubTransmissionSender>()
+                .AddSingleton<ITransmissionBuffer<EventData, EventDataBatch>, EventHubTransmissionBuffer>()
+                .AddSingleton<ITransmissionSender<EventDataBatch>, EventHubTransmissionSender>()
                 .AddSingleton<ITransmissionStorage<EventData>>(p =>
                 {
                     TracingConfiguration tracingConfiguration = p.GetRequiredService<TracingConfiguration>();
@@ -62,18 +64,21 @@ namespace Thor.Core.Transmission.EventHub
                 .AddSingleton<ITelemetryEventTransmitter, EventHubTransmitter>();
         }
 
-        private static EventHubsConnectionStringBuilder CreateEventHubConnection(
+        private static EventHubProducerClientOptions CreateEventHubClientOptions(
             EventHubConfiguration configuration)
         {
-            TransportType transportType = TransportType.Amqp;
+            EventHubsTransportType transportType = EventHubsTransportType.AmqpTcp;
             if (!string.IsNullOrEmpty(configuration.TransportType))
             {
                 Enum.TryParse(configuration.TransportType, out transportType);
             }
 
-            return new EventHubsConnectionStringBuilder(configuration.ConnectionString)
+            return new EventHubProducerClientOptions
             {
-                TransportType = transportType
+                ConnectionOptions = new EventHubConnectionOptions
+                {
+                    TransportType = transportType
+                }
             };
         }
     }

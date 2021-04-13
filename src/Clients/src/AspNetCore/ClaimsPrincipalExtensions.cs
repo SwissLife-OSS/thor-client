@@ -1,5 +1,4 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
+using System;
 using System.Linq;
 using System.Security.Claims;
 
@@ -10,7 +9,7 @@ namespace Thor.Hosting.AspNetCore
         public static Guid? GetId(this ClaimsPrincipal user)
         {
             string rawUserId = user?.Claims?
-                .Where(c => c.Type == JwtRegisteredClaimNames.Sub)
+                .Where(c => c.Type == "sub")
                 .Select(c => c.Value)
                 .FirstOrDefault();
 

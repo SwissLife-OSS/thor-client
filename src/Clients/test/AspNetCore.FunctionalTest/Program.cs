@@ -13,7 +13,22 @@ namespace Thor.Hosting.AspNetCore.FunctionalTest
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging(c => c.ClearProviders())
+                .ConfigureLogging(c => c
+                    .ClearProviders()
+                    .AddConsole().AddFilter((provider, category, logLevel) =>
+                    {
+                        if (category.Contains("Thor"))
+                        {
+                            return true;
+                        }
+
+                        if (logLevel > LogLevel.Information)
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    }))
                 .UseStartup<Startup>()
                 .Build();
     }
