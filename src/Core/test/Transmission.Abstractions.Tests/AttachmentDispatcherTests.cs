@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Moq;
@@ -100,7 +100,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
 
         #region Dispatch
 
-        [Fact(DisplayName = "Dispatch: Should throw an argument null excption for attachment")]
+        [Fact(DisplayName = "Dispatch: Should not throw an argument null excption for attachment")]
         public void Dispatch_AttachmentsNull()
         {
             // arrange
@@ -112,10 +112,10 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => dispatcher.Dispatch(attachments);
 
             // assert
-            Assert.Throws<ArgumentNullException>("attachments", validate);
+            AssertEx.NotThrow(validate);
         }
 
-        [Fact(DisplayName = "Dispatch: Should throw an argument null excption for attachment")]
+        [Fact(DisplayName = "Dispatch: Should not throw an argument out of range excption for attachment")]
         public void Dispatch_AttachmentsEmpty()
         {
             // arrange
@@ -127,7 +127,7 @@ namespace Thor.Core.Transmission.Abstractions.Tests
             Action validate = () => dispatcher.Dispatch(attachments);
 
             // assert
-            Assert.Throws<ArgumentOutOfRangeException>("attachments", validate);
+            AssertEx.NotThrow(validate);
         }
 
         [Fact(DisplayName = "Dispatch: Should dispatch a single attachment")]
@@ -186,5 +186,20 @@ namespace Thor.Core.Transmission.Abstractions.Tests
         }
 
         #endregion
+
+        private static class AssertEx
+        {
+            public static void NotThrow(Action action)
+            {
+                try
+                {
+                    action();
+                }
+                catch
+                {
+                    Assert.False(true, "Expected no to be thrown");
+                }
+            }
+        }
     }
 }
