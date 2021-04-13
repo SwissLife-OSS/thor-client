@@ -15,7 +15,7 @@ namespace Thor.Core.Transmission.BlobStorage
         : ITransmissionSender<AttachmentDescriptor>
     {
         private readonly IBlobContainer _container;
-        private readonly Watcher<BlobStorageTransmissionSender> _watcher;
+        private readonly ErrorLogger<BlobStorageTransmissionSender> _errorLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmissionSender"/> class.
@@ -30,7 +30,7 @@ namespace Thor.Core.Transmission.BlobStorage
             ILogger<BlobStorageTransmissionSender> logger)
         {
             _container = container ?? throw new ArgumentNullException(nameof(container));
-            _watcher = new Watcher<BlobStorageTransmissionSender>(logger);
+            _errorLogger = new ErrorLogger<BlobStorageTransmissionSender>(logger);
         }
 
         /// <inheritdoc/>
@@ -47,12 +47,11 @@ namespace Thor.Core.Transmission.BlobStorage
             {
                 try
                 {
-                    _watcher.Checkpoint();
                     await _container.UploadAsync(attachment, cancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    _watcher.ReportError(ex);
+                    _errorLogger.Log(ex);
                 }
             }
         }

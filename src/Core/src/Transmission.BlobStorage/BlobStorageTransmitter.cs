@@ -21,7 +21,6 @@ namespace Thor.Core.Transmission.BlobStorage
         private readonly Task _storeTask;
         private readonly Task _sendTask;
         private bool _disposed;
-        private readonly Watcher<BlobStorageTransmitter> _watcher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobStorageTransmitter"/> class.
@@ -35,7 +34,6 @@ namespace Thor.Core.Transmission.BlobStorage
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
-            _watcher = new Watcher<BlobStorageTransmitter>(logger);
 
             _storeTask = TaskHelper
                 .StartLongRunning(StoreAsync, _disposeToken.Token);
@@ -53,7 +51,6 @@ namespace Thor.Core.Transmission.BlobStorage
 
             if (!_disposeToken.IsCancellationRequested)
             {
-                _watcher.Checkpoint();
                 _buffer.Enqueue(data);
             }
         }

@@ -15,7 +15,7 @@ namespace Thor.Core.Transmission.EventHub
         : ITransmissionSender<EventDataBatch>
     {
         private readonly EventHubProducerClient _client;
-        private readonly Watcher<EventHubTransmissionSender> _watcher;
+        private readonly ErrorLogger<EventHubTransmissionSender> _errorLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHubTransmissionSender"/> class.
@@ -30,7 +30,7 @@ namespace Thor.Core.Transmission.EventHub
             ILogger<EventHubTransmissionSender> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _watcher = new Watcher<EventHubTransmissionSender>(logger);
+            _errorLogger = new ErrorLogger<EventHubTransmissionSender>(logger);
         }
 
         /// <inheritdoc />
@@ -45,12 +45,11 @@ namespace Thor.Core.Transmission.EventHub
             {
                 try
                 {
-                    _watcher.Checkpoint();
                     await _client.SendAsync(batch, cancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    _watcher.ReportError(ex);
+                    _errorLogger.Log(ex);
                 }
             }
         }
