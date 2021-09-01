@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Thor.Core.Abstractions;
 
@@ -19,7 +19,7 @@ namespace Thor.Core.Transmission.Abstractions
         internal AttachmentDispatcher(
             HashSet<ITelemetryAttachmentTransmitter> transmitters)
         {
-            _transmitters = transmitters ?? 
+            _transmitters = transmitters ??
                 throw new ArgumentNullException(nameof(transmitters));
         }
 
@@ -89,40 +89,44 @@ namespace Thor.Core.Transmission.Abstractions
         /// Dispatches one or more attachments.
         /// </summary>
         /// <param name="attachments">A collection of attachments.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Throws if <paramref name="attachments"/> is null.
-        /// </exception>
         public void Dispatch(params IAttachment[] attachments)
         {
             if (attachments == null)
             {
-                throw new ArgumentNullException(nameof(attachments));
+                return;
             }
 
             if (attachments.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(attachments));
+                return;
             }
 
-            var descriptors = new AttachmentDescriptor[attachments.Length];
-
-            for (int i = 0; i < attachments.Length; i++)
+            try
             {
-                descriptors[i] = new AttachmentDescriptor
-                {
-                    Id = attachments[i].Id,
-                    Name = attachments[i].Name,
-                    TypeName = attachments[i].GetTypeName(),
-                    Value = attachments[i].Value
-                };
-            }
+                var descriptors = new AttachmentDescriptor[attachments.Length];
 
-            foreach (var transmitter in _transmitters)
-            {
-                foreach (AttachmentDescriptor descriptor in descriptors)
+                for (int i = 0; i < attachments.Length; i++)
                 {
-                    transmitter.Enqueue(descriptor);
+                    descriptors[i] = new AttachmentDescriptor
+                    {
+                        Id = attachments[i].Id,
+                        Name = attachments[i].Name,
+                        TypeName = attachments[i].GetTypeName(),
+                        Value = attachments[i].Value
+                    };
                 }
+
+                foreach (var transmitter in _transmitters)
+                {
+                    foreach (AttachmentDescriptor descriptor in descriptors)
+                    {
+                        transmitter.Enqueue(descriptor);
+                    }
+                }
+            }
+            catch
+            {
+                // Must not throw on user code.
             }
         }
     }

@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
 using Thor.Core.Abstractions;
 
 namespace Thor.Core.Transmission.EventHub

@@ -20,7 +20,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             IBlobContainer container = null;
 
             // act
-            Action verify = () => new BlobStorageTransmissionSender(container);
+            Action verify = () => new BlobStorageTransmissionSender(container, default);
 
             // arrange
             Assert.Throws<ArgumentNullException>("container", verify);
@@ -33,7 +33,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
             IBlobContainer container = new Mock<IBlobContainer>().Object;
 
             // act
-            Action verify = () => new BlobStorageTransmissionSender(container);
+            Action verify = () => new BlobStorageTransmissionSender(container, default);
 
             // arrange
             Assert.Null(Record.Exception(verify));
@@ -53,7 +53,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Setup(t => t.UploadAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(0));
 
-            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
+            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object, default);
             IAsyncEnumerable<AttachmentDescriptor> batch = null;
 
             // act
@@ -73,7 +73,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Setup(t => t.UploadAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(0));
 
-            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
+            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object, default);
             IAsyncEnumerable<AttachmentDescriptor> batch = new AttachmentDescriptor[0].ToAsyncEnumerable();
 
             // act
@@ -93,7 +93,7 @@ namespace Thor.Core.Transmission.BlobStorage.Tests
                 .Setup(t => t.UploadAsync(It.IsAny<AttachmentDescriptor>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(0));
 
-            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object);
+            BlobStorageTransmissionSender sender = new BlobStorageTransmissionSender(container.Object, default);
             IAsyncEnumerable<AttachmentDescriptor> batch = new[] { new AttachmentDescriptor() }.ToAsyncEnumerable();
 
             // act

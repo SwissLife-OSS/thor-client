@@ -1,7 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Thor.Core.Transmission.Abstractions;
+using Thor.Core.Transmission.EventHub;
 
 namespace Thor.Core.Transmission.BlobStorage
 {
@@ -26,7 +28,8 @@ namespace Thor.Core.Transmission.BlobStorage
         public BlobStorageTransmitter(
             IMemoryBuffer<AttachmentDescriptor> buffer,
             ITransmissionStorage<AttachmentDescriptor> storage,
-            ITransmissionSender<AttachmentDescriptor> sender)
+            ITransmissionSender<AttachmentDescriptor> sender,
+            ILogger<BlobStorageTransmitter> logger)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));

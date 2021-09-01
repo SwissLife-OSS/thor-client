@@ -1,7 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using Microsoft.Extensions.Logging;
 using Thor.Core.Abstractions;
 using Thor.Core.Transmission.Abstractions;
 
@@ -16,8 +18,8 @@ namespace Thor.Core.Transmission.EventHub
     {
         private readonly CancellationTokenSource _disposeToken = new CancellationTokenSource();
         private readonly IMemoryBuffer<EventData> _buffer;
-        private readonly ITransmissionBuffer<EventData> _aggregator;
-        private readonly ITransmissionSender<EventData[]> _sender;
+        private readonly ITransmissionBuffer<EventData, EventDataBatch> _aggregator;
+        private readonly ITransmissionSender<EventDataBatch> _sender;
         private readonly ITransmissionStorage<EventData> _storage;
         private readonly Task _storeTask;
         private readonly Task _aggregateTask;
@@ -29,8 +31,8 @@ namespace Thor.Core.Transmission.EventHub
         /// </summary>
         public EventHubTransmitter(
             IMemoryBuffer<EventData> buffer,
-            ITransmissionBuffer<EventData> aggregator,
-            ITransmissionSender<EventData[]> sender,
+            ITransmissionBuffer<EventData, EventDataBatch> aggregator,
+            ITransmissionSender<EventDataBatch> sender,
             ITransmissionStorage<EventData> storage)
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
