@@ -14,7 +14,7 @@ namespace Thor.Extensions.HotChocolate
     [Serializable]
     internal class HotChocolateActivity
         : IActivity
-        , IActivityScope
+        , IDisposable
     {
         private readonly Guid _relatedActivityId;
         private bool _disposed;

@@ -16,7 +16,7 @@ namespace Thor.Extensions.HotChocolate
             _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         }
 
-        public override IActivityScope ExecuteRequest(IRequestContext context)
+        public override IDisposable ExecuteRequest(IRequestContext context)
         {
             var activity = HotChocolateActivity.Create(_formatter.Serialize(context.Request));
             context.SetActivity(activity);
