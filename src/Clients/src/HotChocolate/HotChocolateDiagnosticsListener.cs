@@ -7,7 +7,7 @@ using HotChocolate.Resolvers;
 
 namespace Thor.Extensions.HotChocolate
 {
-    internal class HotChocolateDiagnosticsListener : DiagnosticEventListener
+    internal class HotChocolateDiagnosticsListener : ExecutionDiagnosticEventListener
     {
         private readonly IRequestFormatter _formatter;
 
